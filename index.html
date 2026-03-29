@@ -1,6 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <title>Grey's Cook Book | Family Recipes from the Lancaster Kitchen</title>
+  <meta name="description" content="A family cookbook by Grey Lancaster — hearty Southern recipes, family stories, and Papa Lanc's kitchen wisdom. From baked potato soup to beef tenderloin.">
+  <meta name="author" content="Grey Lancaster">
+  <meta name="keywords" content="Southern recipes, family cookbook, Grey Lancaster, Papa Lanc, Lancaster family recipes">
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Grey's Cook Book">
+  <meta property="og:title" content="Grey's Cook Book">
+  <meta property="og:description" content="Hearty Southern recipes passed down through the Lancaster family. Real food, real stories.">
+  <meta property="og:url" content="https://greycooks.com/">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Grey's Cook Book">
+  <meta name="twitter:description" content="Hearty Southern recipes passed down through the Lancaster family. Real food, real stories.">
+  <link rel="canonical" href="https://greycooks.com/">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Grey's Cook Book</title>
@@ -300,5 +315,13 @@
   </div>
 </footer>
 
+<button id="back-to-top" title="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#8679;</button>
+<script>
+  window.addEventListener('scroll', function() {
+    var btn = document.getElementById('back-to-top');
+    if (window.scrollY > 300) { btn.classList.add('visible'); }
+    else { btn.classList.remove('visible'); }
+  });
+</script>
 </body>
 </html>
