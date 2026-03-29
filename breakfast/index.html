@@ -24,11 +24,11 @@
 <body>
 
 <nav class="site-nav">
-  <a href="../" class="nav-brand">Grey's Cook Book</a>
-  <a href="../">Home</a>
-  <a href="../book/">Recipes</a>
-  <a href="../recipeindex/">Recipe Index</a>
-  <a href="../breakfast/" class="active">Breakfast</a>
+  <a href="/" class="nav-brand">Grey's Cook Book</a>
+  <a href="/">Home</a>
+  <a href="/book/">Recipes</a>
+  <a href="/recipeindex/">Recipe Index</a>
+  <a href="/breakfast/" class="active">Breakfast</a>
 </nav>
 
 <div class="page-hero">
@@ -39,8 +39,8 @@
 </div>
 
 <div class="chapter-nav">
-  <a href="../breads/">← Breads</a>
-  <a href="../meats/">Next: Meats →</a>
+  <a href="/breads/">← Breads</a>
+  <a href="/meats/">Next: Meats →</a>
 </div>
 
 <div class="jump-links">
@@ -134,9 +134,9 @@
   <div class="footer-title">Grey's Cook Book</div>
   <p>Family recipes passed down with love — tried, true, and guaranteed to please.</p>
   <div class="footer-links">
-    <a href="../">Home</a>
-    <a href="../book/">All Recipes</a>
-    <a href="../meats/">Meats →</a>
+    <a href="/">Home</a>
+    <a href="/book/">All Recipes</a>
+    <a href="/meats/">Meats →</a>
   </div>
 </footer>
 
@@ -181,6 +181,14 @@ function printRecipe(btn) {
   document.body.innerHTML = originalBody;
   location.reload();
 }
+</script>
+<button id="back-to-top" title="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#8679;</button>
+<script>
+  window.addEventListener('scroll', function() {
+    var btn = document.getElementById('back-to-top');
+    if (window.scrollY > 300) { btn.classList.add('visible'); }
+    else { btn.classList.remove('visible'); }
+  });
 </script>
 </body>
 </html>

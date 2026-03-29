@@ -24,11 +24,11 @@
 <body>
 
 <nav class="site-nav">
-  <a href="../" class="nav-brand">Grey's Cook Book</a>
-  <a href="../">Home</a>
-  <a href="../book/">Recipes</a>
-  <a href="../recipeindex/">Recipe Index</a>
-  <a href="../appetizers/" class="active">Appetizers</a>
+  <a href="/" class="nav-brand">Grey's Cook Book</a>
+  <a href="/">Home</a>
+  <a href="/book/">Recipes</a>
+  <a href="/recipeindex/">Recipe Index</a>
+  <a href="/appetizers/" class="active">Appetizers</a>
 </nav>
 
 <div class="page-hero">
@@ -39,8 +39,8 @@
 </div>
 
 <div class="chapter-nav">
-  <a href="../book/">← Back to all chapters</a>
-  <a href="../breads/">Next: Breads →</a>
+  <a href="/book/">← Back to all chapters</a>
+  <a href="/breads/">Next: Breads →</a>
 </div>
 
 <div class="jump-links">
@@ -99,7 +99,7 @@
       <div class="instructions">
         <p>Brown the meat in a large saucepan and drain. Add the Velveeta in chunks and melt. Add the Rotel and cook until warmed. Serve with tortilla chips. (The little scooper chips work great.)</p>
       </div>
-      <div class="note-box"><strong>Note:</strong> Mr. Jeffords — my 10th grade chemistry teacher, who always referred to me as "The Reverend" — was the first person to make this for me. He told us once that he only missed one day of school each year: opening day of duck season, when he'd take his boys hunting. My father always referred to this as "that bean dip your chemistry teacher made." Why he called it that when it had no beans I don't know, but due to these two facts I call it beanless bean dip. </div>
+      <div class="note-box"><strong>Note:</strong> Mr. Jeffords — my 10th grade chemistry teacher, who always referred to me as "The Reverend" — was the first person to make this for me. He told us once that he only missed one day of school each year: opening day of duck season, when he'd take his boys hunting. My father always referred to this as "that bean dip your chemistry teacher made." Why he called it that when it had no beans I don't know, but due to these two facts I call it beanless bean dip.</div>
     </div>
   </div>
 
@@ -120,7 +120,7 @@
       <div class="instructions">
         <p>Mix all ingredients by hand. When the mixture stops sticking to your hands it's mixed well enough. Press onto a cookie sheet and cut into 3–4 inch straws. Bake at 375°F for 10 to 12 minutes.</p>
       </div>
-      <div class="note-box"><strong>Note:</strong> This is the often imitated but never duplicated Lancaster cheese straw recipe. The trick is you need a special extruder piece for your cookie press so the straws come out the proper thickness. Dad is constantly searching eBay for these. Dad also says use only Kraft block cheese, never freeze it or use pre shredded.</div>
+      <div class="note-box"><strong>Note:</strong> This is the often imitated but never duplicated Lancaster cheese straw recipe. The trick is you need a special extruder piece for your cookie press so the straws come out the proper thickness. Dad is constantly searching eBay for these.</div>
     </div>
   </div>
 
@@ -130,9 +130,9 @@
   <div class="footer-title">Grey's Cook Book</div>
   <p>Family recipes passed down with love — tried, true, and guaranteed to please.</p>
   <div class="footer-links">
-    <a href="../">Home</a>
-    <a href="../book/">All Recipes</a>
-    <a href="../breads/">Breads →</a>
+    <a href="/">Home</a>
+    <a href="/book/">All Recipes</a>
+    <a href="/breads/">Breads →</a>
   </div>
 </footer>
 
@@ -177,6 +177,14 @@ function printRecipe(btn) {
   document.body.innerHTML = originalBody;
   location.reload();
 }
+</script>
+<button id="back-to-top" title="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#8679;</button>
+<script>
+  window.addEventListener('scroll', function() {
+    var btn = document.getElementById('back-to-top');
+    if (window.scrollY > 300) { btn.classList.add('visible'); }
+    else { btn.classList.remove('visible'); }
+  });
 </script>
 </body>
 </html>
