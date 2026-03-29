@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <url>
+    <loc>https://greycooks.com/</loc>
+  </url>
+
+  <url>
+    <loc>https://greycooks.com/book/</loc>
+  </url>
+
+  <url>
+    <loc>https://greycooks.com/recipeindex/</loc>
+  </url>
+
+  <url>
+    <loc>https://greycooks.com/appetizers/</loc>
+  </url>
+
+  <url>
+    <loc>https://greycooks.com/breads/</loc>
+  </url>
+
+  <url>
+    <loc>https://greycooks.com/breakfast/</loc>
+  </url>
+
+  <url>
+    <loc>https://greycooks.com/meats/</loc>
+  </url>
+
+  <url>
+    <loc>https://greycooks.com/fish/</loc>
+  </url>
+
+  <url>
+    <loc>https://greycooks.com/sides/</loc>
+  </url>
+
+  <url>
+    <loc>https://greycooks.com/dessert/</loc>
+  </url>
+
+</urlset>
