@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Breads — Grey's Cook Book</title>
+<link rel="stylesheet" href="../style.css">
+<style>
+  .chapter-nav { max-width: 900px; margin: 40px auto 0; padding: 0 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+  .chapter-nav a { font-size: 0.85rem; color: var(--rust); text-decoration: none; font-style: italic; }
+  .chapter-nav a:hover { color: var(--warm-brown); }
+</style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LNBRC3723R"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-LNBRC3723R');
+  </script>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="../" class="nav-brand">Grey's Cook Book</a>
+  <a href="../">Home</a>
+  <a href="../book/">Recipes</a>
+  <a href="../recipeindex/">Recipe Index</a>
+  <a href="../breads/" class="active">Breads</a>
+</nav>
+
+<div class="page-hero">
+  <div class="rule rule-top"></div>
+  <h1>🍞 Breads</h1>
+  <p class="hero-sub">Fresh from the oven</p>
+  <div class="rule rule-bot"></div>
+</div>
+
+<div class="chapter-nav">
+  <a href="../appetizers/">← Appetizers</a>
+  <a href="../breakfast/">Next: Breakfast →</a>
+</div>
+
+<div class="container">
+
+  <div class="recipe-card" id="sour-cream-biscuits">
+    <div class="recipe-card-header"><h3>Sour Cream Biscuits</h3><button class="print-btn" onclick="printRecipe(this)" aria-label="Print recipe"><svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Print</button></div>
+    <div class="recipe-body">
+      <h4>Ingredients</h4>
+      <ul class="ingredients-list">
+        <li>2 cups self-rising flour</li>
+        <li>2 sticks butter</li>
+        <li>1 cup sour cream</li>
+      </ul>
+      <h4>Instructions</h4>
+      <div class="instructions">
+        <p>Melt butter. Mix all ingredients together. Bake in a muffin tin at 400°F until lightly browned.</p>
+      </div>
+      <div class="note-box"><strong>Note:</strong> I usually do it with melted butter. Should try softened to see the difference. Baking temp may be higher.</div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-title">Grey's Cook Book</div>
+  <p>Family recipes passed down with love — tried, true, and guaranteed to please.</p>
+  <div class="footer-links">
+    <a href="../">Home</a>
+    <a href="../book/">All Recipes</a>
+    <a href="../breakfast/">Breakfast →</a>
+  </div>
+</footer>
+
+
+
+
+
+
+
+<script>
+function printRecipe(btn) {
+  var card = btn.closest(".recipe-card");
+  var title = card.querySelector("h3").textContent;
+  var bodyHTML = card.querySelector(".recipe-body").innerHTML;
+  var originalHead = document.head.innerHTML;
+  var originalBody = document.body.innerHTML;
+
+  var css = "" +
+    "* { margin:0; padding:0; box-sizing:border-box; }" +
+    "body { font-family: Georgia, serif; font-size: 13px; line-height: 1.75; color: #2a1a0e; padding: 40px 48px; max-width: 720px; margin: 0 auto; }" +
+    ".cn { font-style:italic; color:#8a7560; font-size:0.8rem; letter-spacing:0.12em; margin-bottom:6px; }" +
+    "h1 { font-size:1.6rem; color:#2a1a0e; padding-bottom:10px; border-bottom:2px solid #5c3d1e; margin-bottom:20px; }" +
+    "h4 { font-size:0.75rem; letter-spacing:0.15em; text-transform:uppercase; color:#8b3a1a; margin:20px 0 8px; border-bottom:1px solid #e8d5a3; padding-bottom:4px; }" +
+    "h4::after { display:none !important; }" +
+    "ul.ingredients-list { list-style:none; display:grid; grid-template-columns:1fr 1fr; gap:4px 16px; margin-bottom:8px; }" +
+    "ul.ingredients-list li { padding:3px 0 3px 14px; border-bottom:1px dotted #ccc; position:relative; font-size:0.88rem; }" +
+    "ul.ingredients-list li::before { content:'·'; position:absolute; left:2px; color:#c4922a; font-size:1.2rem; line-height:1; top:2px; }" +
+    ".instructions { font-size:0.91rem; line-height:1.8; }" +
+    ".instructions p { margin-bottom:10px; }" +
+    ".note-box { background:#f2ead8; border-left:3px solid #c4922a; padding:12px 16px; margin-top:16px; font-size:0.85rem; font-style:italic; color:#8a7560; }" +
+    ".note-box strong { color:#8b3a1a; font-style:normal; }" +
+    ".variation-box { background:#f0f5e8; border-left:3px solid #6b7c3e; padding:10px 16px; margin-top:10px; font-size:0.85rem; color:#3d4a25; }" +
+    ".variation-box strong { color:#6b7c3e; }" +
+    "button { display:none !important; }";
+
+  document.head.innerHTML = "<meta charset=\"UTF-8\"><style>" + css + "</style>";
+  document.body.innerHTML = "<p class=\"cn\">Grey\u2019s Cook Book</p><h1>" + title + "</h1>" + bodyHTML;
+
+  window.print();
+
+  document.head.innerHTML = originalHead;
+  document.body.innerHTML = originalBody;
+  location.reload();
+}
+</script>
+</body>
+</html>
