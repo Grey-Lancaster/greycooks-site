@@ -3,71 +3,118 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Recipe Index — Grey's Cook Book</title>
+<title>Recipes — Grey's Cook Book</title>
 <link rel="stylesheet" href="../style.css">
 <style>
-  .index-wrap {
-    max-width: 860px;
-    margin: 0 auto;
-    padding: 48px 24px 80px;
-  }
-  .index-intro {
+  .toc-intro {
+    max-width: 680px;
+    margin: 56px auto 0;
+    padding: 0 24px;
     text-align: center;
-    margin-bottom: 48px;
-    color: var(--muted);
-    font-style: italic;
-    font-size: 0.95rem;
   }
-  .index-chapter {
-    margin-bottom: 40px;
-  }
-  .index-chapter-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 12px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid var(--light-gold);
-  }
-  .index-chapter-header a {
+  .toc-intro h2 {
     font-family: 'Playfair Display', serif;
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--warm-brown);
-    text-decoration: none;
-    transition: color 0.2s;
+    font-size: 1.3rem;
+    color: var(--muted);
+    font-style: italic;
+    font-weight: 400;
+    margin-bottom: 12px;
   }
-  .index-chapter-header a:hover { color: var(--rust); }
-  .index-chapter-header .emoji { font-size: 1.3rem; }
-  .index-chapter-header .count {
+  .toc-intro p { font-size: 0.95rem; color: var(--muted); }
+
+  .toc-grid {
+    max-width: 960px;
+    margin: 56px auto 0;
+    padding: 0 24px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 28px;
+  }
+
+  .toc-card {
+    background: #fff;
+    border: 1px solid var(--light-gold);
+    border-radius: 3px;
+    overflow: hidden;
+    box-shadow: 0 3px 14px var(--shadow);
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+  }
+  .toc-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: filter 0.2s;
+  }
+  .toc-card-link:hover .toc-card-top {
+    filter: brightness(1.12);
+  }
+  .toc-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 28px var(--shadow);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .toc-card-top {
+    background: linear-gradient(135deg, var(--warm-brown), var(--rust));
+    padding: 28px 28px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .toc-card-emoji {
+    font-size: 2.2rem;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .toc-card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--cream);
+    line-height: 1.1;
+  }
+  .toc-card-count {
     font-family: 'Lora', serif;
     font-style: italic;
+    color: var(--light-gold);
     font-size: 0.82rem;
-    color: var(--muted);
-    margin-left: auto;
+    margin-top: 4px;
   }
-  .index-list {
-    list-style: none;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 0;
-  }
-  .index-list li {
+  .toc-card-body { padding: 20px 28px 24px; flex: 1; }
+  .toc-card-body ul { list-style: none; }
+  .toc-card-body ul li {
+    font-size: 0.88rem;
+    padding: 5px 0;
     border-bottom: 1px dotted var(--light-gold);
-  }
-  .index-list li a {
-    display: block;
-    padding: 9px 12px 9px 0;
+    color: var(--dark-ink);
+    font-style: italic;
     font-family: 'Lora', serif;
-    font-size: 0.93rem;
+  }
+  .toc-card-body ul li:last-child { border-bottom: none; }
+  .toc-card-body ul li a {
     color: var(--dark-ink);
     text-decoration: none;
-    transition: color 0.15s, padding-left 0.15s;
+    display: block;
+    transition: color 0.2s;
   }
-  .index-list li a:hover {
+  .toc-card-body ul li a:hover { color: var(--rust); }
+  .toc-card-footer {
+    padding: 14px 28px;
+    border-top: 1px solid var(--light-gold);
+    background: var(--parchment);
+    font-family: 'Playfair Display', serif;
+    font-size: 0.82rem;
     color: var(--rust);
-    padding-left: 8px;
+    letter-spacing: 0.1em;
+    margin-top: auto;
   }
+  .toc-card-footer a {
+    color: var(--rust);
+    text-decoration: none;
+    display: block;
+  }
+  .toc-card-footer a:hover { color: var(--warm-brown); }
 </style>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-LNBRC3723R"></script>
   <script>
@@ -82,130 +129,164 @@
 <nav class="site-nav">
   <a href="/" class="nav-brand">Grey's Cook Book</a>
   <a href="/">Home</a>
-  <a href="/book/">Chapters</a>
-  <a href="/recipeindex/" class="active">Recipe Index</a>
+  <a href="/book/" class="active">Recipes</a>
+  <a href="/recipeindex/">Recipe Index</a>
 </nav>
 
 <div class="page-hero">
   <div class="rule rule-top"></div>
-  <h1>Recipe Index</h1>
-  <p class="hero-sub">Every recipe, all in one place</p>
+  <h1>The Recipes</h1>
+  <p class="hero-sub">Seven chapters of family-tested food</p>
   <div class="rule rule-bot"></div>
 </div>
 
-<div class="index-wrap">
-  <p class="index-intro">Click any recipe to jump straight to it.</p>
+<div class="toc-intro">
+  <h2>Choose a chapter to begin</h2>
+  <p>Each section has its own page with full ingredient lists, instructions, and the stories behind the dishes.</p>
+</div>
 
-  <!-- APPETIZERS -->
-  <div class="index-chapter">
-    <div class="index-chapter-header">
-      <span class="emoji">🥗</span>
-      <a href="/appetizers/">Appetizers</a>
-      <span class="count">3 recipes</span>
+<div class="toc-grid">
+
+  <div class="toc-card">
+    <a href="/appetizers/" class="toc-card-link">
+    <div class="toc-card-top">
+      <div class="toc-card-emoji">🥗</div>
+      <div>
+        <div class="toc-card-title">Appetizers</div>
+        <div class="toc-card-count">3 recipes</div>
+      </div>
     </div>
-    <ul class="index-list">
-      <li><a href="/appetizers/#baked-potato-soup">Baked Potato Soup</a></li>
-      <li><a href="/appetizers/#beanless-bean-dip">Beanless Bean Dip</a></li>
-      <li><a href="/appetizers/#cheese-straws">Cheese Straws</a></li>
-    </ul>
+    </a>
+    <div class="toc-card-body">
+      <ul>
+        <li><a href="/appetizers/#baked-potato-soup">Baked Potato Soup</a></li>
+        <li><a href="/appetizers/#beanless-bean-dip">Beanless Bean Dip</a></li>
+        <li><a href="/appetizers/#cheese-straws">Cheese Straws</a></li>
+      </ul>
+    </div>
+    <div class="toc-card-footer"><a href="/appetizers/">Open Chapter →</a></div>
   </div>
 
-  <!-- BREADS -->
-  <div class="index-chapter">
-    <div class="index-chapter-header">
-      <span class="emoji">🍞</span>
-      <a href="/breads/">Breads</a>
-      <span class="count">1 recipe</span>
+  <div class="toc-card">
+    <a href="/breads/" class="toc-card-link">
+    <div class="toc-card-top">
+      <div class="toc-card-emoji">🍞</div>
+      <div>
+        <div class="toc-card-title">Breads</div>
+        <div class="toc-card-count">1 recipe</div>
+      </div>
     </div>
-    <ul class="index-list">
-      <li><a href="/breads/#sour-cream-biscuits">Sour Cream Biscuits</a></li>
-    </ul>
+    </a>
+    <div class="toc-card-body">
+      <ul>
+        <li><a href="/breads/#sour-cream-biscuits">Sour Cream Biscuits</a></li>
+      </ul>
+    </div>
+    <div class="toc-card-footer"><a href="/breads/">Open Chapter →</a></div>
   </div>
 
-  <!-- BREAKFAST -->
-  <div class="index-chapter">
-    <div class="index-chapter-header">
-      <span class="emoji">🍳</span>
-      <a href="/breakfast/">Breakfast</a>
-      <span class="count">3 recipes</span>
+  <div class="toc-card">
+    <a href="/breakfast/" class="toc-card-link">
+    <div class="toc-card-top">
+      <div class="toc-card-emoji">🍳</div>
+      <div>
+        <div class="toc-card-title">Breakfast</div>
+        <div class="toc-card-count">3 recipes</div>
+      </div>
     </div>
-    <ul class="index-list">
-      <li><a href="/breakfast/#grits">Grits</a></li>
-      <li><a href="/breakfast/#hash-brown-casserole">Hash Brown Casserole</a></li>
-      <li><a href="/breakfast/#omelets">Omelets</a></li>
-    </ul>
+    </a>
+    <div class="toc-card-body">
+      <ul>
+        <li><a href="/breakfast/#grits">Grits</a></li>
+        <li><a href="/breakfast/#hash-brown-casserole">Hash Brown Casserole</a></li>
+        <li><a href="/breakfast/#omelets">Omelets</a></li>
+      </ul>
+    </div>
+    <div class="toc-card-footer"><a href="/breakfast/">Open Chapter →</a></div>
   </div>
 
-  <!-- MEATS -->
-  <div class="index-chapter">
-    <div class="index-chapter-header">
-      <span class="emoji">🥩</span>
-      <a href="/meats/">Meats</a>
-      <span class="count">14 recipes</span>
+  <div class="toc-card">
+    <a href="/meats/" class="toc-card-link">
+    <div class="toc-card-top">
+      <div class="toc-card-emoji">🥩</div>
+      <div>
+        <div class="toc-card-title">Meats</div>
+        <div class="toc-card-count">14 recipes</div>
+      </div>
     </div>
-    <ul class="index-list">
-      <li><a href="/meats/#chicken-casserole">Chicken Casserole</a></li>
-      <li><a href="/meats/#country-style-steak">Country Style Steak</a></li>
-      <li><a href="/meats/#dads-country-style-steak">Dad's Country Style Steak</a></li>
-      <li><a href="/meats/#deer-tenderloin">Deer Tenderloin</a></li>
-      <li><a href="/meats/#dove-birds">Dove Birds</a></li>
-      <li><a href="/meats/#grilled-chicken">Grilled Chicken</a></li>
-      <li><a href="/meats/#hash">Hash</a></li>
-      <li><a href="/meats/#hot-dog-chili">Dad's Hot Dog Chili</a></li>
-      <li><a href="/meats/#lasagna">Lasagna</a></li>
-      <li><a href="/meats/#pork-roast">Parmesan Honey Pork Roast</a></li>
-      <li><a href="/meats/#shrimp-and-grits">Shrimp and Grits</a></li>
-      <li><a href="/meats/#steak">Steak</a></li>
-      <li><a href="/meats/#swiss-chicken">Swiss Chicken Casserole</a></li>
-      <li><a href="/meats/#tenderloin">Tenderloin</a></li>
-    </ul>
+    </a>
+    <div class="toc-card-body">
+      <ul>
+        <li><a href="/meats/#chicken-casserole">Chicken Casserole</a></li>
+        <li><a href="/meats/#country-style-steak">Country Style Steak</a></li>
+        <li><a href="/meats/#deer-tenderloin">Deer Tenderloin</a></li>
+        <li><a href="/meats/#dove-birds">Dove Birds</a></li>
+        <li><a href="/meats/#lasagna">Lasagna</a></li>
+        <li><a href="/meats/#shrimp-and-grits">Shrimp and Grits</a></li>
+        <li><a href="/meats/#tenderloin">Tenderloin &amp; more…</a></li>
+      </ul>
+    </div>
+    <div class="toc-card-footer"><a href="/meats/">Open Chapter →</a></div>
   </div>
 
-  <!-- FISH -->
-  <div class="index-chapter">
-    <div class="index-chapter-header">
-      <span class="emoji">🐟</span>
-      <a href="/fish/">Fish</a>
-      <span class="count">1 recipe</span>
+  <div class="toc-card">
+    <a href="/fish/" class="toc-card-link">
+    <div class="toc-card-top">
+      <div class="toc-card-emoji">🐟</div>
+      <div>
+        <div class="toc-card-title">Fish</div>
+        <div class="toc-card-count">1 recipe</div>
+      </div>
     </div>
-    <ul class="index-list">
-      <li><a href="/fish/#tilapia">Papa Lanc's Skillet Tilapia with Cherry Tomatoes</a></li>
-    </ul>
+    </a>
+    <div class="toc-card-body">
+      <ul>
+        <li><a href="/fish/#tilapia">Papa Lanc's Skillet Tilapia with Cherry Tomatoes</a></li>
+      </ul>
+    </div>
+    <div class="toc-card-footer"><a href="/fish/">Open Chapter →</a></div>
   </div>
 
-  <!-- SIDES -->
-  <div class="index-chapter">
-    <div class="index-chapter-header">
-      <span class="emoji">🥦</span>
-      <a href="/sides/">Sides</a>
-      <span class="count">10 recipes</span>
+  <div class="toc-card">
+    <a href="/sides/" class="toc-card-link">
+    <div class="toc-card-top">
+      <div class="toc-card-emoji">🥦</div>
+      <div>
+        <div class="toc-card-title">Sides</div>
+        <div class="toc-card-count">10 recipes</div>
+      </div>
     </div>
-    <ul class="index-list">
-      <li><a href="/sides/#mac-and-cheese">Mimi's Mac and Cheese</a></li>
-      <li><a href="/sides/#baked-beans">Baked Beans</a></li>
-      <li><a href="/sides/#brown-rice">Brown Rice Casserole</a></li>
-      <li><a href="/sides/#fried-cabbage">Fried Cabbage</a></li>
-      <li><a href="/sides/#green-bean-casserole">Green Bean Casserole</a></li>
-      <li><a href="/sides/#green-beans">Green Beans</a></li>
-      <li><a href="/sides/#home-fries">Home Fries</a></li>
-      <li><a href="/sides/#lima-beans">Lima Beans</a></li>
-      <li><a href="/sides/#mashed-potatoes">Mashed Potatoes</a></li>
-      <li><a href="/sides/#succotash">Succotash</a></li>
-    </ul>
+    </a>
+    <div class="toc-card-body">
+      <ul>
+        <li><a href="/sides/#mac-and-cheese">Mimi's Mac and Cheese</a></li>
+        <li><a href="/sides/#baked-beans">Baked Beans</a></li>
+        <li><a href="/sides/#fried-cabbage">Fried Cabbage</a></li>
+        <li><a href="/sides/#mashed-potatoes">Mashed Potatoes</a></li>
+        <li><a href="/sides/#succotash">Succotash &amp; more…</a></li>
+      </ul>
+    </div>
+    <div class="toc-card-footer"><a href="/sides/">Open Chapter →</a></div>
   </div>
 
-  <!-- DESSERT -->
-  <div class="index-chapter">
-    <div class="index-chapter-header">
-      <span class="emoji">🍰</span>
-      <a href="/dessert/">Dessert</a>
-      <span class="count">3 recipes</span>
+  <div class="toc-card">
+    <a href="/dessert/" class="toc-card-link">
+    <div class="toc-card-top">
+      <div class="toc-card-emoji">🍰</div>
+      <div>
+        <div class="toc-card-title">Dessert</div>
+        <div class="toc-card-count">3 recipes</div>
+      </div>
     </div>
-    <ul class="index-list">
-      <li><a href="/dessert/#blackberry-cobbler">Blackberry Cobbler</a></li>
-      <li><a href="/dessert/#lemonade-pie">Lemonade Pie</a></li>
-      <li><a href="/dessert/#red-velvet-cake">Red Velvet Cake</a></li>
-    </ul>
+    </a>
+    <div class="toc-card-body">
+      <ul>
+        <li><a href="/dessert/#blackberry-cobbler">Blackberry Cobbler</a></li>
+        <li><a href="/dessert/#lemonade-pie">Lemonade Pie</a></li>
+        <li><a href="/dessert/#red-velvet-cake">Red Velvet Cake</a></li>
+      </ul>
+    </div>
+    <div class="toc-card-footer"><a href="/dessert/">Open Chapter →</a></div>
   </div>
 
 </div>
@@ -215,9 +296,10 @@
   <p>Family recipes passed down with love — tried, true, and guaranteed to please.</p>
   <div class="footer-links">
     <a href="/">Home</a>
-    <a href="/book/">Chapters</a>
-    <a href="/recipeindex/">Recipe Index</a>
+    <a href="/appetizers/">Appetizers</a>
+    <a href="/breakfast/">Breakfast</a>
     <a href="/meats/">Meats</a>
+    <a href="/fish/">Fish</a>
     <a href="/sides/">Sides</a>
     <a href="/dessert/">Dessert</a>
   </div>
