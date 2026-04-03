@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Host: greycooks.com
 
 Sitemap: https://greycooks.com/sitemap.xml
