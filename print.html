@@ -1,0 +1,160 @@
+<script>
+/*
+============================================================
+1. CATEGORY PAGES (NOT individual recipes)
+============================================================
+*/
+const CATEGORY_PAGES = [
+  { title: "Appetizers", url: "/appetizers/" },
+  { title: "Breakfast", url: "/breakfast/" },
+  { title: "Breads", url: "/breads/" },
+  { title: "Sides", url: "/sides/" },
+  { title: "Main Dishes", url: "/meats/" },
+  { title: "Fish", url: "/fish/" }
+  { title: "Desserts", url: "/desserts/" },
+
+];
+
+/*
+============================================================
+2. EXTRACT FROM YOUR EXACT STRUCTURE
+============================================================
+*/
+function extractRecipesFromPage(doc, category) {
+  const cards = doc.querySelectorAll(".recipe-card");
+
+  return [...cards].map(card => {
+    const title = card.querySelector("h3")?.textContent.trim() || "Recipe";
+
+    const ingredients = [
+      ...card.querySelectorAll(".ingredients-list li")
+    ].map(li => li.textContent.trim());
+
+    const directions = [
+      ...card.querySelectorAll(".instructions p")
+    ].map(p => p.textContent.trim());
+
+    const notes = [
+      ...card.querySelectorAll(".note-box, .variation-box")
+    ].map(n => n.textContent.trim());
+
+    return {
+      title,
+      category,
+      ingredients,
+      directions,
+      notes
+    };
+  });
+}
+
+/*
+============================================================
+3. RENDER
+============================================================
+*/
+function renderRecipe(recipe, pageNumber) {
+  return `
+    <section class="page">
+      <div class="page-inner">
+
+        <h2>${recipe.title}</h2>
+        <p style="color:#666; margin:6px 0 12px;">${recipe.category}</p>
+
+        <div class="divider"></div>
+
+        <div class="recipe-content">
+
+          <div class="recipe-block">
+            <h3>Ingredients</h3>
+            <ul>
+              ${recipe.ingredients.map(i => `<li>${i}</li>`).join("")}
+            </ul>
+          </div>
+
+          <div class="recipe-block">
+            <h3>Directions</h3>
+            <ol>
+              ${recipe.directions.map(d => `<li>${d}</li>`).join("")}
+            </ol>
+          </div>
+
+        </div>
+
+        ${
+          recipe.notes.length
+            ? `<div class="recipe-notes">
+                 <h4>Notes</h4>
+                 ${recipe.notes.map(n => `<p>${n}</p>`).join("")}
+               </div>`
+            : ""
+        }
+
+        <footer class="recipe-footer">
+          <span>greycooks.com</span>
+          <span>${pageNumber}</span>
+        </footer>
+
+      </div>
+    </section>
+  `;
+}
+
+/*
+============================================================
+4. BUILD BOOK
+============================================================
+*/
+async function buildBook() {
+  const book = document.getElementById("book");
+  const loading = document.getElementById("loading");
+
+  loading.style.display = "block";
+  book.innerHTML = "";
+
+  let html = `
+    <section class="page">
+      <div class="page-inner title-page">
+        <h1 class="book-title">Grey’s Cook Book</h1>
+        <p class="book-subtitle">Recipes from greycooks.com</p>
+      </div>
+    </section>
+  `;
+
+  let pageNumber = 2;
+
+  for (const cat of CATEGORY_PAGES) {
+    try {
+      const res = await fetch(cat.url);
+      const text = await res.text();
+      const doc = new DOMParser().parseFromString(text, "text/html");
+
+      const recipes = extractRecipesFromPage(doc, cat.title);
+
+      // Section page
+      html += `
+        <section class="page">
+          <div class="page-inner section-page">
+            <h2>${cat.title}</h2>
+          </div>
+        </section>
+      `;
+      pageNumber++;
+
+      // Recipes
+      for (const recipe of recipes) {
+        html += renderRecipe(recipe, pageNumber);
+        pageNumber++;
+      }
+
+    } catch (e) {
+      console.error("Failed loading:", cat.url, e);
+    }
+  }
+
+  book.innerHTML = html;
+  loading.style.display = "none";
+}
+
+buildBook();
+</script>
