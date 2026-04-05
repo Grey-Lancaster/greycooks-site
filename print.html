@@ -1,161 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grey's Cook Book - Print Edition</title>
+  <meta name="robots" content="noindex, nofollow" />
 
-<script>
-/*
-============================================================
-1. CATEGORY PAGES (NOT individual recipes)
-============================================================
-*/
-const CATEGORY_PAGES = [
-  { title: "Appetizers", url: "/appetizers/" },
-  { title: "Breakfast", url: "/breakfast/" },
-  { title: "Breads", url: "/breads/" },
-  { title: "Sides", url: "/sides/" },
-  { title: "Main Dishes", url: "/meats/" },
-  { title: "Fish", url: "/fish/" },
-  { title: "Desserts", url: "/desserts/" },
+  <style>
+    :root {
+      --page-width: 8.5in;
+      --page-height: 11in;
+      --page-margin: 0.7in;
+      --ink: #111;
+      --muted: #666;
+      --line: #d8d8d8;
+      --screen-bg: #e5e5e5;
+    }
 
-];
+    * {
+      box-sizing: border-box;
+    }
 
-/*
-============================================================
-2. EXTRACT FROM YOUR EXACT STRUCTURE
-============================================================
-*/
-function extractRecipesFromPage(doc, category) {
-  const cards = doc.querySelectorAll(".recipe-card");
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--screen-bg);
+      color: var(--ink);
+      font-family: Georgia, "Times New Roman", serif;
+      line-height: 1.5;
+    }
 
-  return [...cards].map(card => {
-    const title = card.querySelector("h3")?.textContent.trim() || "Recipe";
+    body {
+      padding: 24px 0;
+    }
 
-    const ingredients = [
-      ...card.querySelectorAll(".ingredients-list li")
-    ].map(li => li.textContent.trim());
+    .screen-note,
+    .loading,
+    .error-box {
+      width: min(900px, calc(100% - 32px));
+      margin: 0 auto 18px;
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 16px 20px;
+    }
 
-    const directions = [
-      ...card.querySelectorAll(".instructions p")
-    ].map(p => p.textContent.trim());
+    .screen-note h1 {
+      margin: 0 0 10px;
+      font-size: 1.5rem;
+    }
 
-    const notes = [
-      ...card.querySelectorAll(".note-box, .variation-box")
-    ].map(n => n.textContent.trim());
+    .screen-note p,
+    .loading p,
+    .error-box p {
+      margin: 8px 0;
+    }
 
-    return {
-      title,
-      category,
-      ingredients,
-      directions,
-      notes
-    };
-  });
-}
+    .actions {
+      margin-top: 14px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
 
-/*
-============================================================
-3. RENDER
-============================================================
-*/
-function renderRecipe(recipe, pageNumber) {
-  return `
-    <section class="page">
-      <div class="page-inner">
+    .actions button {
+      padding: 10px 14px;
+      border: 1px solid #999;
+      background: #fff;
+      color: #111;
+      cursor: pointer;
+      font: inherit;
+    }
 
-        <h2>${recipe.title}</h2>
-        <p style="color:#666; margin:6px 0 12px;">${recipe.category}</p>
+    .actions button:hover {
+      background: #f2f2f2;
+    }
 
-        <div class="divider"></div>
+    .error-box {
+      border-color: #c88;
+      color: #6d1f1f;
+      display: none;
+    }
 
-        <div class="recipe-content">
+    .book {
+      width: 100%;
+    }
 
-          <div class="recipe-block">
-            <h3>Ingredients</h3>
-            <ul>
-              ${recipe.ingredients.map(i => `<li>${i}</li>`).join("")}
-            </ul>
-          </div>
+    .page {
+      width: var(--page-width);
+      min-height: var(--page-height);
+      margin: 0 auto 20px;
+      background: #fff;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.14);
+      padding: var(--page-margin);
+      page-break-after: always;
+      break-after: page;
+      overflow: hidden;
+    }
 
-          <div class="recipe-block">
-            <h3>Directions</h3>
-            <ol>
-              ${recipe.directions.map(d => `<li>${d}</li>`).join("")}
-            </ol>
-          </div>
+    .page:last-child {
+      page-break-after: auto;
+      break-after: auto;
+    }
 
-        </div>
+    .page-inner {
+      min-height: calc(var(--page-height) - (var(--page-margin) * 2));
+      display: flex;
+      flex-direction: column;
+    }
 
-        ${
-          recipe.notes.length
-            ? `<div class="recipe-notes">
-                 <h4>Notes</h4>
-                 ${recipe.notes.map(n => `<p>${n}</p>`).join("")}
-               </div>`
-            : ""
-        }
+    .title-page,
+    .section-page,
+    .toc-page,
+    .about-page {
+      justify-content: center;
+      text-align: center;
+    }
 
-        <footer class="recipe-footer">
-          <span>greycooks.com</span>
-          <span>${pageNumber}</span>
-        </footer>
+    .book-title {
+      margin: 0;
+      font-size: 2.2rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
 
-      </div>
-    </section>
-  `;
-}
+    .book-subtitle {
+      margin: 10px 0 0;
+      font-size: 1rem;
+      color: var(--muted);
+      font-style: italic;
+    }
 
-/*
-============================================================
-4. BUILD BOOK
-============================================================
-*/
-async function buildBook() {
-  const book = document.getElementById("book");
-  const loading = document.getElementById("loading");
+    .byline {
+      margin-top: 26px;
+      font-size: 1rem;
+    }
 
-  loading.style.display = "block";
-  book.innerHTML = "";
+    .small-divider {
+      width: 120px;
+      height: 1px;
+      background: #222;
+      margin: 18px auto;
+    }
 
-  let html = `
-    <section class="page">
-      <div class="page-inner title-page">
-        <h1 class="book-title">Grey’s Cook Book</h1>
-        <p class="book-subtitle">Recipes from greycooks.com</p>
-      </div>
-    </section>
-  `;
+    .section-kicker {
+      margin: 0 0 10px;
+      font-size: 0.92rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
 
-  let pageNumber = 2;
+    .section-title {
+      margin: 0;
+      font-size: 1.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
 
-  for (const cat of CATEGORY_PAGES) {
-    try {
-      const res = await fetch(cat.url);
-      const text = await res.text();
-      const doc = new DOMParser().parseFromString(text, "text/html");
+    .section-note {
+      margin: 0 auto;
+      max-width: 460px;
+      color: var(--muted);
+      font-size: 1rem;
+    }
 
-      const recipes = extractRecipesFromPage(doc, cat.title);
+    .toc-title,
+    .about-title {
+      margin: 0;
+      font-size: 1.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
 
-      // Section page
-      html += `
+    .toc-list {
+      list-style: none;
+      margin: 28px auto 0;
+      padding: 0;
+      max-width: 520px;
+      text-align: left;
+    }
+
+    .toc-list li {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 1rem;
+    }
+
+    .toc-list span:first-child {
+      font-weight: 600;
+    }
+
+    .recipe-header h2 {
+      margin: 0;
+      font-size: 1.9rem;
+      line-height: 1.15;
+    }
+
+    .recipe-category {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 0.98rem;
+      font-style: italic;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--line);
+      margin: 16px 0 18px;
+    }
+
+    .recipe-content {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    .recipe-block h3 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .recipe-block ul,
+    .recipe-block ol {
+      margin: 0;
+      padding-left: 1.2rem;
+    }
+
+    .recipe-block li {
+      margin-bottom: 0.45rem;
+      font-size: 1rem;
+    }
+
+    .recipe-notes {
+      margin-top: 18px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+    }
+
+    .recipe-notes h4 {
+      margin: 0 0 8px;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .recipe-notes p {
+      margin: 0 0 8px;
+      font-size: 0.97rem;
+    }
+
+    .recipe-footer {
+      margin-top: auto;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 0.84rem;
+      color: var(--muted);
+    }
+
+    .about-page p {
+      margin: 0 0 12px;
+      max-width: 540px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+    }
+
+    @page {
+      size: 8.5in 11in;
+      margin: 0;
+    }
+
+    @media print {
+      html,
+      body {
+        background: #fff;
+        margin: 0;
+        padding: 0;
+      }
+
+      .screen-note,
+      .loading,
+      .error-box {
+        display: none !important;
+      }
+
+      .page {
+        margin: 0;
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="screen-note">
+    <h1>Grey's Cook Book Print Builder</h1>
+    <p>This page pulls recipes from your category pages and rebuilds them into a clean black-and-white printable cookbook.</p>
+    <p>After it finishes loading, use Print and save as PDF.</p>
+    <div class="actions">
+      <button onclick="window.print()">Print / Save PDF</button>
+      <button onclick="buildBook()">Reload Recipes</button>
+    </div>
+  </div>
+
+  <div id="loading" class="loading">
+    <p><strong>Loading recipes...</strong></p>
+    <p>Please wait while the cookbook is assembled.</p>
+  </div>
+
+  <div id="errors" class="error-box"></div>
+
+  <main id="book" class="book"></main>
+
+  <script>
+    const CATEGORY_PAGES = [
+      { title: "Appetizers", url: "/appetizers/" },
+      { title: "Breakfast", url: "/breakfast/" },
+      { title: "Breads", url: "/breads/" },
+      { title: "Sides", url: "/sides/" },
+      { title: "Main Dishes", url: "/meats/" },
+      { title: "Fish", url: "/fish/" },
+      { title: "Desserts", url: "/desserts/" }
+    ];
+
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, function (ch) {
+        return {
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;"
+        }[ch];
+      });
+    }
+
+    function extractRecipesFromPage(doc, category) {
+      const cards = doc.querySelectorAll(".recipe-card");
+
+      return [...cards].map(card => {
+        const title = card.querySelector("h3")?.textContent.trim() || "Recipe";
+
+        const ingredients = [
+          ...card.querySelectorAll(".ingredients-list li")
+        ].map(li => li.textContent.trim()).filter(Boolean);
+
+        const directions = [
+          ...card.querySelectorAll(".instructions p")
+        ].map(p => p.textContent.trim()).filter(Boolean);
+
+        const notes = [
+          ...card.querySelectorAll(".note-box, .variation-box")
+        ].map(n => n.textContent.trim()).filter(Boolean);
+
+        return {
+          title,
+          category,
+          ingredients,
+          directions,
+          notes
+        };
+      });
+    }
+
+    function renderTitlePage() {
+      return `
         <section class="page">
-          <div class="page-inner section-page">
-            <h2>${cat.title}</h2>
+          <div class="page-inner title-page">
+            <p class="section-kicker">Family Recipes</p>
+            <h1 class="book-title">Grey's Cook Book</h1>
+            <div class="small-divider"></div>
+            <p class="book-subtitle">A collection of home cooking favorites from greycooks.com</p>
+            <p class="byline">By Grey Lancaster</p>
           </div>
         </section>
       `;
-      pageNumber++;
+    }
 
-      // Recipes
-      for (const recipe of recipes) {
-        html += renderRecipe(recipe, pageNumber);
-        pageNumber++;
+    function renderToc(tocItems) {
+      return `
+        <section class="page">
+          <div class="page-inner toc-page">
+            <h2 class="toc-title">Table of Contents</h2>
+            <div class="small-divider"></div>
+            <ul class="toc-list">
+              ${tocItems.map(item => `
+                <li>
+                  <span>${escapeHtml(item.title)}</span>
+                  <span>${item.page}</span>
+                </li>
+              `).join("")}
+            </ul>
+          </div>
+        </section>
+      `;
+    }
+
+    function renderSectionPage(title) {
+      return `
+        <section class="page">
+          <div class="page-inner section-page">
+            <p class="section-kicker">Chapter</p>
+            <h2 class="section-title">${escapeHtml(title)}</h2>
+            <div class="small-divider"></div>
+          </div>
+        </section>
+      `;
+    }
+
+    function renderRecipe(recipe, pageNumber) {
+      return `
+        <section class="page">
+          <div class="page-inner">
+            <header class="recipe-header">
+              <h2>${escapeHtml(recipe.title)}</h2>
+              <p class="recipe-category">${escapeHtml(recipe.category)}</p>
+            </header>
+
+            <div class="divider"></div>
+
+            <div class="recipe-content">
+              <div class="recipe-block">
+                <h3>Ingredients</h3>
+                <ul>
+                  ${recipe.ingredients.map(i => `<li>${escapeHtml(i)}</li>`).join("")}
+                </ul>
+              </div>
+
+              <div class="recipe-block">
+                <h3>Directions</h3>
+                <ol>
+                  ${recipe.directions.map(d => `<li>${escapeHtml(d)}</li>`).join("")}
+                </ol>
+              </div>
+            </div>
+
+            ${recipe.notes.length ? `
+              <div class="recipe-notes">
+                <h4>Notes</h4>
+                ${recipe.notes.map(n => `<p>${escapeHtml(n)}</p>`).join("")}
+              </div>
+            ` : ""}
+
+            <footer class="recipe-footer">
+              <span>greycooks.com</span>
+              <span>${pageNumber}</span>
+            </footer>
+          </div>
+        </section>
+      `;
+    }
+
+    function renderAboutPage(pageNumber) {
+      return `
+        <section class="page">
+          <div class="page-inner about-page">
+            <h2 class="about-title">About the Author</h2>
+            <div class="small-divider"></div>
+            <p>Grey Lancaster shares approachable home cooking rooted in family meals, practical kitchen know-how, and recipes worth making again.</p>
+            <p>This collection brings together favorites from greycooks.com in a format meant for real kitchens, real tables, and real use.</p>
+            <footer class="recipe-footer">
+              <span>greycooks.com</span>
+              <span>${pageNumber}</span>
+            </footer>
+          </div>
+        </section>
+      `;
+    }
+
+    async function buildBook() {
+      const book = document.getElementById("book");
+      const loading = document.getElementById("loading");
+      const errorsBox = document.getElementById("errors");
+
+      if (!book) {
+        console.error('Missing <main id="book"></main>');
+        return;
       }
 
-    } catch (e) {
-      console.error("Failed loading:", cat.url, e);
+      if (loading) {
+        loading.style.display = "block";
+      }
+
+      if (errorsBox) {
+        errorsBox.style.display = "none";
+        errorsBox.innerHTML = "";
+      }
+
+      book.innerHTML = "";
+
+      const builtSections = [];
+      const errors = [];
+
+      for (const cat of CATEGORY_PAGES) {
+        try {
+          const res = await fetch(cat.url);
+
+          if (!res.ok) {
+            throw new Error(`HTTP ${res.status} for ${cat.url}`);
+          }
+
+          const text = await res.text();
+          const doc = new DOMParser().parseFromString(text, "text/html");
+          const recipes = extractRecipesFromPage(doc, cat.title);
+
+          builtSections.push({
+            title: cat.title,
+            recipes
+          });
+        } catch (e) {
+          errors.push(`Failed loading ${cat.url}: ${e.message}`);
+          builtSections.push({
+            title: cat.title,
+            recipes: []
+          });
+        }
+      }
+
+      const tocItems = [];
+      let pageNumber = 3;
+
+      for (const section of builtSections) {
+        tocItems.push({
+          title: section.title,
+          page: pageNumber
+        });
+        pageNumber += 1;
+        pageNumber += section.recipes.length;
+      }
+
+      const aboutPageNumber = pageNumber;
+
+      let html = "";
+      html += renderTitlePage();
+      html += renderToc(tocItems);
+
+      pageNumber = 3;
+
+      for (const section of builtSections) {
+        html += renderSectionPage(section.title);
+        pageNumber += 1;
+
+        for (const recipe of section.recipes) {
+          html += renderRecipe(recipe, pageNumber);
+          pageNumber += 1;
+        }
+      }
+
+      html += renderAboutPage(aboutPageNumber);
+
+      book.innerHTML = html;
+
+      if (errors.length && errorsBox) {
+        errorsBox.style.display = "block";
+        errorsBox.innerHTML = `
+          <p><strong>Some pages did not load:</strong></p>
+          <ul>
+            ${errors.map(err => `<li>${escapeHtml(err)}</li>`).join("")}
+          </ul>
+        `;
+      }
+
+      if (loading) {
+        loading.style.display = "none";
+      }
     }
-  }
 
-  book.innerHTML = html;
-  loading.style.display = "none";
-}
-
-buildBook();
-</script>
+    buildBook();
+  </script>
+</body>
+</html>
