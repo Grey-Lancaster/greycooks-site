@@ -155,17 +155,40 @@ function printRecipe(btn) {
   var card = btn.closest(".recipe-card");
   var title = card.querySelector("h3").textContent;
   var bodyHTML = card.querySelector(".recipe-body").innerHTML;
+
+  // Pre-load cover image as a base64 data URL so it resolves correctly
+  // inside the swapped-out DOM during printing
+  var img = new Image();
+  img.crossOrigin = "anonymous";
+  img.onload = function () {
+    var canvas = document.createElement("canvas");
+    canvas.width = img.naturalWidth;
+    canvas.height = img.naturalHeight;
+    canvas.getContext("2d").drawImage(img, 0, 0);
+    var dataUrl = canvas.toDataURL("image/jpeg");
+    doPrint(title, bodyHTML, dataUrl);
+  };
+  img.onerror = function () {
+    // Fallback: print with a plain dark banner if image fails to load
+    doPrint(title, bodyHTML, null);
+  };
+  img.src = "/images/cover.jpg";
+}
+
+function doPrint(title, bodyHTML, coverDataUrl) {
   var originalHead = document.head.innerHTML;
   var originalBody = document.body.innerHTML;
 
-  var css = "" +
+  var css =
     "* { margin:0; padding:0; box-sizing:border-box; }" +
     "body { font-family: Georgia, serif; font-size: 13px; line-height: 1.75; color: #2a1a0e; padding: 40px 48px; max-width: 720px; margin: 0 auto; }" +
 
     /* ===== BRAND HEADER ===== */
     ".brand-header { position: relative; height: 70px; margin-bottom: 18px; border: 1px solid #d7cfc7; overflow:hidden; }" +
-    ".brand-header img { width:100%; height:100%; object-fit:cover; filter:grayscale(100%); }" +
+    ".brand-header img { width:100%; height:100%; object-fit:cover; filter:grayscale(100%); display:block; }" +
     ".brand-header span { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:#fff; font-size:0.9rem; letter-spacing:0.15em; text-transform:uppercase; background:rgba(0,0,0,0.45); padding:4px 10px; }" +
+    ".brand-header-blank { height: 70px; margin-bottom: 18px; border: 1px solid #d7cfc7; background:#2a1a0e; display:flex; align-items:center; justify-content:center; }" +
+    ".brand-header-blank span { color:#fff; font-size:0.9rem; letter-spacing:0.15em; text-transform:uppercase; }" +
 
     "h1 { font-size:1.6rem; color:#2a1a0e; padding-bottom:10px; border-bottom:2px solid #5c3d1e; margin-bottom:20px; }" +
 
@@ -187,13 +210,13 @@ function printRecipe(btn) {
 
     "button { display:none !important; }";
 
-  document.head.innerHTML = "<meta charset=\"UTF-8\"><style>" + css + "</style>";
+  var bannerHTML = coverDataUrl
+    ? "<div class='brand-header'><img src='" + coverDataUrl + "' alt='Grey\\'s Cook Book'><span>Grey's Cook Book</span></div>"
+    : "<div class='brand-header-blank'><span>Grey's Cook Book</span></div>";
 
+  document.head.innerHTML = "<meta charset=\"UTF-8\"><style>" + css + "</style>";
   document.body.innerHTML =
-    "<div class='brand-header'>" +
-      "<img src='/images/cover.jpg'>" +
-      "<span>Grey’s Cook Book</span>" +
-    "</div>" +
+    bannerHTML +
     "<h1>" + title + "</h1>" +
     bodyHTML;
 
@@ -204,6 +227,7 @@ function printRecipe(btn) {
   location.reload();
 }
 </script>
+
   <button id="back-to-top" title="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#8679;</button>
   <script>
     window.addEventListener('scroll', function () {
