@@ -18,6 +18,7 @@
       --muted: #6c625b;
       --line: #d7cfc7;
       --line-dark: #8b7f75;
+      --line-light: #ebe4dc;
       --accent: #3b312b;
       --screen-bg: #e7e4e0;
     }
@@ -106,6 +107,7 @@
       page-break-after: always;
       break-after: page;
       overflow: hidden;
+      position: relative;
     }
 
     .page:last-child {
@@ -119,6 +121,8 @@
       );
       display: flex;
       flex-direction: column;
+      position: relative;
+      z-index: 2;
     }
 
     .title-page,
@@ -132,7 +136,7 @@
     .book-title {
       margin: 0;
       font-size: 2.45rem;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--accent);
     }
@@ -192,21 +196,33 @@
       list-style: none;
       margin: 30px auto 0;
       padding: 0;
-      max-width: 540px;
+      max-width: 560px;
       text-align: left;
     }
 
     .toc-list li {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: end;
+      gap: 10px;
       padding: 10px 0;
-      border-bottom: 1px solid var(--line);
       font-size: 1rem;
     }
 
-    .toc-list span:first-child {
+    .toc-name {
       font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .toc-dots {
+      border-bottom: 1px dotted var(--line-dark);
+      transform: translateY(-0.2em);
+    }
+
+    .toc-page-number {
+      min-width: 24px;
+      text-align: right;
+      white-space: nowrap;
     }
 
     .recipe-header h2 {
@@ -303,6 +319,166 @@
       margin-left: auto;
       margin-right: auto;
       text-align: center;
+    }
+
+    .cover-page,
+    .section-page,
+    .toc-page {
+      position: relative;
+    }
+
+    .cover-page::before,
+    .section-page::before,
+    .toc-page::before {
+      content: "";
+      position: absolute;
+      inset: 0.18in;
+      border: 1px solid var(--line);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .cover-page::after,
+    .section-page::after,
+    .toc-page::after {
+      content: "";
+      position: absolute;
+      inset: 0.3in;
+      border: 1px solid var(--line-light);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .cover-page {
+      justify-content: center;
+      text-align: center;
+    }
+
+    .cover-kicker {
+      margin: 0 0 14px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.26em;
+    }
+
+    .cover-title {
+      margin: 0;
+      font-size: 2.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      line-height: 1.08;
+    }
+
+    .cover-subtitle {
+      margin: 14px auto 0;
+      max-width: 430px;
+      font-size: 1.02rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .cover-byline {
+      margin-top: 30px;
+      font-size: 1rem;
+    }
+
+    .cover-divider {
+      width: 160px;
+      height: 1px;
+      background: var(--line-dark);
+      margin: 22px auto;
+    }
+
+    .cover-bottom-note {
+      margin-top: 40px;
+      font-size: 0.82rem;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .section-page {
+      justify-content: center;
+      text-align: center;
+    }
+
+    .section-page .section-kicker {
+      margin: 0 0 14px;
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.28em;
+    }
+
+    .section-page .section-title {
+      margin: 0;
+      font-size: 2.15rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      line-height: 1.1;
+    }
+
+    .section-page .small-divider {
+      width: 150px;
+      margin: 20px auto 18px;
+    }
+
+    .section-page .section-note {
+      max-width: 420px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 0.98rem;
+      font-style: italic;
+      line-height: 1.55;
+    }
+
+    .section-ornament {
+      margin: 0 auto 18px;
+      font-size: 1rem;
+      color: var(--line-dark);
+      letter-spacing: 0.35em;
+    }
+
+    .section-bottom-ornament {
+      margin: 22px auto 0;
+      font-size: 0.9rem;
+      color: var(--line-dark);
+      letter-spacing: 0.35em;
+    }
+
+    .toc-page .toc-title {
+      margin-bottom: 8px;
+      font-size: 1.95rem;
+      letter-spacing: 0.08em;
+    }
+
+    .toc-intro {
+      max-width: 420px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-style: italic;
+      font-size: 0.98rem;
+      line-height: 1.5;
+    }
+
+    .toc-ornament {
+      margin: 0 auto 16px;
+      font-size: 1rem;
+      color: var(--line-dark);
+      letter-spacing: 0.35em;
+    }
+
+    .toc-wrap {
+      max-width: 560px;
+      margin: 28px auto 0;
+      padding: 12px 18px 0;
+    }
+
+    .toc-list li + li {
+      border-top: 1px solid #f2ede7;
     }
 
     @page {
@@ -416,12 +592,16 @@
     function renderTitlePage() {
       return `
         <section class="page">
-          <div class="page-inner title-page">
-            <p class="section-kicker">Family Recipes</p>
-            <h1 class="book-title">Grey's Cook Book</h1>
-            <div class="small-divider"></div>
-            <p class="book-subtitle">A collection of home cooking favorites from greycooks.com</p>
-            <p class="byline">By Grey Lancaster</p>
+          <div class="page-inner title-page cover-page">
+            <p class="cover-kicker">Family Recipes</p>
+            <div class="section-ornament">✦ ✦ ✦</div>
+            <h1 class="cover-title">Grey's Cook Book</h1>
+            <div class="cover-divider"></div>
+            <p class="cover-subtitle">
+              A collection of home cooking favorites from greycooks.com
+            </p>
+            <p class="cover-byline">By Grey Lancaster</p>
+            <p class="cover-bottom-note">Southern • Family • Tried and True</p>
           </div>
         </section>
       `;
@@ -431,16 +611,22 @@
       return `
         <section class="page">
           <div class="page-inner toc-page">
+            <div class="toc-ornament">✦ ✦ ✦</div>
             <h2 class="toc-title">Table of Contents</h2>
             <div class="small-divider"></div>
-            <ul class="toc-list">
-              ${tocItems.map(item => `
-                <li>
-                  <span>${escapeHtml(item.title)}</span>
-                  <span>${item.page}</span>
-                </li>
-              `).join("")}
-            </ul>
+            <p class="toc-intro">A chapter-by-chapter path through the recipes, from first bites to dessert.</p>
+            <div class="toc-wrap">
+              <ul class="toc-list">
+                ${tocItems.map(item => `
+                  <li>
+                    <span class="toc-name">${escapeHtml(item.title)}</span>
+                    <span class="toc-dots"></span>
+                    <span class="toc-page-number">${item.page}</span>
+                  </li>
+                `).join("")}
+              </ul>
+            </div>
+            <div class="section-bottom-ornament">✦ ✦ ✦</div>
           </div>
         </section>
       `;
@@ -451,9 +637,11 @@
         <section class="page">
           <div class="page-inner section-page">
             <p class="section-kicker">Chapter</p>
+            <div class="section-ornament">✦ ✦ ✦</div>
             <h2 class="section-title">${escapeHtml(title)}</h2>
             <div class="small-divider"></div>
             <p class="section-note">${escapeHtml(SECTION_NOTES[title] || "")}</p>
+            <div class="section-bottom-ornament">✦ ✦ ✦</div>
           </div>
         </section>
       `;
