@@ -10,11 +10,16 @@
     :root {
       --page-width: 8.5in;
       --page-height: 11in;
-      --page-margin: 0.7in;
-      --ink: #111;
-      --muted: #666;
-      --line: #d8d8d8;
-      --screen-bg: #e5e5e5;
+      --page-margin-top: 0.72in;
+      --page-margin-right: 0.72in;
+      --page-margin-bottom: 0.78in;
+      --page-margin-left: 0.72in;
+      --ink: #1f1a17;
+      --muted: #6c625b;
+      --line: #d7cfc7;
+      --line-dark: #8b7f75;
+      --accent: #3b312b;
+      --screen-bg: #e7e4e0;
     }
 
     * {
@@ -28,7 +33,7 @@
       background: var(--screen-bg);
       color: var(--ink);
       font-family: Georgia, "Times New Roman", serif;
-      line-height: 1.5;
+      line-height: 1.52;
     }
 
     body {
@@ -38,16 +43,17 @@
     .screen-note,
     .loading,
     .error-box {
-      width: min(900px, calc(100% - 32px));
+      width: min(920px, calc(100% - 32px));
       margin: 0 auto 18px;
       background: #fff;
-      border: 1px solid #ccc;
-      padding: 16px 20px;
+      border: 1px solid #d5d0ca;
+      padding: 18px 22px;
     }
 
     .screen-note h1 {
       margin: 0 0 10px;
-      font-size: 1.5rem;
+      font-size: 1.7rem;
+      color: var(--accent);
     }
 
     .screen-note p,
@@ -65,15 +71,15 @@
 
     .actions button {
       padding: 10px 14px;
-      border: 1px solid #999;
+      border: 1px solid #b7aea5;
       background: #fff;
-      color: #111;
+      color: var(--ink);
       cursor: pointer;
       font: inherit;
     }
 
     .actions button:hover {
-      background: #f2f2f2;
+      background: #f6f3ef;
     }
 
     .error-box {
@@ -91,8 +97,12 @@
       min-height: var(--page-height);
       margin: 0 auto 20px;
       background: #fff;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.14);
-      padding: var(--page-margin);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+      padding:
+        var(--page-margin-top)
+        var(--page-margin-right)
+        var(--page-margin-bottom)
+        var(--page-margin-left);
       page-break-after: always;
       break-after: page;
       overflow: hidden;
@@ -104,7 +114,9 @@
     }
 
     .page-inner {
-      min-height: calc(var(--page-height) - (var(--page-margin) * 2));
+      min-height: calc(
+        var(--page-height) - var(--page-margin-top) - var(--page-margin-bottom)
+      );
       display: flex;
       flex-direction: column;
     }
@@ -119,43 +131,45 @@
 
     .book-title {
       margin: 0;
-      font-size: 2.2rem;
+      font-size: 2.45rem;
+      letter-spacing: 0.05em;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
+      color: var(--accent);
     }
 
     .book-subtitle {
       margin: 10px 0 0;
-      font-size: 1rem;
+      font-size: 1.02rem;
       color: var(--muted);
       font-style: italic;
     }
 
     .byline {
-      margin-top: 26px;
+      margin-top: 28px;
       font-size: 1rem;
     }
 
     .small-divider {
-      width: 120px;
+      width: 130px;
       height: 1px;
-      background: #222;
+      background: var(--line-dark);
       margin: 18px auto;
     }
 
     .section-kicker {
       margin: 0 0 10px;
-      font-size: 0.92rem;
+      font-size: 0.8rem;
       color: var(--muted);
       text-transform: uppercase;
-      letter-spacing: 0.16em;
+      letter-spacing: 0.22em;
     }
 
     .section-title {
       margin: 0;
-      font-size: 1.9rem;
+      font-size: 2rem;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
+      color: var(--accent);
     }
 
     .section-note {
@@ -170,14 +184,15 @@
       margin: 0;
       font-size: 1.8rem;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.06em;
+      color: var(--accent);
     }
 
     .toc-list {
       list-style: none;
-      margin: 28px auto 0;
+      margin: 30px auto 0;
       padding: 0;
-      max-width: 520px;
+      max-width: 540px;
       text-align: left;
     }
 
@@ -185,7 +200,7 @@
       display: flex;
       justify-content: space-between;
       gap: 12px;
-      padding: 8px 0;
+      padding: 10px 0;
       border-bottom: 1px solid var(--line);
       font-size: 1rem;
     }
@@ -196,15 +211,17 @@
 
     .recipe-header h2 {
       margin: 0;
-      font-size: 1.9rem;
-      line-height: 1.15;
+      font-size: 1.95rem;
+      line-height: 1.12;
+      color: var(--accent);
     }
 
     .recipe-category {
-      margin: 6px 0 0;
+      margin: 7px 0 0;
       color: var(--muted);
-      font-size: 0.98rem;
-      font-style: italic;
+      font-size: 0.92rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
     }
 
     .divider {
@@ -215,45 +232,58 @@
 
     .recipe-content {
       display: grid;
-      grid-template-columns: 1fr 1.2fr;
-      gap: 28px;
+      grid-template-columns: 0.95fr 1.25fr;
+      gap: 26px;
       align-items: start;
+    }
+
+    .recipe-block {
+      break-inside: avoid;
+      page-break-inside: avoid;
     }
 
     .recipe-block h3 {
       margin: 0 0 10px;
-      font-size: 1rem;
+      font-size: 0.9rem;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.17em;
+      color: var(--accent);
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 6px;
     }
 
     .recipe-block ul,
     .recipe-block ol {
       margin: 0;
-      padding-left: 1.2rem;
+      padding-left: 1.15rem;
     }
 
     .recipe-block li {
       margin-bottom: 0.45rem;
-      font-size: 1rem;
+      font-size: 0.98rem;
     }
 
     .recipe-notes {
       margin-top: 18px;
-      padding-top: 12px;
+      padding: 12px 14px 2px;
       border-top: 1px solid var(--line);
+      background: #faf8f5;
+      break-inside: avoid;
+      page-break-inside: avoid;
     }
 
     .recipe-notes h4 {
       margin: 0 0 8px;
-      font-size: 0.95rem;
+      font-size: 0.82rem;
       text-transform: uppercase;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.18em;
+      color: var(--accent);
     }
 
     .recipe-notes p {
-      margin: 0 0 8px;
-      font-size: 0.97rem;
+      margin: 0 0 10px;
+      font-size: 0.95rem;
+      white-space: pre-line;
     }
 
     .recipe-footer {
@@ -263,7 +293,7 @@
       display: flex;
       justify-content: space-between;
       gap: 12px;
-      font-size: 0.84rem;
+      font-size: 0.82rem;
       color: var(--muted);
     }
 
@@ -305,7 +335,7 @@
 
   <div class="screen-note">
     <h1>Grey's Cook Book Print Builder</h1>
-    <p>This page pulls recipes from your category pages and rebuilds them into a clean black-and-white printable cookbook.</p>
+    <p>This page pulls recipes from your category pages and rebuilds them into a cleaner printable cookbook.</p>
     <p>After it finishes loading, use Print and save as PDF.</p>
     <div class="actions">
       <button onclick="window.print()">Print / Save PDF</button>
@@ -330,8 +360,18 @@
       { title: "Sides", url: "/sides/" },
       { title: "Main Dishes", url: "/meats/" },
       { title: "Fish", url: "/fish/" },
-      { title: "Desserts", url: "/dessert/" }
+      { title: "Desserts", url: "/desserts/" }
     ];
+
+    const SECTION_NOTES = {
+      "Appetizers": "Start the meal right with favorites that feel at home on any table.",
+      "Breakfast": "Morning staples worth waking up for.",
+      "Breads": "The kind of breads that belong beside soup, breakfast, or Sunday supper.",
+      "Sides": "The dishes that make the plate feel complete.",
+      "Main Dishes": "Hearty suppers, casseroles, and favorites meant for real appetites.",
+      "Fish": "Simple skillet and supper-table fish done the right way.",
+      "Desserts": "Sweet endings worth saving room for."
+    };
 
     function escapeHtml(str) {
       return String(str).replace(/[&<>"']/g, function (ch) {
@@ -361,7 +401,7 @@
 
         const notes = [
           ...card.querySelectorAll(".note-box, .variation-box")
-        ].map(n => n.textContent.trim()).filter(Boolean);
+        ].map(n => n.innerText.trim()).filter(Boolean);
 
         return {
           title,
@@ -413,12 +453,18 @@
             <p class="section-kicker">Chapter</p>
             <h2 class="section-title">${escapeHtml(title)}</h2>
             <div class="small-divider"></div>
+            <p class="section-note">${escapeHtml(SECTION_NOTES[title] || "")}</p>
           </div>
         </section>
       `;
     }
 
     function renderRecipe(recipe, pageNumber) {
+      const longRecipe =
+        recipe.ingredients.length > 12 ||
+        recipe.directions.length > 7 ||
+        recipe.notes.join(" ").length > 550;
+
       return `
         <section class="page">
           <div class="page-inner">
@@ -429,7 +475,7 @@
 
             <div class="divider"></div>
 
-            <div class="recipe-content">
+            <div class="recipe-content" style="${longRecipe ? "grid-template-columns: 1fr;" : ""}">
               <div class="recipe-block">
                 <h3>Ingredients</h3>
                 <ul>
