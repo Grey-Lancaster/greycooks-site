@@ -317,7 +317,7 @@
     .recipe-notes p {
       margin: 0 0 10px;
       font-size: 0.95rem;
-      white-space: pre-line;
+      white-space: normal;
     }
 
     .recipe-footer {
@@ -579,6 +579,10 @@
       });
     }
 
+    function cleanText(node) {
+      return node.textContent.replace(/\s+/g, " ").trim();
+    }
+
     function absoluteUrl(url, baseUrl) {
       try {
         return new URL(url, baseUrl).href;
@@ -593,6 +597,7 @@
 
       const src = img.getAttribute("src") || "";
       const alt = img.getAttribute("alt") || "";
+
       return {
         src: absoluteUrl(src, pageBaseUrl),
         alt: alt.trim()
@@ -607,15 +612,15 @@
 
         const ingredients = [
           ...card.querySelectorAll(".ingredients-list li")
-        ].map(li => li.textContent.trim()).filter(Boolean);
+        ].map(cleanText).filter(Boolean);
 
         const directions = [
           ...card.querySelectorAll(".instructions p")
-        ].map(p => p.textContent.trim()).filter(Boolean);
+        ].map(cleanText).filter(Boolean);
 
         const notes = [
           ...card.querySelectorAll(".note-box, .variation-box")
-        ].map(n => n.innerText.trim()).filter(Boolean);
+        ].map(cleanText).filter(Boolean);
 
         return {
           title,
@@ -869,3 +874,4 @@
     buildBook();
   </script>
 </body>
+</html>
