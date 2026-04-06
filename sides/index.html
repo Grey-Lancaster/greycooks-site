@@ -381,7 +381,7 @@
     </div>
   </div>
 
-</div>
+  </div>
 
   <div class="chapter-nav">
     <a href="/fish/">← Fish</a>
@@ -713,42 +713,67 @@
 
 
 
-
-
   <script>
     function printRecipe(btn) {
       var card = btn.closest(".recipe-card");
       var title = card.querySelector("h3").textContent;
       var bodyHTML = card.querySelector(".recipe-body").innerHTML;
-      var originalHead = document.head.innerHTML;
-      var originalBody = document.body.innerHTML;
 
-      var css = "" +
+      // Absolute URL so the popup window resolves the image correctly
+      // regardless of which subdirectory this page lives in.
+      var coverSrc = window.location.origin + "/images/cover.jpg";
+
+      var css =
         "* { margin:0; padding:0; box-sizing:border-box; }" +
         "body { font-family: Georgia, serif; font-size: 13px; line-height: 1.75; color: #2a1a0e; padding: 40px 48px; max-width: 720px; margin: 0 auto; }" +
-        ".cn { font-style:italic; color:#8a7560; font-size:0.8rem; letter-spacing:0.12em; margin-bottom:6px; }" +
-        "h1 { font-size:1.6rem; color:#2a1a0e; padding-bottom:10px; border-bottom:2px solid #5c3d1e; margin-bottom:20px; }" +
-        "h4 { font-size:0.75rem; letter-spacing:0.15em; text-transform:uppercase; color:#8b3a1a; margin:20px 0 8px; border-bottom:1px solid #e8d5a3; padding-bottom:4px; }" +
-        "h4::after { display:none !important; }" +
-        "ul.ingredients-list { list-style:none; display:grid; grid-template-columns:1fr 1fr; gap:4px 16px; margin-bottom:8px; }" +
-        "ul.ingredients-list li { padding:3px 0 3px 14px; border-bottom:1px dotted #ccc; position:relative; font-size:0.88rem; }" +
-        "ul.ingredients-list li::before { content:'·'; position:absolute; left:2px; color:#c4922a; font-size:1.2rem; line-height:1; top:2px; }" +
-        ".instructions { font-size:0.91rem; line-height:1.8; }" +
-        ".instructions p { margin-bottom:10px; }" +
-        ".note-box { background:#f2ead8; border-left:3px solid #c4922a; padding:12px 16px; margin-top:16px; font-size:0.85rem; font-style:italic; color:#8a7560; }" +
-        ".note-box strong { color:#8b3a1a; font-style:normal; }" +
-        ".variation-box { background:#f0f5e8; border-left:3px solid #6b7c3e; padding:10px 16px; margin-top:10px; font-size:0.85rem; color:#3d4a25; }" +
-        ".variation-box strong { color:#6b7c3e; }" +
-        "button { display:none !important; }";
 
-      document.head.innerHTML = "<meta charset=\"UTF-8\"><style>" + css + "</style>";
-      document.body.innerHTML = "<p class=\"cn\">Grey\u2019s Cook Book</p><h1>" + title + "</h1>" + bodyHTML;
+        ".brand-header { position: relative; height: 70px; margin-bottom: 18px; border: 1px solid #d7cfc7; overflow: hidden; }" +
+        ".brand-header img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%); display: block; }" +
+        ".brand-header span { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); color: #fff; font-size: 0.9rem; letter-spacing: 0.15em; text-transform: uppercase; background: rgba(0,0,0,0.45); padding: 4px 10px; white-space: nowrap; }" +
 
-      window.print();
+        "h1 { font-size: 1.6rem; color: #2a1a0e; padding-bottom: 10px; border-bottom: 2px solid #5c3d1e; margin-bottom: 20px; }" +
 
-      document.head.innerHTML = originalHead;
-      document.body.innerHTML = originalBody;
-      location.reload();
+        "h4 { font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: #8b3a1a; margin: 20px 0 8px; border-bottom: 1px solid #e8d5a3; padding-bottom: 4px; }" +
+        "h4::after { display: none !important; }" +
+
+        "ul.ingredients-list { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; margin-bottom: 8px; }" +
+        "ul.ingredients-list li { padding: 3px 0 3px 14px; border-bottom: 1px dotted #ccc; position: relative; font-size: 0.88rem; }" +
+        "ul.ingredients-list li::before { content: '·'; position: absolute; left: 2px; color: #c4922a; font-size: 1.2rem; top: 2px; }" +
+
+        ".instructions { font-size: 0.91rem; line-height: 1.8; }" +
+        ".instructions p { margin-bottom: 10px; }" +
+
+        ".note-box { background: #f2ead8; border-left: 3px solid #c4922a; padding: 12px 16px; margin-top: 16px; font-size: 0.85rem; font-style: italic; color: #8a7560; }" +
+        ".note-box strong { color: #8b3a1a; font-style: normal; }" +
+
+        ".variation-box { background: #f0f5e8; border-left: 3px solid #6b7c3e; padding: 10px 16px; margin-top: 10px; font-size: 0.85rem; color: #3d4a25; }" +
+        ".variation-box strong { color: #6b7c3e; }";
+
+      var html =
+        "<!DOCTYPE html><html><head>" +
+        "<meta charset='UTF-8'>" +
+        "<title>" + title + " | Grey\u2019s Cook Book</title>" +
+        "<style>" + css + "</style>" +
+        "</head><body>" +
+        "<div class='brand-header'>" +
+        "<img src='" + coverSrc + "' alt=\"Grey's Cook Book\">" +
+        "<span>Grey\u2019s Cook Book</span>" +
+        "</div>" +
+        "<h1>" + title + "</h1>" +
+        bodyHTML +
+        "<scr" + "ipt>" +
+        "window.onload = function() {" +
+        "var img = document.querySelector('.brand-header img');" +
+        "function go() { window.print(); window.close(); }" +
+        "if (img.complete) { go(); } else { img.onload = go; img.onerror = go; }" +
+        "};" +
+        "</scr" + "ipt>" +
+        "</body></html>";
+
+      var popup = window.open("", "_blank", "width=800,height=600");
+      popup.document.open();
+      popup.document.write(html);
+      popup.document.close();
     }
   </script>
   <button id="back-to-top" title="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#8679;</button>
