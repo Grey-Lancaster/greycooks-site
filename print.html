@@ -246,16 +246,18 @@
       margin: 16px 0 18px;
     }
 
-    .recipe-image-wrap {
-      margin: 0 0 18px;
+    .section-image-wrap {
+      margin: 6px auto 22px;
+      width: 100%;
+      max-width: 5.8in;
       break-inside: avoid;
       page-break-inside: avoid;
     }
 
-    .recipe-image {
+    .section-image {
       display: block;
       width: 100%;
-      max-height: 2.55in;
+      max-height: 3.1in;
       object-fit: cover;
       object-position: center;
       border: 1px solid var(--line);
@@ -585,22 +587,6 @@
       }
     }
 
-    function extractRecipeImage(card, pageBaseUrl) {
-      const img =
-        card.querySelector("img") ||
-        card.querySelector(".recipe-body img") ||
-        card.querySelector(".recipe-card-header img");
-
-      if (!img) return { src: "", alt: "" };
-
-      const src = img.getAttribute("src") || "";
-      const alt = img.getAttribute("alt") || "";
-      return {
-        src: absoluteUrl(src, pageBaseUrl),
-        alt: alt.trim()
-      };
-    }
-
     function extractCategoryBannerImage(doc, pageBaseUrl) {
       const img = doc.querySelector(".category-banner img");
       if (!img) return { src: "", alt: "" };
@@ -613,9 +599,8 @@
       };
     }
 
-    function extractRecipesFromPage(doc, category, pageUrl) {
+    function extractRecipesFromPage(doc, category) {
       const cards = doc.querySelectorAll(".recipe-card");
-      const bannerImage = extractCategoryBannerImage(doc, pageUrl);
 
       return [...cards].map(card => {
         const title = card.querySelector("h3")?.textContent.trim() || "Recipe";
@@ -632,17 +617,12 @@
           ...card.querySelectorAll(".note-box, .variation-box")
         ].map(n => n.innerText.trim()).filter(Boolean);
 
-        const recipeImage = extractRecipeImage(card, pageUrl);
-        const image = recipeImage.src ? recipeImage : bannerImage;
-
         return {
           title,
           category,
           ingredients,
           directions,
-          notes,
-          imageSrc: image.src || "",
-          imageAlt: image.alt || title
+          notes
         };
       });
     }
@@ -690,7 +670,7 @@
       `;
     }
 
-    function renderSectionPage(title) {
+    function renderSectionPage(title, imageSrc, imageAlt) {
       return `
         <section class="page">
           <div class="page-inner section-page">
@@ -698,6 +678,17 @@
             <div class="section-ornament">✦ ✦ ✦</div>
             <h2 class="section-title">${escapeHtml(title)}</h2>
             <div class="small-divider"></div>
+
+            ${imageSrc ? `
+              <div class="section-image-wrap">
+                <img
+                  class="section-image"
+                  src="${escapeHtml(imageSrc)}"
+                  alt="${escapeHtml(imageAlt || title)}"
+                />
+              </div>
+            ` : ""}
+
             <p class="section-note">${escapeHtml(SECTION_NOTES[title] || "")}</p>
             <div class="section-bottom-ornament">✦ ✦ ✦</div>
           </div>
@@ -720,16 +711,6 @@
             </header>
 
             <div class="divider"></div>
-
-            ${recipe.imageSrc ? `
-              <div class="recipe-image-wrap">
-                <img
-                  class="recipe-image"
-                  src="${escapeHtml(recipe.imageSrc)}"
-                  alt="${escapeHtml(recipe.imageAlt)}"
-                />
-              </div>
-            ` : ""}
 
             <div class="recipe-content" style="${longRecipe ? "grid-template-columns: 1fr;" : ""}">
               <div class="recipe-block">
@@ -815,17 +796,23 @@
           const text = await res.text();
           const pageUrl = new URL(cat.url, window.location.origin).href;
           const doc = new DOMParser().parseFromString(text, "text/html");
-          const recipes = extractRecipesFromPage(doc, cat.title, pageUrl);
+
+          const bannerImage = extractCategoryBannerImage(doc, pageUrl);
+          const recipes = extractRecipesFromPage(doc, cat.title);
 
           builtSections.push({
             title: cat.title,
-            recipes
+            recipes,
+            imageSrc: bannerImage.src || "",
+            imageAlt: bannerImage.alt || cat.title
           });
         } catch (e) {
           errors.push(`Failed loading ${cat.url}: ${e.message}`);
           builtSections.push({
             title: cat.title,
-            recipes: []
+            recipes: [],
+            imageSrc: "",
+            imageAlt: cat.title
           });
         }
       }
@@ -851,7 +838,7 @@
       pageNumber = 3;
 
       for (const section of builtSections) {
-        html += renderSectionPage(section.title);
+        html += renderSectionPage(section.title, section.imageSrc, section.imageAlt);
         pageNumber += 1;
 
         for (const recipe of section.recipes) {
@@ -882,4 +869,3 @@
     buildBook();
   </script>
 </body>
-</html>
