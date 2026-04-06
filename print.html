@@ -246,6 +246,22 @@
       margin: 16px 0 18px;
     }
 
+    .recipe-image-wrap {
+      margin: 0 0 18px;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .recipe-image {
+      display: block;
+      width: 100%;
+      max-height: 2.55in;
+      object-fit: cover;
+      object-position: center;
+      border: 1px solid var(--line);
+      filter: grayscale(100%);
+    }
+
     .recipe-content {
       display: grid;
       grid-template-columns: 0.95fr 1.25fr;
@@ -536,7 +552,7 @@
       { title: "Sides", url: "/sides/" },
       { title: "Main Dishes", url: "/meats/" },
       { title: "Fish", url: "/fish/" },
-      { title: "Desserts", url: "/dessert/" }
+      { title: "Desserts", url: "/desserts/" }
     ];
 
     const SECTION_NOTES = {
@@ -561,8 +577,45 @@
       });
     }
 
-    function extractRecipesFromPage(doc, category) {
+    function absoluteUrl(url, baseUrl) {
+      try {
+        return new URL(url, baseUrl).href;
+      } catch {
+        return "";
+      }
+    }
+
+    function extractRecipeImage(card, pageBaseUrl) {
+      const img =
+        card.querySelector("img") ||
+        card.querySelector(".recipe-body img") ||
+        card.querySelector(".recipe-card-header img");
+
+      if (!img) return { src: "", alt: "" };
+
+      const src = img.getAttribute("src") || "";
+      const alt = img.getAttribute("alt") || "";
+      return {
+        src: absoluteUrl(src, pageBaseUrl),
+        alt: alt.trim()
+      };
+    }
+
+    function extractCategoryBannerImage(doc, pageBaseUrl) {
+      const img = doc.querySelector(".category-banner img");
+      if (!img) return { src: "", alt: "" };
+
+      const src = img.getAttribute("src") || "";
+      const alt = img.getAttribute("alt") || "";
+      return {
+        src: absoluteUrl(src, pageBaseUrl),
+        alt: alt.trim()
+      };
+    }
+
+    function extractRecipesFromPage(doc, category, pageUrl) {
       const cards = doc.querySelectorAll(".recipe-card");
+      const bannerImage = extractCategoryBannerImage(doc, pageUrl);
 
       return [...cards].map(card => {
         const title = card.querySelector("h3")?.textContent.trim() || "Recipe";
@@ -579,12 +632,17 @@
           ...card.querySelectorAll(".note-box, .variation-box")
         ].map(n => n.innerText.trim()).filter(Boolean);
 
+        const recipeImage = extractRecipeImage(card, pageUrl);
+        const image = recipeImage.src ? recipeImage : bannerImage;
+
         return {
           title,
           category,
           ingredients,
           directions,
-          notes
+          notes,
+          imageSrc: image.src || "",
+          imageAlt: image.alt || title
         };
       });
     }
@@ -662,6 +720,16 @@
             </header>
 
             <div class="divider"></div>
+
+            ${recipe.imageSrc ? `
+              <div class="recipe-image-wrap">
+                <img
+                  class="recipe-image"
+                  src="${escapeHtml(recipe.imageSrc)}"
+                  alt="${escapeHtml(recipe.imageAlt)}"
+                />
+              </div>
+            ` : ""}
 
             <div class="recipe-content" style="${longRecipe ? "grid-template-columns: 1fr;" : ""}">
               <div class="recipe-block">
@@ -745,8 +813,9 @@
           }
 
           const text = await res.text();
+          const pageUrl = new URL(cat.url, window.location.origin).href;
           const doc = new DOMParser().parseFromString(text, "text/html");
-          const recipes = extractRecipesFromPage(doc, cat.title);
+          const recipes = extractRecipesFromPage(doc, cat.title, pageUrl);
 
           builtSections.push({
             title: cat.title,
