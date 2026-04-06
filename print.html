@@ -261,7 +261,14 @@
       object-fit: cover;
       object-position: center;
       border: 1px solid var(--line);
+    }
+
+    body.print-grayscale .section-image {
       filter: grayscale(100%);
+    }
+
+    body.print-color .section-image {
+      filter: none;
     }
 
     .recipe-content {
@@ -525,14 +532,15 @@
     }
   </style>
 </head>
-<body>
+<body class="print-grayscale">
 
   <div class="screen-note">
     <h1>Grey's Cook Book Print Builder</h1>
     <p>This page pulls recipes from your category pages and rebuilds them into a cleaner printable cookbook.</p>
-    <p>After it finishes loading, use Print and save as PDF.</p>
+    <p>After it finishes loading, use one of the print buttons below.</p>
     <div class="actions">
-      <button onclick="window.print()">Print / Save PDF</button>
+      <button onclick="printBook('grayscale')">Print / Save PDF (Grayscale)</button>
+      <button onclick="printBook('color')">Print / Save PDF (Color)</button>
       <button onclick="buildBook()">Reload Recipes</button>
     </div>
   </div>
@@ -554,7 +562,7 @@
       { title: "Sides", url: "/sides/" },
       { title: "Main Dishes", url: "/meats/" },
       { title: "Fish", url: "/fish/" },
-      { title: "Desserts", url: "/dessert/" }
+      { title: "Desserts", url: "/desserts/" }
     ];
 
     const SECTION_NOTES = {
@@ -764,6 +772,18 @@
           </div>
         </section>
       `;
+    }
+
+    function printBook(mode) {
+      document.body.classList.remove("print-grayscale", "print-color");
+
+      if (mode === "color") {
+        document.body.classList.add("print-color");
+      } else {
+        document.body.classList.add("print-grayscale");
+      }
+
+      window.print();
     }
 
     async function buildBook() {
