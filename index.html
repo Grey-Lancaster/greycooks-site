@@ -3,35 +3,28 @@
 
 <head>
   <title>Grey's Cook Book | Family Recipes from the Lancaster Kitchen</title>
-  <meta name="description"
-    content="A family cookbook by Grey Lancaster — hearty Southern recipes, family stories, and Papa Lanc's kitchen wisdom. From baked potato soup to beef tenderloin.">
+  <meta name="description" content="A family cookbook by Grey Lancaster — hearty Southern recipes, family stories, and Papa Lanc's kitchen wisdom. From baked potato soup to beef tenderloin.">
   <meta name="author" content="Grey Lancaster">
-  <meta name="keywords"
-    content="Southern recipes, family cookbook, Grey Lancaster, Papa Lanc, Lancaster family recipes">
+  <meta name="keywords" content="Southern recipes, family cookbook, Grey Lancaster, Papa Lanc, Lancaster family recipes">
   <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Grey's Cook Book">
-  <meta property="og:title" content="Grey's Cook Book">
-  <meta property="og:description"
-    content="Hearty Southern recipes passed down through the Lancaster family. Real food, real stories.">
+  <meta property="og:title" content="Grey's Cook Book | Family Recipes from the Lancaster Kitchen">
+  <meta property="og:image" content="https://greycooks.com/og-image.png">
+  <meta property="og:image:width" content="683">
+  <meta property="og:image:height" content="1024">
+  <meta property="og:description" content="Hearty Southern recipes passed down through the Lancaster family. Real food, real stories.">
   <meta property="og:url" content="https://greycooks.com/">
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Grey's Cook Book">
-  <meta name="twitter:description"
-    content="Hearty Southern recipes passed down through the Lancaster family. Real food, real stories.">
   <link rel="canonical" href="https://greycooks.com/">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Grey's Cook Book</title>
+  <meta name="robots" content="index, follow">
   <link rel="stylesheet" href="style.css">
   <style>
-    /* ── INDEX-SPECIFIC ── */
     .hero {
       min-height: 92vh;
       background:
-        linear-gradient(rgba(20, 14, 10, 0.65),
-          rgba(20, 14, 10, 0.75)),
+        linear-gradient(rgba(20, 14, 10, 0.65), rgba(20, 14, 10, 0.75)),
         url('/images/cover.jpg') center/cover no-repeat;
       display: flex;
       flex-direction: column;
@@ -42,16 +35,12 @@
       position: relative;
       overflow: hidden;
     }
-
-
-
     .hero::before {
       content: '';
       position: absolute;
       inset: 0;
       background: rgba(0, 0, 0, 0.15);
     }
-
     .hero-frame {
       border: 1px solid rgba(196, 146, 42, 0.4);
       padding: 64px 72px;
@@ -60,32 +49,15 @@
       position: relative;
       animation: fadeUp 1s ease both;
     }
-
-    .hero-frame::before,
-    .hero-frame::after {
+    .hero-frame::before, .hero-frame::after {
       content: '✦';
       position: absolute;
       color: var(--gold);
       font-size: 1.1rem;
       opacity: 0.6;
     }
-
-    .hero-frame::before {
-      top: -14px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--warm-brown);
-      padding: 0 12px;
-    }
-
-    .hero-frame::after {
-      bottom: -14px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--warm-brown);
-      padding: 0 12px;
-    }
-
+    .hero-frame::before { top: -14px; left: 50%; transform: translateX(-50%); background: transparent; padding: 0 12px; }
+    .hero-frame::after { bottom: -14px; left: 50%; transform: translateX(-50%); background: transparent; padding: 0 12px; }
     .hero-eyebrow {
       font-family: 'Lora', serif;
       font-style: italic;
@@ -95,7 +67,6 @@
       text-transform: uppercase;
       margin-bottom: 20px;
     }
-
     .hero h1 {
       font-family: 'Playfair Display', serif;
       font-size: clamp(3rem, 8vw, 5.5rem);
@@ -104,7 +75,6 @@
       line-height: 1.05;
       letter-spacing: -0.01em;
     }
-
     .hero h1 em {
       display: block;
       font-style: italic;
@@ -114,15 +84,7 @@
       letter-spacing: 0.06em;
       margin-top: 8px;
     }
-
-    .hero-rule {
-      width: 80px;
-      height: 1px;
-      background: var(--gold);
-      margin: 28px auto;
-      opacity: 0.6;
-    }
-
+    .hero-rule { width: 80px; height: 1px; background: var(--gold); margin: 28px auto; opacity: 0.6; }
     .hero-tagline {
       font-family: 'Lora', serif;
       font-style: italic;
@@ -131,33 +93,12 @@
       line-height: 1.7;
       margin-bottom: 36px;
     }
-
-    .hero-cta {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
+    .hero-cta { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
     @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(24px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-
-    /* ── FOREWORD SECTION ── */
-    .foreword-section {
-      max-width: 760px;
-      margin: 80px auto;
-      padding: 0 24px;
-    }
-
+    .foreword-section { max-width: 760px; margin: 80px auto; padding: 0 24px; }
     .foreword-section .section-label {
       font-family: 'Playfair Display', serif;
       font-style: italic;
@@ -167,111 +108,26 @@
       color: var(--gold);
       margin-bottom: 12px;
     }
-
-    .foreword-section h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 2rem;
-      color: var(--warm-brown);
-      margin-bottom: 32px;
-      line-height: 1.2;
-    }
-
-    .foreword-section p {
-      font-size: 0.97rem;
-      margin-bottom: 20px;
-      color: var(--dark-ink);
-    }
-
-    .foreword-section p:last-of-type {
-      margin-bottom: 36px;
-    }
-
-    .pull-quote {
-      border-top: 2px solid var(--light-gold);
-      border-bottom: 2px solid var(--light-gold);
-      padding: 28px 0;
-      margin: 40px 0;
-      text-align: center;
-    }
-
-    .pull-quote p {
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      font-size: 1.3rem;
-      color: var(--rust);
-      line-height: 1.5;
-      margin: 0;
-    }
-
-    /* ── QUICK LINKS ── */
-    .quick-links {
-      background: var(--parchment);
-      padding: 60px 24px;
-      text-align: center;
-    }
-
-    .quick-links h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.5rem;
-      color: var(--warm-brown);
-      margin-bottom: 8px;
-    }
-
-    .quick-links .sub {
-      font-style: italic;
-      color: var(--muted);
-      margin-bottom: 36px;
-      font-size: 0.92rem;
-    }
-
-    .categories-row {
-      display: flex;
-      justify-content: center;
-      gap: 14px;
-      flex-wrap: wrap;
-      max-width: 800px;
-      margin: 0 auto 36px;
-    }
-
+    .foreword-section h2 { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--warm-brown); margin-bottom: 32px; line-height: 1.2; }
+    .foreword-section p { font-size: 0.97rem; margin-bottom: 20px; color: var(--dark-ink); }
+    .foreword-section p:last-of-type { margin-bottom: 36px; }
+    .pull-quote { border-top: 2px solid var(--light-gold); border-bottom: 2px solid var(--light-gold); padding: 28px 0; margin: 40px 0; text-align: center; }
+    .pull-quote p { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.3rem; color: var(--rust); line-height: 1.5; margin: 0; }
+    .quick-links { background: var(--parchment); padding: 60px 24px; text-align: center; }
+    .quick-links h2 { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--warm-brown); margin-bottom: 8px; }
+    .quick-links .sub { font-style: italic; color: var(--muted); margin-bottom: 36px; font-size: 0.92rem; }
+    .categories-row { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; max-width: 800px; margin: 0 auto 36px; }
     .cat-pill {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      background: #fff;
-      border: 1px solid var(--light-gold);
-      border-radius: 3px;
-      padding: 18px 20px;
-      text-decoration: none;
-      color: var(--warm-brown);
-      font-family: 'Playfair Display', serif;
-      font-size: 0.9rem;
-      min-width: 110px;
-      box-shadow: 0 2px 8px var(--shadow);
-      transition: all 0.2s;
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      background: #fff; border: 1px solid var(--light-gold); border-radius: 3px;
+      padding: 18px 20px; text-decoration: none; color: var(--warm-brown);
+      font-family: 'Playfair Display', serif; font-size: 0.9rem; min-width: 110px;
+      box-shadow: 0 2px 8px var(--shadow); transition: all 0.2s;
     }
-
-    .cat-pill:hover {
-      background: var(--warm-brown);
-      color: var(--cream);
-      transform: translateY(-3px);
-      box-shadow: 0 6px 18px var(--shadow);
-    }
-
-    .cat-pill .cat-emoji {
-      font-size: 1.6rem;
-    }
-
-    .cat-pill .cat-count {
-      font-size: 0.72rem;
-      color: var(--muted);
-      font-family: 'Lora', serif;
-      font-style: italic;
-    }
-
-    .cat-pill:hover .cat-count {
-      color: var(--light-gold);
-    }
+    .cat-pill:hover { background: var(--warm-brown); color: var(--cream); transform: translateY(-3px); box-shadow: 0 6px 18px var(--shadow); }
+    .cat-pill .cat-emoji { font-size: 1.6rem; }
+    .cat-pill .cat-count { font-size: 0.72rem; color: var(--muted); font-family: 'Lora', serif; font-style: italic; }
+    .cat-pill:hover .cat-count { color: var(--light-gold); }
   </style>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-LNBRC3723R"></script>
   <script>
@@ -284,14 +140,12 @@
 
 <body>
 
-  <!-- NAV -->
   <nav class="site-nav">
     <a href="./" class="nav-brand active">Grey's Cook Book</a>
     <a href="book/">Recipes</a>
     <a href="recipeindex/">Recipe Index</a>
   </nav>
 
-  <!-- HERO -->
   <section class="hero">
     <div class="hero-frame">
       <div class="hero-eyebrow">A Family Collection</div>
@@ -303,59 +157,35 @@
       </p>
       <div class="hero-cta">
         <a href="book/" class="btn btn-primary">Browse the Recipes</a>
-        <a href="recipeindex/" class="btn btn-outline"
-          style="color:var(--light-gold); border-color:var(--light-gold);">Full Recipe Index</a>
-        <a href="#foreword" class="btn btn-outline"
-          style="color:var(--light-gold); border-color:var(--light-gold);">Read the Forward</a>
+        <a href="recipeindex/" class="btn btn-outline" style="color:var(--light-gold); border-color:var(--light-gold);">Full Recipe Index</a>
+        <a href="#foreword" class="btn btn-outline" style="color:var(--light-gold); border-color:var(--light-gold);">Read the Forward</a>
       </div>
     </div>
   </section>
 
-  <!-- FOREWORD -->
   <section class="foreword-section" id="foreword">
     <div class="section-label">The Cook Speaks</div>
     <h2>Forward</h2>
 
-    <p>Food is a wonderful thing. From the preparation to the serving of the meal there are so many enjoyable aspects
-      that it is hard to say what my favorite part of food is. Many people enjoy the feeling of having made something
-      with their own hands, or presenting a dish that is almost a work of art to look at. Others enjoy the fellowship
-      that is often found in the kitchen — be that an indoor kitchen around a stove, or an outdoor kitchen around a
-      grill — or at the table eating with family and friends.</p>
+    <p>Food is a wonderful thing. From the preparation to the serving of the meal there are so many enjoyable aspects that it is hard to say what my favorite part of food is. Many people enjoy the feeling of having made something with their own hands, or presenting a dish that is almost a work of art to look at. Others enjoy the fellowship that is often found in the kitchen — be that an indoor kitchen around a stove, or an outdoor kitchen around a grill — or at the table eating with family and friends.</p>
 
-    <p>I love all of those parts of food, but for me my favorite part is enjoying the meal with family and friends. It's
-      one of the highlights of my family vacations to sit around the table with all of us (on the Sheehan side that's 12
-      if we are all there) and enjoy the conversation and story-telling — my Mimi is one of the best at this — over a
-      good meal. The longer the meal lasts the better.</p>
+    <p>I love all of those parts of food, but for me my favorite part is enjoying the meal with family and friends. It's one of the highlights of my family vacations to sit around the table with all of us (on the Sheehan side that's 12 if we are all there) and enjoy the conversation and story-telling — my Mimi is one of the best at this — over a good meal. The longer the meal lasts the better.</p>
 
     <div class="pull-quote">
       <p>"Pull out the table cloth, set the table,<br>call your friends, and enjoy some food."</p>
     </div>
 
-    <p>Following that I love to present the food well. I get this almost purely from my Nannie. Matching dishes,
-      flatware for each course, table cloths, and candles will all be found at my tables. I also like to make sure the
-      plate has good colors. I've even been known to cook something I didn't necessarily like just to get the color I
-      wanted on a plate. My wife Becky laughs at this side of my cooking, but for me it's part of what makes the meal
-      enjoyable.</p>
+    <p>Following that I love to present the food well. I get this almost purely from my Nannie. Matching dishes, flatware for each course, table cloths, and candles will all be found at my tables. I also like to make sure the plate has good colors. I've even been known to cook something I didn't necessarily like just to get the color I wanted on a plate. My wife Becky laughs at this side of my cooking, but for me it's part of what makes the meal enjoyable.</p>
 
-    <p>And of course there's the actually eating of the food itself. I've often said while I ate beef tenderloin that I
-      just wished I had two stomachs to fill instead of one. People often ask me how I started cooking and I tell them I
-      woke up one Saturday morning and mom was still asleep. If I wanted something to eat that was warm I had to learn
-      how to cook — so I did.</p>
+    <p>And of course there's the actually eating of the food itself. I've often said while I ate beef tenderloin that I just wished I had two stomachs to fill instead of one. People often ask me how I started cooking and I tell them I woke up one Saturday morning and mom was still asleep. If I wanted something to eat that was warm I had to learn how to cook — so I did.</p>
 
-    <p>From there I've had a lot of teachers. My dad loves to cook and the majority of it I picked up from him (he in
-      turn learned a lot from his mom and a hunting buddy named Jeff Rousey who will be mentioned throughout the book).
-      My mom taught me about practical meals — the kind of stuff that tastes good but isn't too difficult to whip up
-      when you've been working all day. And lastly there's my wife and her family, who are always discovering new
-      recipes and taught me most of what I know about baking.</p>
+    <p>From there I've had a lot of teachers. My dad loves to cook and the majority of it I picked up from him (he in turn learned a lot from his mom and a hunting buddy named Jeff Rousey who will be mentioned throughout the book). My mom taught me about practical meals — the kind of stuff that tastes good but isn't too difficult to whip up when you've been working all day. And lastly there's my wife and her family, who are always discovering new recipes and taught me most of what I know about baking.</p>
 
-    <p>So with all these influences there is definitely a good mix of recipes in this book, and few of them are entirely
-      my own. They've all been passed down to me from different people, but all of them are tried and true and
-      guaranteed to please.</p>
+    <p>So with all these influences there is definitely a good mix of recipes in this book, and few of them are entirely my own. They've all been passed down to me from different people, but all of them are tried and true and guaranteed to please.</p>
 
     <a href="book/" class="btn btn-primary">Open the Cook Book →</a>
   </section>
 
-  <!-- QUICK LINKS -->
   <section class="quick-links">
     <h2>Jump to a Category</h2>
     <p class="sub">Each section has its own page with full recipes and stories</p>
@@ -398,12 +228,12 @@
     </div>
   </section>
 
-  <!-- FOOTER -->
   <footer>
     <div class="footer-title">Grey's Cook Book</div>
     <p>Family recipes passed down with love — tried, true, and guaranteed to please.</p>
     <div class="footer-links">
       <a href="./">Home</a>
+      <a href="recipeindex/">Recipe Index</a>
       <a href="book/">All Recipes</a>
       <a href="appetizers/">Appetizers</a>
       <a href="breakfast/">Breakfast</a>
@@ -423,5 +253,4 @@
     });
   </script>
 </body>
-
 </html>
