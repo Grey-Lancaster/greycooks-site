@@ -9,127 +9,115 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Grey's Cook Book">
   <meta property="og:title" content="Recipe Chapters | Grey's Cook Book">
+  <meta property="og:image" content="https://greycooks.com/og-image.png">
+  <meta property="og:image:width" content="683">
+  <meta property="og:image:height" content="1024">
   <meta property="og:description" content="Browse seven chapters of family-tested Southern recipes.">
   <meta property="og:url" content="https://greycooks.com/book/">
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Recipe Chapters | Grey's Cook Book">
-  <meta name="twitter:description" content="Browse seven chapters of family-tested Southern recipes.">
   <link rel="canonical" href="https://greycooks.com/book/">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="../style.css">
-<style>
-  .toc-intro {
-    max-width: 680px;
-    margin: 56px auto 0;
-    padding: 0 24px;
-    text-align: center;
-  }
-  .toc-intro h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.3rem;
-    color: var(--muted);
-    font-style: italic;
-    font-weight: 400;
-    margin-bottom: 12px;
-  }
-  .toc-intro p { font-size: 0.95rem; color: var(--muted); }
-
-  .toc-grid {
-    max-width: 960px;
-    margin: 56px auto 0;
-    padding: 0 24px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 28px;
-  }
-
-  .toc-card {
-    background: #fff;
-    border: 1px solid var(--light-gold);
-    border-radius: 3px;
-    overflow: hidden;
-    box-shadow: 0 3px 14px var(--shadow);
-    color: inherit;
-    display: flex;
-    flex-direction: column;
-  }
-  .toc-card-link {
-    text-decoration: none;
-    color: inherit;
-    display: block;
-    transition: filter 0.2s;
-  }
-  .toc-card-link:hover .toc-card-top {
-    filter: brightness(1.12);
-  }
-  .toc-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 28px var(--shadow);
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  .toc-card-top {
-    background: linear-gradient(135deg, var(--warm-brown), var(--rust));
-    padding: 28px 28px 20px;
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-  }
-  .toc-card-emoji {
-    font-size: 2.2rem;
-    line-height: 1;
-    flex-shrink: 0;
-  }
-  .toc-card-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--cream);
-    line-height: 1.1;
-  }
-  .toc-card-count {
-    font-family: 'Lora', serif;
-    font-style: italic;
-    color: var(--light-gold);
-    font-size: 0.82rem;
-    margin-top: 4px;
-  }
-  .toc-card-body { padding: 20px 28px 24px; flex: 1; }
-  .toc-card-body ul { list-style: none; }
-  .toc-card-body ul li {
-    font-size: 0.88rem;
-    padding: 5px 0;
-    border-bottom: 1px dotted var(--light-gold);
-    color: var(--dark-ink);
-    font-style: italic;
-    font-family: 'Lora', serif;
-  }
-  .toc-card-body ul li:last-child { border-bottom: none; }
-  .toc-card-body ul li a {
-    color: var(--dark-ink);
-    text-decoration: none;
-    display: block;
-    transition: color 0.2s;
-  }
-  .toc-card-body ul li a:hover { color: var(--rust); }
-  .toc-card-footer {
-    padding: 14px 28px;
-    border-top: 1px solid var(--light-gold);
-    background: var(--parchment);
-    font-family: 'Playfair Display', serif;
-    font-size: 0.82rem;
-    color: var(--rust);
-    letter-spacing: 0.1em;
-    margin-top: auto;
-  }
-  .toc-card-footer a {
-    color: var(--rust);
-    text-decoration: none;
-    display: block;
-  }
-  .toc-card-footer a:hover { color: var(--warm-brown); }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow">
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .toc-intro {
+      max-width: 680px;
+      margin: 56px auto 0;
+      padding: 0 24px;
+      text-align: center;
+    }
+    .toc-intro h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--muted);
+      font-style: italic;
+      font-weight: 400;
+      margin-bottom: 12px;
+    }
+    .toc-intro p { font-size: 0.95rem; color: var(--muted); }
+    .toc-grid {
+      max-width: 960px;
+      margin: 56px auto 0;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 28px;
+    }
+    .toc-card {
+      background: #fff;
+      border: 1px solid var(--light-gold);
+      border-radius: 3px;
+      overflow: hidden;
+      box-shadow: 0 3px 14px var(--shadow);
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+    }
+    .toc-card-link {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      transition: filter 0.2s;
+    }
+    .toc-card-link:hover .toc-card-top { filter: brightness(1.12); }
+    .toc-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 28px var(--shadow);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .toc-card-top {
+      background: linear-gradient(135deg, var(--warm-brown), var(--rust));
+      padding: 28px 28px 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    .toc-card-emoji { font-size: 2.2rem; line-height: 1; flex-shrink: 0; }
+    .toc-card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--cream);
+      line-height: 1.1;
+    }
+    .toc-card-count {
+      font-family: 'Lora', serif;
+      font-style: italic;
+      color: var(--light-gold);
+      font-size: 0.82rem;
+      margin-top: 4px;
+    }
+    .toc-card-body { padding: 20px 28px 24px; flex: 1; }
+    .toc-card-body ul { list-style: none; }
+    .toc-card-body ul li {
+      font-size: 0.88rem;
+      padding: 5px 0;
+      border-bottom: 1px dotted var(--light-gold);
+      color: var(--dark-ink);
+      font-style: italic;
+      font-family: 'Lora', serif;
+    }
+    .toc-card-body ul li:last-child { border-bottom: none; }
+    .toc-card-body ul li a {
+      color: var(--dark-ink);
+      text-decoration: none;
+      display: block;
+      transition: color 0.2s;
+    }
+    .toc-card-body ul li a:hover { color: var(--rust); }
+    .toc-card-footer {
+      padding: 14px 28px;
+      border-top: 1px solid var(--light-gold);
+      background: var(--parchment);
+      font-family: 'Playfair Display', serif;
+      font-size: 0.82rem;
+      color: var(--rust);
+      letter-spacing: 0.1em;
+      margin-top: auto;
+    }
+    .toc-card-footer a { color: var(--rust); text-decoration: none; display: block; }
+    .toc-card-footer a:hover { color: var(--warm-brown); }
+  </style>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-LNBRC3723R"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -147,16 +135,15 @@
   <a href="/recipeindex/">Recipe Index</a>
 </nav>
 
-  <div class="category-banner">
-    <img src="/images/index.jpg"
-      alt="family-tested food">
-    <div class="category-banner-overlay">
-      <div class="category-banner-text">
-        <h1>The Recipes</h1>
-        <p>Seven chapters of family-tested food</p>
-      </div>
-    </div>  
+<div class="category-banner">
+  <img src="/images/index.jpg" alt="family-tested food">
+  <div class="category-banner-overlay">
+    <div class="category-banner-text">
+      <h1>The Recipes</h1>
+      <p>Seven chapters of family-tested food</p>
+    </div>
   </div>
+</div>
 
 <div class="toc-intro">
   <h2>Choose a chapter to begin</h2>
@@ -167,13 +154,13 @@
 
   <div class="toc-card">
     <a href="/appetizers/" class="toc-card-link">
-    <div class="toc-card-top">
-      <div class="toc-card-emoji">🥗</div>
-      <div>
-        <div class="toc-card-title">Appetizers</div>
-        <div class="toc-card-count">3 recipes</div>
+      <div class="toc-card-top">
+        <div class="toc-card-emoji">🥗</div>
+        <div>
+          <div class="toc-card-title">Appetizers</div>
+          <div class="toc-card-count">3 recipes</div>
+        </div>
       </div>
-    </div>
     </a>
     <div class="toc-card-body">
       <ul>
@@ -187,13 +174,13 @@
 
   <div class="toc-card">
     <a href="/breads/" class="toc-card-link">
-    <div class="toc-card-top">
-      <div class="toc-card-emoji">🍞</div>
-      <div>
-        <div class="toc-card-title">Breads</div>
-        <div class="toc-card-count">1 recipe</div>
+      <div class="toc-card-top">
+        <div class="toc-card-emoji">🍞</div>
+        <div>
+          <div class="toc-card-title">Breads</div>
+          <div class="toc-card-count">1 recipe</div>
+        </div>
       </div>
-    </div>
     </a>
     <div class="toc-card-body">
       <ul>
@@ -205,13 +192,13 @@
 
   <div class="toc-card">
     <a href="/breakfast/" class="toc-card-link">
-    <div class="toc-card-top">
-      <div class="toc-card-emoji">🍳</div>
-      <div>
-        <div class="toc-card-title">Breakfast</div>
-        <div class="toc-card-count">3 recipes</div>
+      <div class="toc-card-top">
+        <div class="toc-card-emoji">🍳</div>
+        <div>
+          <div class="toc-card-title">Breakfast</div>
+          <div class="toc-card-count">3 recipes</div>
+        </div>
       </div>
-    </div>
     </a>
     <div class="toc-card-body">
       <ul>
@@ -225,13 +212,13 @@
 
   <div class="toc-card">
     <a href="/meats/" class="toc-card-link">
-    <div class="toc-card-top">
-      <div class="toc-card-emoji">🥩</div>
-      <div>
-        <div class="toc-card-title">Meats</div>
-        <div class="toc-card-count">14 recipes</div>
+      <div class="toc-card-top">
+        <div class="toc-card-emoji">🥩</div>
+        <div>
+          <div class="toc-card-title">Meats</div>
+          <div class="toc-card-count">14 recipes</div>
+        </div>
       </div>
-    </div>
     </a>
     <div class="toc-card-body">
       <ul>
@@ -249,13 +236,13 @@
 
   <div class="toc-card">
     <a href="/fish/" class="toc-card-link">
-    <div class="toc-card-top">
-      <div class="toc-card-emoji">🐟</div>
-      <div>
-        <div class="toc-card-title">Fish</div>
-        <div class="toc-card-count">1 recipe</div>
+      <div class="toc-card-top">
+        <div class="toc-card-emoji">🐟</div>
+        <div>
+          <div class="toc-card-title">Fish</div>
+          <div class="toc-card-count">1 recipe</div>
+        </div>
       </div>
-    </div>
     </a>
     <div class="toc-card-body">
       <ul>
@@ -267,13 +254,13 @@
 
   <div class="toc-card">
     <a href="/sides/" class="toc-card-link">
-    <div class="toc-card-top">
-      <div class="toc-card-emoji">🥦</div>
-      <div>
-        <div class="toc-card-title">Sides</div>
-        <div class="toc-card-count">10 recipes</div>
+      <div class="toc-card-top">
+        <div class="toc-card-emoji">🥦</div>
+        <div>
+          <div class="toc-card-title">Sides</div>
+          <div class="toc-card-count">10 recipes</div>
+        </div>
       </div>
-    </div>
     </a>
     <div class="toc-card-body">
       <ul>
@@ -289,13 +276,13 @@
 
   <div class="toc-card">
     <a href="/dessert/" class="toc-card-link">
-    <div class="toc-card-top">
-      <div class="toc-card-emoji">🍰</div>
-      <div>
-        <div class="toc-card-title">Dessert</div>
-        <div class="toc-card-count">3 recipes</div>
+      <div class="toc-card-top">
+        <div class="toc-card-emoji">🍰</div>
+        <div>
+          <div class="toc-card-title">Dessert</div>
+          <div class="toc-card-count">3 recipes</div>
+        </div>
       </div>
-    </div>
     </a>
     <div class="toc-card-body">
       <ul>
@@ -314,6 +301,7 @@
   <p>Family recipes passed down with love — tried, true, and guaranteed to please.</p>
   <div class="footer-links">
     <a href="/">Home</a>
+    <a href="/recipeindex/">Recipe Index</a>
     <a href="/appetizers/">Appetizers</a>
     <a href="/breakfast/">Breakfast</a>
     <a href="/meats/">Meats</a>
