@@ -12,7 +12,7 @@ This is a static HTML/CSS family recipe cookbook site ("Grey's Cook Book"), depl
 - `book/index.html` — table of contents linking to each category chapter.
 - `recipeindex/index.html` — alphabetical index of all individual recipes.
 - One folder per recipe category (`appetizers/`, `breads/`, `breakfast/`, `dessert/`, `fish/`, `meats/`, `sides/`), each containing a single `index.html` that lists every recipe in that category as a `.recipe-card`.
-- `print.html` — a separate, standalone "print edition" compiling the whole book for printing (marked `noindex, nofollow`); it duplicates recipe content rather than pulling from the category pages.
+- `print.html` — a separate, standalone "print edition" (marked `noindex, nofollow`). It has no static recipe content of its own: on load, client-side JS (`buildBook()`) fetches each category page listed in `CATEGORY_PAGES`, parses out every `.recipe-card` (title, `.ingredients-list li`, `.instructions p`, `.note-box`/`.variation-box`), and rebuilds a printable book from them. Adding a recipe to a category page's `.recipe-card` markup is automatically picked up here — no manual sync needed.
 - `style.css` — the single shared stylesheet for all pages (nav bar, recipe cards, category banners, buttons, etc.), built around CSS custom properties defined in `:root` (`--cream`, `--warm-brown`, `--rust`, `--gold`, `--dark-ink`, etc.). Reuse these variables rather than hardcoding colors.
 - `images/` — category banner photos and the homepage cover image, referenced with absolute paths (`/images/...`).
 - `sitemap.xml` / `robots.txt` — kept in sync manually with the page list; update `sitemap.xml` when adding or removing a page.
