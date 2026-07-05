@@ -244,46 +244,132 @@
       btn.textContent = "Download .docx";
     }
 
+    // Palette matches print.html / print2.html, not the site's own CSS variables --
+    // the print editions intentionally use a quieter, book-like ink/muted scheme.
+    const INK = "1F1A17";
+    const MUTED = "6C625B";
+    const ACCENT = "3B312B";
+    const LINE = "D7CFC7";
+    const LINE_DARK = "8B7F75";
+    const NOTE_BG = "FAF8F5";
+    const FONT = "Georgia";
+    const HEADING_FONT = "Cambria";
+
     function buildDocx() {
-      const { Document, Packer, Paragraph, TextRun, HeadingLevel, PageBreak, AlignmentType, ImageRun } = docx;
+      const {
+        Document, Packer, Paragraph, TextRun, PageBreak, AlignmentType, ImageRun,
+        Table, TableRow, TableCell, WidthType, BorderStyle, ShadingType,
+        Footer, PageNumber, TabStopType, TabStopPosition
+      } = docx;
+
+      const noBorder = () => ({ style: BorderStyle.NONE, size: 0, color: "FFFFFF" });
+
+      function divider() {
+        return new Paragraph({
+          spacing: { after: 200 },
+          border: { bottom: { style: BorderStyle.SINGLE, size: 4, color: LINE } }
+        });
+      }
+
+      function blockLabel(text) {
+        return new Paragraph({
+          spacing: { before: 60, after: 120 },
+          border: { bottom: { style: BorderStyle.SINGLE, size: 4, color: LINE } },
+          children: [new TextRun({ text, bold: true, allCaps: true, color: ACCENT, size: 16, characterSpacing: 30, font: HEADING_FONT })]
+        });
+      }
+
+      function twoColumnTable(leftChildren, rightChildren) {
+        return new Table({
+          width: { size: 100, type: WidthType.PERCENTAGE },
+          borders: {
+            top: noBorder(), bottom: noBorder(), left: noBorder(), right: noBorder(),
+            insideHorizontal: noBorder(), insideVertical: noBorder()
+          },
+          rows: [
+            new TableRow({
+              children: [
+                new TableCell({
+                  width: { size: 44, type: WidthType.PERCENTAGE },
+                  margins: { right: 260 },
+                  children: leftChildren
+                }),
+                new TableCell({
+                  width: { size: 56, type: WidthType.PERCENTAGE },
+                  margins: { left: 260 },
+                  children: rightChildren
+                })
+              ]
+            })
+          ]
+        });
+      }
 
       const children = [];
 
-      children.push(
-        new Paragraph({
-          heading: HeadingLevel.TITLE,
-          alignment: AlignmentType.CENTER,
-          text: "Grey's Cook Book"
-        })
-      );
+      // ---- Cover page ----
+      children.push(new Paragraph({
+        alignment: AlignmentType.CENTER,
+        spacing: { after: 160 },
+        children: [new TextRun({ text: "Family Recipes", allCaps: true, color: MUTED, size: 18, characterSpacing: 60, font: HEADING_FONT })]
+      }));
 
       if (coverImage && coverImage.ok) {
-        children.push(
-          new Paragraph({
-            alignment: AlignmentType.CENTER,
-            children: [
-              new ImageRun({
-                type: "jpg",
-                data: coverImage.data,
-                transformation: { width: coverImage.width, height: coverImage.height }
-              })
-            ]
-          })
-        );
+        children.push(new Paragraph({
+          alignment: AlignmentType.CENTER,
+          spacing: { after: 240 },
+          children: [new ImageRun({ type: "jpg", data: coverImage.data, transformation: { width: coverImage.width, height: coverImage.height } })]
+        }));
       }
 
       children.push(
         new Paragraph({
           alignment: AlignmentType.CENTER,
-          children: [new TextRun({ text: "A collection of home cooking favorites from greycooks.com", italics: true })]
+          spacing: { after: 200 },
+          children: [new TextRun({ text: "Grey's Cook Book", bold: true, allCaps: true, color: ACCENT, size: 56, characterSpacing: 40, font: HEADING_FONT })]
         }),
         new Paragraph({
           alignment: AlignmentType.CENTER,
-          children: [new TextRun({ text: "By Grey Lancaster" })]
+          spacing: { after: 160 },
+          children: [new TextRun({ text: "A collection of home cooking favorites from greycooks.com", italics: true, color: MUTED, font: FONT })]
+        }),
+        new Paragraph({
+          alignment: AlignmentType.CENTER,
+          spacing: { after: 320 },
+          children: [new TextRun({ text: "By Grey Lancaster", color: INK, font: FONT })]
+        }),
+        new Paragraph({
+          alignment: AlignmentType.CENTER,
+          children: [new TextRun({ text: "Southern • Family • Tried and True", allCaps: true, color: MUTED, size: 14, characterSpacing: 20, font: HEADING_FONT })]
         }),
         new Paragraph({ children: [new PageBreak()] })
       );
 
+      // ---- Table of contents (chapter list; Word pagination isn't fixed like a PDF, so no page numbers) ----
+      children.push(
+        new Paragraph({
+          alignment: AlignmentType.CENTER,
+          spacing: { after: 100 },
+          children: [new TextRun({ text: "Table of Contents", bold: true, allCaps: true, color: ACCENT, size: 36, characterSpacing: 30, font: HEADING_FONT })]
+        }),
+        new Paragraph({
+          alignment: AlignmentType.CENTER,
+          spacing: { after: 280 },
+          children: [new TextRun({ text: "A chapter-by-chapter path through the recipes, from first bites to dessert.", italics: true, color: MUTED, font: FONT })]
+        })
+      );
+
+      builtSections.forEach(section => {
+        children.push(new Paragraph({
+          spacing: { after: 140 },
+          border: { bottom: { style: BorderStyle.SINGLE, size: 2, color: LINE } },
+          children: [new TextRun({ text: section.title, bold: true, color: INK, font: HEADING_FONT, size: 22 })]
+        }));
+      });
+
+      children.push(new Paragraph({ children: [new PageBreak()] }));
+
+      // ---- Chapters & recipes ----
       builtSections.forEach((section, sIdx) => {
         if (sIdx > 0) {
           children.push(new Paragraph({ children: [new PageBreak()] }));
@@ -291,31 +377,31 @@
 
         children.push(
           new Paragraph({
-            heading: HeadingLevel.HEADING_1,
-            text: section.title
+            alignment: AlignmentType.CENTER,
+            spacing: { before: 160, after: 60 },
+            children: [new TextRun({ text: "Chapter", allCaps: true, color: MUTED, size: 14, characterSpacing: 40, font: HEADING_FONT })]
+          }),
+          new Paragraph({
+            alignment: AlignmentType.CENTER,
+            spacing: { after: 200 },
+            children: [new TextRun({ text: section.title, bold: true, allCaps: true, color: ACCENT, size: 40, characterSpacing: 30, font: HEADING_FONT })]
           })
         );
 
         if (section.bannerImage && section.bannerImage.ok) {
-          children.push(
-            new Paragraph({
-              children: [
-                new ImageRun({
-                  type: "jpg",
-                  data: section.bannerImage.data,
-                  transformation: { width: section.bannerImage.width, height: section.bannerImage.height }
-                })
-              ]
-            })
-          );
+          children.push(new Paragraph({
+            alignment: AlignmentType.CENTER,
+            spacing: { after: 200 },
+            children: [new ImageRun({ type: "jpg", data: section.bannerImage.data, transformation: { width: section.bannerImage.width, height: section.bannerImage.height } })]
+          }));
         }
 
         if (SECTION_NOTES[section.title]) {
-          children.push(
-            new Paragraph({
-              children: [new TextRun({ text: SECTION_NOTES[section.title], italics: true })]
-            })
-          );
+          children.push(new Paragraph({
+            alignment: AlignmentType.CENTER,
+            spacing: { after: 200 },
+            children: [new TextRun({ text: SECTION_NOTES[section.title], italics: true, color: MUTED, font: FONT })]
+          }));
         }
 
         section.recipes.forEach(recipe => {
@@ -323,62 +409,91 @@
 
           children.push(
             new Paragraph({
-              heading: HeadingLevel.HEADING_2,
-              text: recipe.title
-            })
-          );
-
-          children.push(
+              spacing: { after: 20 },
+              children: [new TextRun({ text: recipe.title, bold: true, color: ACCENT, size: 32, font: HEADING_FONT })]
+            }),
             new Paragraph({
-              heading: HeadingLevel.HEADING_3,
-              text: "Ingredients"
-            })
+              spacing: { after: 140 },
+              children: [new TextRun({ text: recipe.category, allCaps: true, color: MUTED, size: 16, characterSpacing: 24, font: HEADING_FONT })]
+            }),
+            divider()
           );
 
+          const leftCol = [blockLabel("Ingredients")];
           recipe.ingredients.forEach(i => {
-            children.push(new Paragraph({ bullet: { level: 0 }, text: i }));
+            leftCol.push(new Paragraph({
+              bullet: { level: 0 },
+              spacing: { after: 70 },
+              children: [new TextRun({ text: i, size: 19, color: INK, font: FONT })]
+            }));
           });
 
-          children.push(
-            new Paragraph({
-              heading: HeadingLevel.HEADING_3,
-              text: "Directions"
-            })
-          );
-
+          const rightCol = [blockLabel("Directions")];
           recipe.directions.forEach((d, idx) => {
-            children.push(new Paragraph({ text: `${idx + 1}. ${d}` }));
+            rightCol.push(new Paragraph({
+              spacing: { after: 130 },
+              children: [new TextRun({ text: `${idx + 1}. ${d}`, size: 19, color: INK, font: FONT })]
+            }));
           });
+
+          children.push(twoColumnTable(leftCol, rightCol));
 
           if (recipe.notes.length) {
-            children.push(
-              new Paragraph({
-                heading: HeadingLevel.HEADING_3,
-                text: "Notes"
-              })
-            );
+            children.push(new Paragraph({
+              spacing: { before: 240, after: 80 },
+              border: { top: { style: BorderStyle.SINGLE, size: 4, color: LINE } },
+              children: [new TextRun({ text: "Notes", bold: true, allCaps: true, color: ACCENT, size: 14, characterSpacing: 30, font: HEADING_FONT })]
+            }));
             recipe.notes.forEach(n => {
-              children.push(new Paragraph({ children: [new TextRun({ text: n, italics: true })] }));
+              children.push(new Paragraph({
+                shading: { type: ShadingType.CLEAR, color: "auto", fill: NOTE_BG },
+                spacing: { after: 100 },
+                children: [new TextRun({ text: n, italics: true, color: INK, size: 18, font: FONT })]
+              }));
             });
           }
         });
       });
 
-      children.push(new Paragraph({ children: [new PageBreak()] }));
+      // ---- About page ----
       children.push(
+        new Paragraph({ children: [new PageBreak()] }),
         new Paragraph({
-          heading: HeadingLevel.HEADING_1,
-          text: "About the Author"
+          alignment: AlignmentType.CENTER,
+          spacing: { after: 200 },
+          children: [new TextRun({ text: "About the Author", bold: true, allCaps: true, color: ACCENT, size: 36, characterSpacing: 30, font: HEADING_FONT })]
         }),
         new Paragraph({
-          text: "Grey Lancaster shares approachable home cooking rooted in family meals, practical kitchen know-how, and recipes worth making again."
+          alignment: AlignmentType.CENTER,
+          spacing: { after: 140 },
+          children: [new TextRun({ text: "Grey Lancaster shares approachable home cooking rooted in family meals, practical kitchen know-how, and recipes worth making again.", color: INK, font: FONT })]
         }),
         new Paragraph({
-          text: "This collection brings together favorites from greycooks.com in a format meant for real kitchens, real tables, and real use."
+          alignment: AlignmentType.CENTER,
+          children: [new TextRun({ text: "This collection brings together favorites from greycooks.com in a format meant for real kitchens, real tables, and real use.", color: INK, font: FONT })]
         })
       );
 
+      const footer = new Footer({
+        children: [
+          new Paragraph({
+            border: { top: { style: BorderStyle.SINGLE, size: 4, color: LINE } },
+            tabStops: [{ type: TabStopType.RIGHT, position: TabStopPosition.MAX }],
+            children: [
+              new TextRun({ text: "greycooks.com", color: MUTED, size: 16, font: FONT }),
+              new TextRun({ text: "\t", font: FONT }),
+              new TextRun({ children: [PageNumber.CURRENT], color: MUTED, size: 16, font: FONT })
+            ]
+          })
+        ]
+      });
+
       const doc = new Document({
+        styles: {
+          default: {
+            document: { run: { font: FONT, size: 20, color: INK } }
+          }
+        },
         sections: [
           {
             properties: {
@@ -387,6 +502,7 @@
                 margin: { top: 1440, bottom: 1440, left: 1440, right: 1440 }
               }
             },
+            footers: { default: footer },
             children
           }
         ]
