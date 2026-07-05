@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grey's Cook Book - Print Edition (Half-Page Booklet)</title>
+  <meta name="robots" content="noindex, nofollow" />
+
+  <style>
+    :root {
+      --page-width: 5.5in;
+      --page-height: 8.5in;
+      --page-margin-top: 0.42in;
+      --page-margin-right: 0.4in;
+      --page-margin-bottom: 0.45in;
+      --page-margin-left: 0.4in;
+      --ink: #1f1a17;
+      --muted: #6c625b;
+      --line: #d7cfc7;
+      --line-dark: #8b7f75;
+      --line-light: #ebe4dc;
+      --accent: #3b312b;
+      --screen-bg: #e7e4e0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--screen-bg);
+      color: var(--ink);
+      font-family: Georgia, "Times New Roman", serif;
+      line-height: 1.5;
+    }
+
+    body {
+      padding: 24px 0;
+    }
+
+    .screen-note,
+    .loading,
+    .error-box {
+      width: min(920px, calc(100% - 32px));
+      margin: 0 auto 18px;
+      background: #fff;
+      border: 1px solid #d5d0ca;
+      padding: 18px 22px;
+    }
+
+    .screen-note h1 {
+      margin: 0 0 10px;
+      font-size: 1.7rem;
+      color: var(--accent);
+    }
+
+    .screen-note p,
+    .loading p,
+    .error-box p {
+      margin: 8px 0;
+    }
+
+    .actions {
+      margin-top: 14px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .actions button {
+      padding: 10px 14px;
+      border: 1px solid #b7aea5;
+      background: #fff;
+      color: var(--ink);
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .actions button:hover {
+      background: #f6f3ef;
+    }
+
+    .error-box {
+      border-color: #c88;
+      color: #6d1f1f;
+      display: none;
+    }
+
+    .book {
+      width: 100%;
+    }
+
+    .page {
+      width: var(--page-width);
+      min-height: var(--page-height);
+      margin: 0 auto 20px;
+      background: #fff;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+      padding:
+        var(--page-margin-top)
+        var(--page-margin-right)
+        var(--page-margin-bottom)
+        var(--page-margin-left);
+      page-break-after: always;
+      break-after: page;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .page:last-child {
+      page-break-after: auto;
+      break-after: auto;
+    }
+
+    .page-inner {
+      min-height: calc(
+        var(--page-height) - var(--page-margin-top) - var(--page-margin-bottom)
+      );
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 2;
+    }
+
+    .title-page,
+    .section-page,
+    .toc-page,
+    .about-page {
+      justify-content: center;
+      text-align: center;
+    }
+
+    .book-title {
+      margin: 0;
+      font-size: 1.7rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .book-subtitle {
+      margin: 10px 0 0;
+      font-size: 0.9rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .byline {
+      margin-top: 22px;
+      font-size: 0.92rem;
+    }
+
+    .small-divider {
+      width: 100px;
+      height: 1px;
+      background: var(--line-dark);
+      margin: 16px auto;
+    }
+
+    .section-kicker {
+      margin: 0 0 8px;
+      font-size: 0.72rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+    }
+
+    .section-title {
+      margin: 0;
+      font-size: 1.4rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .section-note {
+      margin: 0 auto;
+      max-width: 380px;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .toc-title,
+    .about-title {
+      margin: 0;
+      font-size: 1.4rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+    }
+
+    .toc-list {
+      list-style: none;
+      margin: 22px auto 0;
+      padding: 0;
+      max-width: 420px;
+      text-align: left;
+    }
+
+    .toc-list li {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: end;
+      gap: 8px;
+      padding: 7px 0;
+      font-size: 0.88rem;
+    }
+
+    .toc-name {
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .toc-dots {
+      border-bottom: 1px dotted var(--line-dark);
+      transform: translateY(-0.2em);
+    }
+
+    .toc-page-number {
+      min-width: 20px;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .recipe-header h2 {
+      margin: 0;
+      font-size: 1.35rem;
+      line-height: 1.15;
+      color: var(--accent);
+    }
+
+    .recipe-category {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--line);
+      margin: 12px 0 14px;
+    }
+
+    .section-image-wrap {
+      margin: 4px auto 16px;
+      width: 100%;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .section-image {
+      display: block;
+      width: 100%;
+      max-height: 2.1in;
+      object-fit: cover;
+      object-position: center;
+      border: 1px solid var(--line);
+    }
+
+    body.print-grayscale .section-image {
+      filter: grayscale(100%);
+    }
+
+    body.print-color .section-image {
+      filter: none;
+    }
+
+    .cover-image-wrap {
+      width: 100%;
+      margin: 0 auto 20px;
+      border: 1px solid var(--line);
+      padding: 0.1in;
+      background: #fff;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .cover-image {
+      display: block;
+      width: 100%;
+      height: 2.6in;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    body.print-grayscale .cover-image {
+      filter: grayscale(100%);
+    }
+
+    body.print-color .cover-image {
+      filter: none;
+    }
+
+    /* Half-page layout is too narrow for side-by-side ingredients/directions,
+       so recipes always stack in a single column here. */
+    .recipe-content {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      align-items: start;
+    }
+
+    .recipe-block {
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .recipe-block h3 {
+      margin: 0 0 8px;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--accent);
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 5px;
+    }
+
+    .recipe-block ul,
+    .recipe-block ol {
+      margin: 0;
+      padding-left: 1.05rem;
+    }
+
+    .recipe-block li {
+      margin-bottom: 0.35rem;
+      font-size: 0.85rem;
+    }
+
+    .recipe-notes {
+      margin-top: 14px;
+      padding: 10px 12px 2px;
+      border-top: 1px solid var(--line);
+      background: #faf8f5;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .recipe-notes h4 {
+      margin: 0 0 6px;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--accent);
+    }
+
+    .recipe-notes p {
+      margin: 0 0 8px;
+      font-size: 0.82rem;
+      white-space: normal;
+    }
+
+    .recipe-footer {
+      margin-top: auto;
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .about-page p {
+      margin: 0 0 12px;
+      max-width: 420px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    .cover-page,
+    .section-page,
+    .toc-page {
+      position: relative;
+    }
+
+    .cover-page::before,
+    .section-page::before,
+    .toc-page::before {
+      content: "";
+      position: absolute;
+      inset: 0.14in;
+      border: 1px solid var(--line);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .cover-page::after,
+    .section-page::after,
+    .toc-page::after {
+      content: "";
+      position: absolute;
+      inset: 0.24in;
+      border: 1px solid var(--line-light);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .cover-page {
+      justify-content: center;
+      text-align: center;
+    }
+
+    .cover-kicker {
+      margin: 0 0 10px;
+      font-size: 0.72rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+    }
+
+    .cover-title {
+      margin: 0;
+      font-size: 1.9rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent);
+      line-height: 1.1;
+    }
+
+    .cover-subtitle {
+      margin: 12px auto 0;
+      max-width: 340px;
+      font-size: 0.9rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .cover-byline {
+      margin-top: 22px;
+      font-size: 0.9rem;
+    }
+
+    .cover-divider {
+      width: 120px;
+      height: 1px;
+      background: var(--line-dark);
+      margin: 18px auto;
+    }
+
+    .cover-bottom-note {
+      margin-top: 26px;
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .section-page {
+      justify-content: center;
+      text-align: center;
+    }
+
+    .section-page .section-kicker {
+      margin: 0 0 12px;
+      font-size: 0.7rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.24em;
+    }
+
+    .section-page .section-title {
+      margin: 0;
+      font-size: 1.55rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      line-height: 1.1;
+    }
+
+    .section-page .small-divider {
+      width: 110px;
+      margin: 16px auto 14px;
+    }
+
+    .section-page .section-note {
+      max-width: 340px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 0.86rem;
+      font-style: italic;
+      line-height: 1.5;
+    }
+
+    .section-ornament {
+      margin: 0 auto 14px;
+      font-size: 0.9rem;
+      color: var(--line-dark);
+      letter-spacing: 0.3em;
+    }
+
+    .section-bottom-ornament {
+      margin: 18px auto 0;
+      font-size: 0.8rem;
+      color: var(--line-dark);
+      letter-spacing: 0.3em;
+    }
+
+    .toc-page .toc-title {
+      margin-bottom: 6px;
+      font-size: 1.4rem;
+      letter-spacing: 0.06em;
+    }
+
+    .toc-intro {
+      max-width: 340px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-style: italic;
+      font-size: 0.86rem;
+      line-height: 1.45;
+    }
+
+    .toc-ornament {
+      margin: 0 auto 14px;
+      font-size: 0.9rem;
+      color: var(--line-dark);
+      letter-spacing: 0.3em;
+    }
+
+    .toc-wrap {
+      max-width: 420px;
+      margin: 20px auto 0;
+      padding: 10px 14px 0;
+    }
+
+    .toc-list li + li {
+      border-top: 1px solid #f2ede7;
+    }
+
+    @page {
+      size: 5.5in 8.5in;
+      margin: 0;
+    }
+
+    @media print {
+      html,
+      body {
+        background: #fff;
+        margin: 0;
+        padding: 0;
+      }
+
+      .screen-note,
+      .loading,
+      .error-box {
+        display: none !important;
+      }
+
+      .page {
+        margin: 0;
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body class="print-grayscale">
+
+  <div class="screen-note">
+    <h1>Grey's Cook Book Print Builder — Half-Page Booklet</h1>
+    <p>This page pulls recipes from your category pages and rebuilds them as a small 5.5&Prime; &times; 8.5&Prime; booklet, two recipe pages to a printed sheet.</p>
+    <p>After it finishes loading: print (or save as PDF), and in the print dialog set <strong>Pages per sheet: 2</strong> on regular 8.5&Prime; &times; 11&Prime; paper. Then cut each printed sheet in half to get finished 5.5&Prime; &times; 8.5&Prime; booklet pages.</p>
+    <div class="actions">
+      <button onclick="printBook('grayscale')">Print / Save PDF (Grayscale)</button>
+      <button onclick="printBook('color')">Print / Save PDF (Color)</button>
+      <button onclick="buildBook()">Reload Recipes</button>
+    </div>
+  </div>
+
+  <div id="loading" class="loading">
+    <p><strong>Loading recipes...</strong></p>
+    <p>Please wait while the cookbook is assembled.</p>
+  </div>
+
+  <div id="errors" class="error-box"></div>
+
+  <main id="book" class="book"></main>
+
+  <script>
+    const CATEGORY_PAGES = [
+      { title: "Appetizers", url: "/appetizers/" },
+      { title: "Breakfast", url: "/breakfast/" },
+      { title: "Breads", url: "/breads/" },
+      { title: "Sides", url: "/sides/" },
+      { title: "Main Dishes", url: "/meats/" },
+      { title: "Fish", url: "/fish/" },
+      { title: "Desserts", url: "/dessert/" }
+    ];
+
+    const SECTION_NOTES = {
+      "Appetizers": "Start the meal right with favorites that feel at home on any table.",
+      "Breakfast": "Morning staples worth waking up for.",
+      "Breads": "The kind of breads that belong beside soup, breakfast, or Sunday supper.",
+      "Sides": "The dishes that make the plate feel complete.",
+      "Main Dishes": "Hearty suppers, casseroles, and favorites meant for real appetites.",
+      "Fish": "Simple skillet and supper-table fish done the right way.",
+      "Desserts": "Sweet endings worth saving room for."
+    };
+
+    const PRINT_COVER_IMAGE = "/images/cover.jpg";
+
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, function (ch) {
+        return {
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;"
+        }[ch];
+      });
+    }
+
+    function cleanText(node) {
+      return node.textContent.replace(/\s+/g, " ").trim();
+    }
+
+    function absoluteUrl(url, baseUrl) {
+      try {
+        return new URL(url, baseUrl).href;
+      } catch {
+        return "";
+      }
+    }
+
+    function extractCategoryBannerImage(doc, pageBaseUrl) {
+      const img = doc.querySelector(".category-banner img");
+      if (!img) return { src: "", alt: "" };
+
+      const src = img.getAttribute("src") || "";
+      const alt = img.getAttribute("alt") || "";
+
+      return {
+        src: absoluteUrl(src, pageBaseUrl),
+        alt: alt.trim()
+      };
+    }
+
+    function extractRecipesFromPage(doc, category) {
+      const cards = doc.querySelectorAll(".recipe-card");
+
+      return [...cards].map(card => {
+        const title = card.querySelector("h3")?.textContent.trim() || "Recipe";
+
+        const ingredients = [
+          ...card.querySelectorAll(".ingredients-list li")
+        ].map(cleanText).filter(Boolean);
+
+        const directions = [
+          ...card.querySelectorAll(".instructions p")
+        ].map(cleanText).filter(Boolean);
+
+        const notes = [
+          ...card.querySelectorAll(".note-box, .variation-box")
+        ].map(cleanText).filter(Boolean);
+
+        return {
+          title,
+          category,
+          ingredients,
+          directions,
+          notes
+        };
+      });
+    }
+
+    function renderTitlePage() {
+      return `
+        <section class="page">
+          <div class="page-inner title-page cover-page">
+            <p class="cover-kicker">Family Recipes</p>
+            <div class="section-ornament">✦ ✦ ✦</div>
+
+            <div class="cover-image-wrap">
+              <img
+                class="cover-image"
+                src="${escapeHtml(PRINT_COVER_IMAGE)}"
+                alt="Grey's Cook Book cover image"
+              />
+            </div>
+
+            <h1 class="cover-title">Grey's Cook Book</h1>
+            <div class="cover-divider"></div>
+            <p class="cover-subtitle">
+              A collection of home cooking favorites from greycooks.com
+            </p>
+            <p class="cover-byline">By Grey Lancaster</p>
+            <p class="cover-bottom-note">Southern • Family • Tried and True</p>
+          </div>
+        </section>
+      `;
+    }
+
+    function renderToc(tocItems) {
+      return `
+        <section class="page">
+          <div class="page-inner toc-page">
+            <div class="toc-ornament">✦ ✦ ✦</div>
+            <h2 class="toc-title">Table of Contents</h2>
+            <div class="small-divider"></div>
+            <p class="toc-intro">A chapter-by-chapter path through the recipes, from first bites to dessert.</p>
+            <div class="toc-wrap">
+              <ul class="toc-list">
+                ${tocItems.map(item => `
+                  <li>
+                    <span class="toc-name">${escapeHtml(item.title)}</span>
+                    <span class="toc-dots"></span>
+                    <span class="toc-page-number">${item.page}</span>
+                  </li>
+                `).join("")}
+              </ul>
+            </div>
+            <div class="section-bottom-ornament">✦ ✦ ✦</div>
+          </div>
+        </section>
+      `;
+    }
+
+    function renderSectionPage(title, imageSrc, imageAlt) {
+      return `
+        <section class="page">
+          <div class="page-inner section-page">
+            <p class="section-kicker">Chapter</p>
+            <div class="section-ornament">✦ ✦ ✦</div>
+            <h2 class="section-title">${escapeHtml(title)}</h2>
+            <div class="small-divider"></div>
+
+            ${imageSrc ? `
+              <div class="section-image-wrap">
+                <img
+                  class="section-image"
+                  src="${escapeHtml(imageSrc)}"
+                  alt="${escapeHtml(imageAlt || title)}"
+                />
+              </div>
+            ` : ""}
+
+            <p class="section-note">${escapeHtml(SECTION_NOTES[title] || "")}</p>
+            <div class="section-bottom-ornament">✦ ✦ ✦</div>
+          </div>
+        </section>
+      `;
+    }
+
+    function renderRecipe(recipe, pageNumber) {
+      return `
+        <section class="page">
+          <div class="page-inner">
+            <header class="recipe-header">
+              <h2>${escapeHtml(recipe.title)}</h2>
+              <p class="recipe-category">${escapeHtml(recipe.category)}</p>
+            </header>
+
+            <div class="divider"></div>
+
+            <div class="recipe-content">
+              <div class="recipe-block">
+                <h3>Ingredients</h3>
+                <ul>
+                  ${recipe.ingredients.map(i => `<li>${escapeHtml(i)}</li>`).join("")}
+                </ul>
+              </div>
+
+              <div class="recipe-block">
+                <h3>Directions</h3>
+                <ol>
+                  ${recipe.directions.map(d => `<li>${escapeHtml(d)}</li>`).join("")}
+                </ol>
+              </div>
+            </div>
+
+            ${recipe.notes.length ? `
+              <div class="recipe-notes">
+                <h4>Notes</h4>
+                ${recipe.notes.map(n => `<p>${escapeHtml(n)}</p>`).join("")}
+              </div>
+            ` : ""}
+
+            <footer class="recipe-footer">
+              <span>greycooks.com</span>
+              <span>${pageNumber}</span>
+            </footer>
+          </div>
+        </section>
+      `;
+    }
+
+    function renderAboutPage(pageNumber) {
+      return `
+        <section class="page">
+          <div class="page-inner about-page">
+            <h2 class="about-title">About the Author</h2>
+            <div class="small-divider"></div>
+            <p>Grey Lancaster shares approachable home cooking rooted in family meals, practical kitchen know-how, and recipes worth making again.</p>
+            <p>This collection brings together favorites from greycooks.com in a format meant for real kitchens, real tables, and real use.</p>
+            <footer class="recipe-footer">
+              <span>greycooks.com</span>
+              <span>${pageNumber}</span>
+            </footer>
+          </div>
+        </section>
+      `;
+    }
+
+    function printBook(mode) {
+      document.body.classList.remove("print-grayscale", "print-color");
+
+      if (mode === "color") {
+        document.body.classList.add("print-color");
+      } else {
+        document.body.classList.add("print-grayscale");
+      }
+
+      window.print();
+    }
+
+    async function buildBook() {
+      const book = document.getElementById("book");
+      const loading = document.getElementById("loading");
+      const errorsBox = document.getElementById("errors");
+
+      if (!book) {
+        console.error('Missing <main id="book"></main>');
+        return;
+      }
+
+      if (loading) {
+        loading.style.display = "block";
+      }
+
+      if (errorsBox) {
+        errorsBox.style.display = "none";
+        errorsBox.innerHTML = "";
+      }
+
+      book.innerHTML = "";
+
+      const builtSections = [];
+      const errors = [];
+
+      for (const cat of CATEGORY_PAGES) {
+        try {
+          const res = await fetch(cat.url);
+
+          if (!res.ok) {
+            throw new Error(`HTTP ${res.status} for ${cat.url}`);
+          }
+
+          const text = await res.text();
+          const pageUrl = new URL(cat.url, window.location.origin).href;
+          const doc = new DOMParser().parseFromString(text, "text/html");
+
+          const bannerImage = extractCategoryBannerImage(doc, pageUrl);
+          const recipes = extractRecipesFromPage(doc, cat.title);
+
+          builtSections.push({
+            title: cat.title,
+            recipes,
+            imageSrc: bannerImage.src || "",
+            imageAlt: bannerImage.alt || cat.title
+          });
+        } catch (e) {
+          errors.push(`Failed loading ${cat.url}: ${e.message}`);
+          builtSections.push({
+            title: cat.title,
+            recipes: [],
+            imageSrc: "",
+            imageAlt: cat.title
+          });
+        }
+      }
+
+      const tocItems = [];
+      let pageNumber = 3;
+
+      for (const section of builtSections) {
+        tocItems.push({
+          title: section.title,
+          page: pageNumber
+        });
+        pageNumber += 1;
+        pageNumber += section.recipes.length;
+      }
+
+      const aboutPageNumber = pageNumber;
+
+      let html = "";
+      html += renderTitlePage();
+      html += renderToc(tocItems);
+
+      pageNumber = 3;
+
+      for (const section of builtSections) {
+        html += renderSectionPage(section.title, section.imageSrc, section.imageAlt);
+        pageNumber += 1;
+
+        for (const recipe of section.recipes) {
+          html += renderRecipe(recipe, pageNumber);
+          pageNumber += 1;
+        }
+      }
+
+      html += renderAboutPage(aboutPageNumber);
+
+      book.innerHTML = html;
+
+      if (errors.length && errorsBox) {
+        errorsBox.style.display = "block";
+        errorsBox.innerHTML = `
+          <p><strong>Some pages did not load:</strong></p>
+          <ul>
+            ${errors.map(err => `<li>${escapeHtml(err)}</li>`).join("")}
+          </ul>
+        `;
+      }
+
+      if (loading) {
+        loading.style.display = "none";
+      }
+    }
+
+    buildBook();
+  </script>
+</body>
+</html>
