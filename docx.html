@@ -115,8 +115,35 @@
       { title: "Desserts", url: "/dessert/" }
     ];
 
+    const SECTION_NOTES = {
+      "Appetizers": "Start the meal right with favorites that feel at home on any table.",
+      "Breakfast": "Morning staples worth waking up for.",
+      "Breads": "The kind of breads that belong beside soup, breakfast, or Sunday supper.",
+      "Sides": "The dishes that make the plate feel complete.",
+      "Main Dishes": "Hearty suppers, casseroles, and favorites meant for real appetites.",
+      "Fish": "Simple skillet and supper-table fish done the right way.",
+      "Desserts": "Sweet endings worth saving room for."
+    };
+
+    const PRINT_COVER_IMAGE = "/images/cover.jpg";
+
     function cleanText(node) {
       return node.textContent.replace(/\s+/g, " ").trim();
+    }
+
+    function absoluteUrl(url, baseUrl) {
+      try {
+        return new URL(url, baseUrl).href;
+      } catch {
+        return "";
+      }
+    }
+
+    function extractCategoryBannerImage(doc, pageBaseUrl) {
+      const img = doc.querySelector(".category-banner img");
+      if (!img) return "";
+      const src = img.getAttribute("src") || "";
+      return absoluteUrl(src, pageBaseUrl);
     }
 
     function extractRecipesFromPage(doc, category) {
@@ -141,7 +168,43 @@
       });
     }
 
+    // Loads an image and figures out a display width/height (max 500x320)
+    // that preserves its original aspect ratio, for embedding in the docx.
+    function loadImageForDocx(url) {
+      return new Promise((resolve) => {
+        fetch(url)
+          .then(res => {
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            return res.arrayBuffer();
+          })
+          .then(buf => {
+            const blob = new Blob([buf]);
+            const objectUrl = URL.createObjectURL(blob);
+            const img = new Image();
+            img.onload = () => {
+              const maxWidth = 500;
+              const maxHeight = 320;
+              let width = maxWidth;
+              let height = Math.round(width * (img.naturalHeight / img.naturalWidth));
+              if (height > maxHeight) {
+                height = maxHeight;
+                width = Math.round(height * (img.naturalWidth / img.naturalHeight));
+              }
+              URL.revokeObjectURL(objectUrl);
+              resolve({ data: buf, width, height, ok: true });
+            };
+            img.onerror = () => {
+              URL.revokeObjectURL(objectUrl);
+              resolve({ ok: false });
+            };
+            img.src = objectUrl;
+          })
+          .catch(() => resolve({ ok: false }));
+      });
+    }
+
     let builtSections = [];
+    let coverImage = null;
 
     async function loadRecipes() {
       const loading = document.getElementById("loading");
@@ -149,16 +212,25 @@
       const btn = document.getElementById("downloadBtn");
       const errors = [];
 
+      coverImage = await loadImageForDocx(PRINT_COVER_IMAGE);
+
       for (const cat of CATEGORY_PAGES) {
         try {
           const res = await fetch(cat.url);
           if (!res.ok) throw new Error(`HTTP ${res.status} for ${cat.url}`);
           const text = await res.text();
+          const pageUrl = new URL(cat.url, window.location.origin).href;
           const doc = new DOMParser().parseFromString(text, "text/html");
-          builtSections.push({ title: cat.title, recipes: extractRecipesFromPage(doc, cat.title) });
+          const bannerUrl = extractCategoryBannerImage(doc, pageUrl);
+          const bannerImage = bannerUrl ? await loadImageForDocx(bannerUrl) : { ok: false };
+          builtSections.push({
+            title: cat.title,
+            recipes: extractRecipesFromPage(doc, cat.title),
+            bannerImage
+          });
         } catch (e) {
           errors.push(`Failed loading ${cat.url}: ${e.message}`);
-          builtSections.push({ title: cat.title, recipes: [] });
+          builtSections.push({ title: cat.title, recipes: [], bannerImage: { ok: false } });
         }
       }
 
@@ -173,7 +245,7 @@
     }
 
     function buildDocx() {
-      const { Document, Packer, Paragraph, TextRun, HeadingLevel, PageBreak, AlignmentType } = docx;
+      const { Document, Packer, Paragraph, TextRun, HeadingLevel, PageBreak, AlignmentType, ImageRun } = docx;
 
       const children = [];
 
@@ -182,7 +254,25 @@
           heading: HeadingLevel.TITLE,
           alignment: AlignmentType.CENTER,
           text: "Grey's Cook Book"
-        }),
+        })
+      );
+
+      if (coverImage && coverImage.ok) {
+        children.push(
+          new Paragraph({
+            alignment: AlignmentType.CENTER,
+            children: [
+              new ImageRun({
+                type: "jpg",
+                data: coverImage.data,
+                transformation: { width: coverImage.width, height: coverImage.height }
+              })
+            ]
+          })
+        );
+      }
+
+      children.push(
         new Paragraph({
           alignment: AlignmentType.CENTER,
           children: [new TextRun({ text: "A collection of home cooking favorites from greycooks.com", italics: true })]
@@ -205,6 +295,28 @@
             text: section.title
           })
         );
+
+        if (section.bannerImage && section.bannerImage.ok) {
+          children.push(
+            new Paragraph({
+              children: [
+                new ImageRun({
+                  type: "jpg",
+                  data: section.bannerImage.data,
+                  transformation: { width: section.bannerImage.width, height: section.bannerImage.height }
+                })
+              ]
+            })
+          );
+        }
+
+        if (SECTION_NOTES[section.title]) {
+          children.push(
+            new Paragraph({
+              children: [new TextRun({ text: SECTION_NOTES[section.title], italics: true })]
+            })
+          );
+        }
 
         section.recipes.forEach(recipe => {
           children.push(new Paragraph({ children: [new PageBreak()] }));
@@ -251,6 +363,20 @@
           }
         });
       });
+
+      children.push(new Paragraph({ children: [new PageBreak()] }));
+      children.push(
+        new Paragraph({
+          heading: HeadingLevel.HEADING_1,
+          text: "About the Author"
+        }),
+        new Paragraph({
+          text: "Grey Lancaster shares approachable home cooking rooted in family meals, practical kitchen know-how, and recipes worth making again."
+        }),
+        new Paragraph({
+          text: "This collection brings together favorites from greycooks.com in a format meant for real kitchens, real tables, and real use."
+        })
+      );
 
       const doc = new Document({
         sections: [
