@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grey's Cook Book - Word Document Export</title>
+  <meta name="robots" content="noindex, nofollow" />
+
+  <style>
+    :root {
+      --ink: #1f1a17;
+      --muted: #6c625b;
+      --accent: #3b312b;
+      --screen-bg: #e7e4e0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--screen-bg);
+      color: var(--ink);
+      font-family: Georgia, "Times New Roman", serif;
+      line-height: 1.52;
+    }
+
+    body {
+      padding: 24px 0;
+    }
+
+    .screen-note,
+    .loading,
+    .error-box {
+      width: min(760px, calc(100% - 32px));
+      margin: 0 auto 18px;
+      background: #fff;
+      border: 1px solid #d5d0ca;
+      padding: 18px 22px;
+    }
+
+    .screen-note h1 {
+      margin: 0 0 10px;
+      font-size: 1.7rem;
+      color: var(--accent);
+    }
+
+    .screen-note p,
+    .loading p,
+    .error-box p {
+      margin: 8px 0;
+    }
+
+    .actions {
+      margin-top: 14px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .actions button {
+      padding: 10px 14px;
+      border: 1px solid #b7aea5;
+      background: #fff;
+      color: var(--ink);
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .actions button:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    .actions button:not(:disabled):hover {
+      background: #f6f3ef;
+    }
+
+    .error-box {
+      border-color: #c88;
+      color: #6d1f1f;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="screen-note">
+    <h1>Grey's Cook Book — Word Document Export</h1>
+    <p>This pulls every recipe from your category pages and builds a .docx file — one recipe per page to start.</p>
+    <p>Open the downloaded file in Word to freely move page breaks, combine short recipes onto one page, or reflow anything before you print.</p>
+    <div class="actions">
+      <button id="downloadBtn" onclick="buildDocx()" disabled>Preparing…</button>
+    </div>
+  </div>
+
+  <div id="loading" class="loading">
+    <p><strong>Loading recipes...</strong></p>
+    <p>Please wait while the cookbook is assembled.</p>
+  </div>
+
+  <div id="errors" class="error-box"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/docx@8.6.0/build/index.umd.min.js"></script>
+  <script>
+    const CATEGORY_PAGES = [
+      { title: "Appetizers", url: "/appetizers/" },
+      { title: "Breakfast", url: "/breakfast/" },
+      { title: "Breads", url: "/breads/" },
+      { title: "Sides", url: "/sides/" },
+      { title: "Main Dishes", url: "/meats/" },
+      { title: "Fish", url: "/fish/" },
+      { title: "Desserts", url: "/dessert/" }
+    ];
+
+    function cleanText(node) {
+      return node.textContent.replace(/\s+/g, " ").trim();
+    }
+
+    function extractRecipesFromPage(doc, category) {
+      const cards = doc.querySelectorAll(".recipe-card");
+
+      return [...cards].map(card => {
+        const title = card.querySelector("h3")?.textContent.trim() || "Recipe";
+
+        const ingredients = [
+          ...card.querySelectorAll(".ingredients-list li")
+        ].map(cleanText).filter(Boolean);
+
+        const directions = [
+          ...card.querySelectorAll(".instructions p")
+        ].map(cleanText).filter(Boolean);
+
+        const notes = [
+          ...card.querySelectorAll(".note-box, .variation-box")
+        ].map(cleanText).filter(Boolean);
+
+        return { title, category, ingredients, directions, notes };
+      });
+    }
+
+    let builtSections = [];
+
+    async function loadRecipes() {
+      const loading = document.getElementById("loading");
+      const errorsBox = document.getElementById("errors");
+      const btn = document.getElementById("downloadBtn");
+      const errors = [];
+
+      for (const cat of CATEGORY_PAGES) {
+        try {
+          const res = await fetch(cat.url);
+          if (!res.ok) throw new Error(`HTTP ${res.status} for ${cat.url}`);
+          const text = await res.text();
+          const doc = new DOMParser().parseFromString(text, "text/html");
+          builtSections.push({ title: cat.title, recipes: extractRecipesFromPage(doc, cat.title) });
+        } catch (e) {
+          errors.push(`Failed loading ${cat.url}: ${e.message}`);
+          builtSections.push({ title: cat.title, recipes: [] });
+        }
+      }
+
+      if (errors.length) {
+        errorsBox.style.display = "block";
+        errorsBox.innerHTML = `<p><strong>Some pages did not load:</strong></p><ul>${errors.map(e => `<li>${e}</li>`).join("")}</ul>`;
+      }
+
+      loading.style.display = "none";
+      btn.disabled = false;
+      btn.textContent = "Download .docx";
+    }
+
+    function buildDocx() {
+      const { Document, Packer, Paragraph, TextRun, HeadingLevel, PageBreak, AlignmentType } = docx;
+
+      const children = [];
+
+      children.push(
+        new Paragraph({
+          heading: HeadingLevel.TITLE,
+          alignment: AlignmentType.CENTER,
+          text: "Grey's Cook Book"
+        }),
+        new Paragraph({
+          alignment: AlignmentType.CENTER,
+          children: [new TextRun({ text: "A collection of home cooking favorites from greycooks.com", italics: true })]
+        }),
+        new Paragraph({
+          alignment: AlignmentType.CENTER,
+          children: [new TextRun({ text: "By Grey Lancaster" })]
+        }),
+        new Paragraph({ children: [new PageBreak()] })
+      );
+
+      builtSections.forEach((section, sIdx) => {
+        if (sIdx > 0) {
+          children.push(new Paragraph({ children: [new PageBreak()] }));
+        }
+
+        children.push(
+          new Paragraph({
+            heading: HeadingLevel.HEADING_1,
+            text: section.title
+          })
+        );
+
+        section.recipes.forEach(recipe => {
+          children.push(new Paragraph({ children: [new PageBreak()] }));
+
+          children.push(
+            new Paragraph({
+              heading: HeadingLevel.HEADING_2,
+              text: recipe.title
+            })
+          );
+
+          children.push(
+            new Paragraph({
+              heading: HeadingLevel.HEADING_3,
+              text: "Ingredients"
+            })
+          );
+
+          recipe.ingredients.forEach(i => {
+            children.push(new Paragraph({ bullet: { level: 0 }, text: i }));
+          });
+
+          children.push(
+            new Paragraph({
+              heading: HeadingLevel.HEADING_3,
+              text: "Directions"
+            })
+          );
+
+          recipe.directions.forEach((d, idx) => {
+            children.push(new Paragraph({ text: `${idx + 1}. ${d}` }));
+          });
+
+          if (recipe.notes.length) {
+            children.push(
+              new Paragraph({
+                heading: HeadingLevel.HEADING_3,
+                text: "Notes"
+              })
+            );
+            recipe.notes.forEach(n => {
+              children.push(new Paragraph({ children: [new TextRun({ text: n, italics: true })] }));
+            });
+          }
+        });
+      });
+
+      const doc = new Document({
+        sections: [
+          {
+            properties: {
+              page: {
+                size: { width: 12240, height: 15840 }, // 8.5in x 11in in twips
+                margin: { top: 1440, bottom: 1440, left: 1440, right: 1440 }
+              }
+            },
+            children
+          }
+        ]
+      });
+
+      Packer.toBlob(doc).then(blob => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "greys-cook-book.docx";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      });
+    }
+
+    loadRecipes();
+  </script>
+</body>
+</html>
