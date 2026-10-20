@@ -13,8 +13,10 @@ This is a static HTML/CSS family recipe cookbook site ("Grey's Cook Book"), depl
 - `recipeindex/index.html` — alphabetical index of all individual recipes.
 - One folder per recipe category (`appetizers/`, `breads/`, `breakfast/`, `dessert/`, `fish/`, `meats/`, `sides/`), each containing a single `index.html` that lists every recipe in that category as a `.recipe-card`.
 - `print.html` — a separate, standalone "print edition" (marked `noindex, nofollow`). It has no static recipe content of its own: on load, client-side JS (`buildBook()`) fetches each category page listed in `CATEGORY_PAGES`, parses out every `.recipe-card` (title, `.ingredients-list li`, `.instructions p`, `.note-box`/`.variation-box`), and rebuilds a printable book from them. Adding a recipe to a category page's `.recipe-card` markup is automatically picked up here — no manual sync needed.
+- `print2.html` — a second print edition (half-page booklet layout), also `noindex, nofollow`, that likewise fetches each category page at load time and rebuilds the content from the `.recipe-card` markup.
+- `docx.html` — a `noindex, nofollow` utility page that builds a Word `.docx` of all recipes in the browser (loads the `docx` library 8.6.0 from the jsDelivr CDN, fetches the category pages and embeds images).
 - `style.css` — the single shared stylesheet for all pages (nav bar, recipe cards, category banners, buttons, etc.), built around CSS custom properties defined in `:root` (`--cream`, `--warm-brown`, `--rust`, `--gold`, `--dark-ink`, etc.). Reuse these variables rather than hardcoding colors.
-- `images/` — category banner photos and the homepage cover image, referenced with absolute paths (`/images/...`).
+- `images/` — category banner photos and the homepage cover image, referenced with absolute paths (`/images/...`). Other images live at the root or next to a page (`og-image.png`, `nannie-brown-rice.png`, `meats/meats.jpg`).
 - `sitemap.xml` / `robots.txt` — kept in sync manually with the page list; update `sitemap.xml` when adding or removing a page.
 
 ## Recipe card pattern
@@ -51,3 +53,8 @@ Each category page (and `print.html`) defines its **own inline copy** of a `prin
 ## SEO / structured data
 
 Each page includes Open Graph tags and a canonical URL pointing at `https://greycooks.com/...`. Category pages also include a `application/ld+json` `Recipe` schema block in `<head>` — note that on multi-recipe category pages (e.g. `meats/index.html`), this JSON-LD currently only describes a single representative recipe for the page rather than every recipe card, so don't assume it enumerates all recipes on the page.
+
+## Deploy
+
+- Pushing to `main` is the whole deploy: GitHub Pages serves the repo root at `greycooks.com` (`CNAME`). No workflow, tags or releases. The site's local-only `.claude/` folder is git-ignored.
+- Because the print/docx pages fetch category pages by URL, preview with a static file server (for example `python -m http.server`), not by double-clicking the files.
