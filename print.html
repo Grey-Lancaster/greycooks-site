@@ -886,6 +886,46 @@
       window.print();
     }
 
+    // A long recipe can run onto a second printed page. After the book is laid
+    // out, measure how many pages each section really takes and renumber the
+    // recipe footers and the table of contents to match.
+    function fixPageNumbers() {
+      const book = document.getElementById("book");
+      if (!book) return;
+
+      const probe = document.createElement("div");
+      probe.style.cssText = "position:absolute;visibility:hidden;height:var(--page-height);";
+      document.body.appendChild(probe);
+      const pageHeight = probe.getBoundingClientRect().height;
+      probe.remove();
+      if (!pageHeight) return;
+
+      const chapterPages = [];
+      let physical = 1;
+
+      for (const section of book.querySelectorAll(":scope > .page")) {
+        const height = section.getBoundingClientRect().height;
+        const pages = Math.max(1, Math.ceil((height - 2) / pageHeight));
+
+        if (section.querySelector(".section-page")) {
+          chapterPages.push(physical);
+        }
+
+        const number = section.querySelector(".recipe-footer span:last-child");
+        if (number) {
+          number.textContent = physical + pages - 1;
+        }
+
+        physical += pages;
+      }
+
+      book.querySelectorAll(".toc-page-number").forEach((el, i) => {
+        if (chapterPages[i] !== undefined) {
+          el.textContent = chapterPages[i];
+        }
+      });
+    }
+
     async function buildBook() {
       const book = document.getElementById("book");
       const loading = document.getElementById("loading");
@@ -976,6 +1016,11 @@
       html += renderBackCover();
 
       book.innerHTML = html;
+
+      if (document.fonts && document.fonts.ready) {
+        await document.fonts.ready;
+      }
+      fixPageNumbers();
 
       if (errors.length && errorsBox) {
         errorsBox.style.display = "block";
