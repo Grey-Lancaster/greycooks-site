@@ -373,6 +373,48 @@
       text-align: center;
     }
 
+    .back-cover-page {
+      justify-content: center;
+      text-align: center;
+    }
+
+    .back-cover-image-wrap {
+      margin: 0 auto;
+      border: 1px solid var(--line);
+      padding: 0.12in;
+      background: #fff;
+      break-inside: avoid;
+      page-break-inside: avoid;
+      position: relative;
+      z-index: 1;
+    }
+
+    .back-cover-image {
+      display: block;
+      width: 5.6in;
+      height: 5.6in;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    body.print-grayscale .back-cover-image {
+      filter: grayscale(100%);
+    }
+
+    body.print-color .back-cover-image {
+      filter: none;
+    }
+
+    .back-cover-note {
+      margin-top: 22px;
+      font-size: 0.82rem;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 1;
+    }
+
     .cover-page,
     .section-page,
     .toc-page {
@@ -380,6 +422,7 @@
     }
 
     .cover-page::before,
+    .back-cover-page::before,
     .section-page::before,
     .toc-page::before {
       content: "";
@@ -391,6 +434,7 @@
     }
 
     .cover-page::after,
+    .back-cover-page::after,
     .section-page::after,
     .toc-page::after {
       content: "";
@@ -603,6 +647,7 @@
     };
 
     const PRINT_COVER_IMAGE = "/images/cover.jpg";
+    const PRINT_BACK_COVER_IMAGE = "/images/back-cover.jpg";
 
     function escapeHtml(str) {
       return String(str).replace(/[&<>"']/g, function (ch) {
@@ -795,6 +840,23 @@
       `;
     }
 
+    function renderBackCover() {
+      return `
+        <section class="page">
+          <div class="page-inner back-cover-page">
+            <div class="back-cover-image-wrap">
+              <img
+                class="back-cover-image"
+                src="${escapeHtml(PRINT_BACK_COVER_IMAGE)}"
+                alt="Fishing off the dock with Budro"
+              >
+            </div>
+            <p class="back-cover-note">greycooks.com</p>
+          </div>
+        </section>
+      `;
+    }
+
     function renderAboutPage(pageNumber) {
       return `
         <section class="page">
@@ -911,6 +973,7 @@
       }
 
       html += renderAboutPage(aboutPageNumber);
+      html += renderBackCover();
 
       book.innerHTML = html;
 
