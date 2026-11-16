@@ -1,0 +1,618 @@
+{
+ "grey": {
+  "baked-potato-soup": [
+   {
+    "t": "Baked Potato Soup",
+    "u": "/papalanc/files/greys-cookbook-appetizers-baked-potato-soup.html",
+    "k": "same"
+   }
+  ],
+  "beanless-bean-dip": [
+   {
+    "t": "Beanless Bean Dip",
+    "u": "/papalanc/files/greys-cookbook-appetizers-beanless-bean-dip.html",
+    "k": "same"
+   }
+  ],
+  "cheese-straws": [
+   {
+    "t": "Cheese Straws",
+    "u": "/papalanc/files/greys-cookbook-appetizers-cheese-straws.html",
+    "k": "same"
+   }
+  ],
+  "sour-cream-biscuits": [
+   {
+    "t": "Sour Cream Biscuits",
+    "u": "/papalanc/files/greys-cookbook-bread-sour-cream-biscuits.html",
+    "k": "same"
+   }
+  ],
+  "grits": [
+   {
+    "t": "Grits",
+    "u": "/papalanc/files/greys-cookbook-breakfast-grits.html",
+    "k": "same"
+   },
+   {
+    "t": "Shrimp and Grits",
+    "u": "/papalanc/files/greys-cookbook-meats-shrimp-and-grits.html",
+    "k": "related"
+   }
+  ],
+  "hash-brown-casserole": [
+   {
+    "t": "Hashbrown Casserole",
+    "u": "/papalanc/files/greys-cookbook-breakfast-hashbrown-casserole.html",
+    "k": "same"
+   }
+  ],
+  "omelets": [
+   {
+    "t": "Omelets",
+    "u": "/papalanc/files/greys-cookbook-breakfast-omelets.html",
+    "k": "same"
+   }
+  ],
+  "blackberry-cobbler": [
+   {
+    "t": "Blackberry Cobbler",
+    "u": "/papalanc/files/greys-cookbook-dessert-blackberry-cobbler.html",
+    "k": "same"
+   }
+  ],
+  "lemonade-pie": [
+   {
+    "t": "Lemonade Pie",
+    "u": "/papalanc/files/greys-cookbook-dessert-lemonade-pie.html",
+    "k": "same"
+   }
+  ],
+  "red-velvet-cake": [
+   {
+    "t": "Red Velvet Cake",
+    "u": "/papalanc/files/greys-cookbook-dessert-red-velvet-cake.html",
+    "k": "same"
+   }
+  ],
+  "tilapia": [
+   {
+    "t": "Papa Lanc's Skillet Tilapia with Cherry Tomatoes",
+    "u": "/papalanc/files/skillet-tilapia-with-cherry-tomatoes.html",
+    "k": "same"
+   }
+  ],
+  "chicken-casserole": [
+   {
+    "t": "Chicken Casserole",
+    "u": "/papalanc/files/greys-cookbook-meats-chicken-casserole.html",
+    "k": "same"
+   }
+  ],
+  "country-style-steak": [
+   {
+    "t": "Country Style Steak",
+    "u": "/papalanc/files/greys-cookbook-meats-country-style-steak.html",
+    "k": "same"
+   },
+   {
+    "t": "Dad's Country Style Steak",
+    "u": "/papalanc/files/greys-cookbook-meats-dads-country-style-steak.html",
+    "k": "related"
+   }
+  ],
+  "dads-country-style-steak": [
+   {
+    "t": "Dad's Country Style Steak",
+    "u": "/papalanc/files/greys-cookbook-meats-dads-country-style-steak.html",
+    "k": "same"
+   },
+   {
+    "t": "Country Style Steak",
+    "u": "/papalanc/files/greys-cookbook-meats-country-style-steak.html",
+    "k": "related"
+   }
+  ],
+  "deer-tenderloin": [
+   {
+    "t": "Deer Tenderloin",
+    "u": "/papalanc/files/greys-cookbook-meats-deer-tenderloin.html",
+    "k": "same"
+   },
+   {
+    "t": "Tenderloin",
+    "u": "/papalanc/files/greys-cookbook-meats-tenderloin.html",
+    "k": "related"
+   }
+  ],
+  "dove-birds": [
+   {
+    "t": "Dove Birds",
+    "u": "/papalanc/files/greys-cookbook-meats-dove-birds.html",
+    "k": "same"
+   }
+  ],
+  "grilled-chicken": [
+   {
+    "t": "Grilled Chicken",
+    "u": "/papalanc/files/greys-cookbook-meats-grilled-chicken.html",
+    "k": "same"
+   }
+  ],
+  "hash": [
+   {
+    "t": "Hash",
+    "u": "/papalanc/files/greys-cookbook-meats-hash.html",
+    "k": "same"
+   }
+  ],
+  "hot-dog-chili": [
+   {
+    "t": "Hot Dog Chili",
+    "u": "/papalanc/files/greys-cookbook-meats-hot-dog-chili.html",
+    "k": "same"
+   },
+   {
+    "t": "Original Greek Coney Sauce",
+    "u": "/papalanc/files/original-greek-coney-sauce.html",
+    "k": "related"
+   },
+   {
+    "t": "Perfect Chili",
+    "u": "/papalanc/files/perfect-chili.html",
+    "k": "related"
+   }
+  ],
+  "lasagna": [
+   {
+    "t": "Lasagna",
+    "u": "/papalanc/files/greys-cookbook-meats-lasagna.html",
+    "k": "same"
+   }
+  ],
+  "pork-roast": [
+   {
+    "t": "Parmesan Honey Pork Roast",
+    "u": "/papalanc/files/greys-cookbook-meats-parmesan-honey-pork-roast.html",
+    "k": "same"
+   }
+  ],
+  "shrimp-and-grits": [
+   {
+    "t": "Shrimp and Grits",
+    "u": "/papalanc/files/greys-cookbook-meats-shrimp-and-grits.html",
+    "k": "same"
+   },
+   {
+    "t": "Grits",
+    "u": "/papalanc/files/greys-cookbook-breakfast-grits.html",
+    "k": "related"
+   }
+  ],
+  "steak": [
+   {
+    "t": "Steak",
+    "u": "/papalanc/files/greys-cookbook-meats-steak.html",
+    "k": "same"
+   }
+  ],
+  "swiss-chicken": [
+   {
+    "t": "Swiss Chicken Casserole",
+    "u": "/papalanc/files/greys-cookbook-meats-swiss-chicken-casserole.html",
+    "k": "same"
+   }
+  ],
+  "tenderloin": [
+   {
+    "t": "Tenderloin",
+    "u": "/papalanc/files/greys-cookbook-meats-tenderloin.html",
+    "k": "same"
+   },
+   {
+    "t": "Deer Tenderloin",
+    "u": "/papalanc/files/greys-cookbook-meats-deer-tenderloin.html",
+    "k": "related"
+   }
+  ],
+  "mac-and-cheese": [
+   {
+    "t": "Mac and Cheese",
+    "u": "/papalanc/files/greys-cookbook-sides-mac-and-cheese-crock-pot.html",
+    "k": "same"
+   },
+   {
+    "t": "Baked Mac and Cheese",
+    "u": "/papalanc/files/baked-mac-and-cheese.html",
+    "k": "related"
+   },
+   {
+    "t": "Thanksgiving Mac and Cheese",
+    "u": "/papalanc/files/thanksgiving-mac-and-cheese.html",
+    "k": "related"
+   }
+  ],
+  "baked-beans": [
+   {
+    "t": "Baked Beans",
+    "u": "/papalanc/files/greys-cookbook-sides-baked-beans.html",
+    "k": "same"
+   }
+  ],
+  "brown-rice": [
+   {
+    "t": "Brown Rice",
+    "u": "/papalanc/files/greys-cookbook-sides-vegetables-brown-rice.html",
+    "k": "same"
+   }
+  ],
+  "fried-cabbage": [
+   {
+    "t": "Fried Cabbage",
+    "u": "/papalanc/files/greys-cookbook-sides-vegetables-fried-cabbage.html",
+    "k": "same"
+   }
+  ],
+  "green-bean-casserole": [
+   {
+    "t": "Green Bean Casserole",
+    "u": "/papalanc/files/greys-cookbook-sides-green-bean-casserole.html",
+    "k": "same"
+   }
+  ],
+  "green-beans": [
+   {
+    "t": "Green Beans",
+    "u": "/papalanc/files/greys-cookbook-sides-vegetables-green-beans.html",
+    "k": "same"
+   }
+  ],
+  "home-fries": [
+   {
+    "t": "Home Fries",
+    "u": "/papalanc/files/greys-cookbook-sides-vegetables-home-fries.html",
+    "k": "same"
+   }
+  ],
+  "lima-beans": [
+   {
+    "t": "Lima Beans",
+    "u": "/papalanc/files/greys-cookbook-sides-vegetables-lima-beans.html",
+    "k": "same"
+   }
+  ],
+  "mashed-potatoes": [
+   {
+    "t": "Mashed Potatoes",
+    "u": "/papalanc/files/greys-cookbook-sides-vegetables-mashed-potatoes.html",
+    "k": "same"
+   }
+  ],
+  "pineapple-casserole": [
+   {
+    "t": "Nannie's Pineapple Casserole",
+    "u": "/papalanc/files/2019-thanksgiving-nannies-pineapple-casserole.html",
+    "k": "same"
+   }
+  ],
+  "succotash": [
+   {
+    "t": "Succotash",
+    "u": "/papalanc/files/greys-cookbook-sides-vegetables-succotash-1.html",
+    "k": "same"
+   }
+  ]
+ },
+ "papa": {
+  "/papalanc/files/greys-cookbook-appetizers-baked-potato-soup.html": [
+   {
+    "t": "Baked Potato Soup",
+    "u": "/appetizers/#baked-potato-soup",
+    "k": "same"
+   }
+  ],
+  "/papalanc/files/greys-cookbook-appetizers-beanless-bean-dip.html": [
+   {
+    "t": "Beanless Bean Dip",
+    "u": "/appetizers/#beanless-bean-dip",
+    "k": "same"
+   }
+  ],
+  "/papalanc/files/greys-cookbook-appetizers-cheese-straws.html": [
+   {
+    "t": "Cheese Straws",
+    "u": "/appetizers/#cheese-straws",
+    "k": "same"
+   }
+  ],
+  "/papalanc/files/greys-cookbook-bread-sour-cream-biscuits.html": [
+   {
+    "t": "Sour Cream Biscuits",
+    "u": "/breads/#sour-cream-biscuits",
+    "k": "same"
+   }
+  ],
+  "/papalanc/files/greys-cookbook-breakfast-grits.html": [
+   {
+    "t": "Grits",
+    "u": "/breakfast/#grits",
+    "k": "same"
+   },
+   {
+    "t": "Shrimp and Grits",
+    "u": "/meats/#shrimp-and-grits",
+    "k": "related"
+   }
+  ],
+  "/papalanc/files/greys-cookbook-breakfast-hashbrown-casserole.html": [
+   {
+    "t": "Hash Brown Casserole",
+    "u": "/breakfast/#hash-brown-casserole",
+    "k": "same"
+   }
+  ],
+  "/papalanc/files/greys-cookbook-breakfast-omelets.html": [
+   {
+    "t": "Omelets",
+    "u": "/breakfast/#omelets",
+    "k": "same"
+   }
+  ],
+  "/papalanc/files/greys-cookbook-dessert-blackberry-cobbler.html": [
+   {
+    "t": "Blackberry Cobbler",
+    "u": "/dessert/#blackberry-cobbler",
+    "k": "same"
+   }
+  ],
+  "/papalanc/files/greys-cookbook-dessert-lemonade-pie.html": [
+   {
+    "t": "Lemonade Pie",
+    "u": "/dessert/#lemonade-pie",
+    "k": "same"
+   }
+  ],
+  "/papalanc/files/greys-cookbook-dessert-red-velvet-cake.html": [
+   {
+    "t": "Red Velvet Cake",
+    "u": "/dessert/#red-velvet-cake",
+    "k": "same"
+   }
+  ],
+  "/papalanc/files/skillet-tilapia-with-cherry-tomatoes.html": [
+   {
+    "t": "Papa Lanc's Skillet Tilapia with Cherry Tomatoes",
+    "u": "/fish/#tilapia",
+    "k": "same"
+   }
+  ],
+  "/papalanc/files/greys-cookbook-meats-chicken-casserole.html": [
+   {
+    "t": "Chicken Casserole",
+    "u": "/meats/#chicken-casserole",
+    "k": "same"
+   }
+  ],
+  "/papalanc/files/greys-cookbook-meats-country-style-steak.html": [
+   {
+    "t": "Country Style Steak",
+    "u": "/meats/#country-style-steak",
+    "k": "same"
+   },
+   {
+    "t": "Dad's Country Style Steak",
+    "u": "/meats/#dads-country-style-steak",
+    "k": "related"
+   }
+  ],
+  "/papalanc/files/greys-cookbook-meats-dads-country-style-steak.html": [
+   {
+    "t": "Dad's Country Style Steak",
+    "u": "/meats/#dads-country-style-steak",
+    "k": "same"
+   },
+   {
+    "t": "Country Style Steak",
+    "u": "/meats/#country-style-steak",
+    "k": "related"
+   }
+  ],
+  "/papalanc/files/greys-cookbook-meats-deer-tenderloin.html": [
+   {
+    "t": "Deer Tenderloin",
+    "u": "/meats/#deer-tenderloin",
+    "k": "same"
+   },
+   {
+    "t": "Tenderloin",
+    "u": "/meats/#tenderloin",
+    "k": "related"
+   }
+  ],
+  "/papalanc/files/greys-cookbook-meats-dove-birds.html": [
+   {
+    "t": "Dove Birds",
+    "u": "/meats/#dove-birds",
+    "k": "same"
+   }
+  ],
+  "/papalanc/files/greys-cookbook-meats-grilled-chicken.html": [
+   {
+    "t": "Grilled Chicken",
+    "u": "/meats/#grilled-chicken",
+    "k": "same"
+   }
+  ],
+  "/papalanc/files/greys-cookbook-meats-hash.html": [
+   {
+    "t": "Hash",
+    "u": "/meats/#hash",
+    "k": "same"
+   }
+  ],
+  "/papalanc/files/greys-cookbook-meats-hot-dog-chili.html": [
+   {
+    "t": "Dad's Hot Dog Chili",
+    "u": "/meats/#hot-dog-chili",
+    "k": "same"
+   }
+  ],
+  "/papalanc/files/greys-cookbook-meats-lasagna.html": [
+   {
+    "t": "Lasagna",
+    "u": "/meats/#lasagna",
+    "k": "same"
+   }
+  ],
+  "/papalanc/files/greys-cookbook-meats-parmesan-honey-pork-roast.html": [
+   {
+    "t": "Parmesan Honey Pork Roast (Crockpot)",
+    "u": "/meats/#pork-roast",
+    "k": "same"
+   }
+  ],
+  "/papalanc/files/greys-cookbook-meats-shrimp-and-grits.html": [
+   {
+    "t": "Shrimp and Grits",
+    "u": "/meats/#shrimp-and-grits",
+    "k": "same"
+   },
+   {
+    "t": "Grits",
+    "u": "/breakfast/#grits",
+    "k": "related"
+   }
+  ],
+  "/papalanc/files/greys-cookbook-meats-steak.html": [
+   {
+    "t": "Steak",
+    "u": "/meats/#steak",
+    "k": "same"
+   }
+  ],
+  "/papalanc/files/greys-cookbook-meats-swiss-chicken-casserole.html": [
+   {
+    "t": "Swiss Chicken Casserole",
+    "u": "/meats/#swiss-chicken",
+    "k": "same"
+   }
+  ],
+  "/papalanc/files/greys-cookbook-meats-tenderloin.html": [
+   {
+    "t": "Tenderloin",
+    "u": "/meats/#tenderloin",
+    "k": "same"
+   },
+   {
+    "t": "Deer Tenderloin",
+    "u": "/meats/#deer-tenderloin",
+    "k": "related"
+   }
+  ],
+  "/papalanc/files/greys-cookbook-sides-mac-and-cheese-crock-pot.html": [
+   {
+    "t": "Mimi's Mac and Cheese",
+    "u": "/sides/#mac-and-cheese",
+    "k": "same"
+   }
+  ],
+  "/papalanc/files/greys-cookbook-sides-baked-beans.html": [
+   {
+    "t": "Baked Beans",
+    "u": "/sides/#baked-beans",
+    "k": "same"
+   }
+  ],
+  "/papalanc/files/greys-cookbook-sides-vegetables-brown-rice.html": [
+   {
+    "t": "Brown Rice Casserole",
+    "u": "/sides/#brown-rice",
+    "k": "same"
+   }
+  ],
+  "/papalanc/files/greys-cookbook-sides-vegetables-fried-cabbage.html": [
+   {
+    "t": "Fried Cabbage",
+    "u": "/sides/#fried-cabbage",
+    "k": "same"
+   }
+  ],
+  "/papalanc/files/greys-cookbook-sides-green-bean-casserole.html": [
+   {
+    "t": "Green Bean Casserole",
+    "u": "/sides/#green-bean-casserole",
+    "k": "same"
+   }
+  ],
+  "/papalanc/files/greys-cookbook-sides-vegetables-green-beans.html": [
+   {
+    "t": "Green Beans",
+    "u": "/sides/#green-beans",
+    "k": "same"
+   }
+  ],
+  "/papalanc/files/greys-cookbook-sides-vegetables-home-fries.html": [
+   {
+    "t": "Home Fries",
+    "u": "/sides/#home-fries",
+    "k": "same"
+   }
+  ],
+  "/papalanc/files/greys-cookbook-sides-vegetables-lima-beans.html": [
+   {
+    "t": "Lima Beans",
+    "u": "/sides/#lima-beans",
+    "k": "same"
+   }
+  ],
+  "/papalanc/files/greys-cookbook-sides-vegetables-mashed-potatoes.html": [
+   {
+    "t": "Mashed Potatoes",
+    "u": "/sides/#mashed-potatoes",
+    "k": "same"
+   }
+  ],
+  "/papalanc/files/2019-thanksgiving-nannies-pineapple-casserole.html": [
+   {
+    "t": "Nannie's Pineapple Casserole",
+    "u": "/sides/#pineapple-casserole",
+    "k": "same"
+   }
+  ],
+  "/papalanc/files/greys-cookbook-sides-vegetables-succotash-1.html": [
+   {
+    "t": "Succotash",
+    "u": "/sides/#succotash",
+    "k": "same"
+   }
+  ],
+  "/papalanc/files/original-greek-coney-sauce.html": [
+   {
+    "t": "Dad's Hot Dog Chili",
+    "u": "/meats/#hot-dog-chili",
+    "k": "related"
+   }
+  ],
+  "/papalanc/files/perfect-chili.html": [
+   {
+    "t": "Dad's Hot Dog Chili",
+    "u": "/meats/#hot-dog-chili",
+    "k": "related"
+   }
+  ],
+  "/papalanc/files/baked-mac-and-cheese.html": [
+   {
+    "t": "Mimi's Mac and Cheese",
+    "u": "/sides/#mac-and-cheese",
+    "k": "related"
+   }
+  ],
+  "/papalanc/files/thanksgiving-mac-and-cheese.html": [
+   {
+    "t": "Mimi's Mac and Cheese",
+    "u": "/sides/#mac-and-cheese",
+    "k": "related"
+   }
+  ]
+ }
+}
