@@ -58,3 +58,10 @@ Each page includes Open Graph tags and a canonical URL pointing at `https://grey
 
 - Pushing to `main` is the whole deploy: GitHub Pages serves the repo root at `greycooks.com` (`CNAME`). No workflow, tags or releases. The site's local-only `.claude/` folder is git-ignored.
 - Because the print/docx pages fetch category pages by URL, preview with a static file server (for example `python -m http.server`), not by double-clicking the files.
+
+## Two cookbooks (since v1.1.0)
+
+greycooks.com now has a landing page at `/` (`index.html`) that links to two cookbooks:
+
+- `/grey/` - Grey's Cook Book. Its home page is `grey/index.html` (it used to be the site root). All of the category folders, `book/`, `recipeindex/`, `print*.html` and `docx.html` still live at the root and keep their URLs, so existing links like `/fish/#tilapia` still work. Nav "Home" links point to `/grey/`; every nav has an "All Cookbooks" link back to `/`.
+- `/papalanc/` - Papa Lanc's Recipe Cookbook, a copy of papalanccooks.papalanc.com (its own `index.html`, `files/`, `Recipies/`, `search.json`, `build_search.py`, and its own `CLAUDE.md` with the add-a-recipe steps). It uses relative links only, so it works under any path.

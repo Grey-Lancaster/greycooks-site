@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Papa Lanc's Recipe Cookbook</title>
+<link rel="icon" href="favicon.ico">
+<style>
+  :root {
+    --paper: #fdf8f0;
+    --ink: #3a2e26;
+    --accent: #a3402b;
+    --accent-light: #d97b52;
+    --line: #e4d6c3;
+    --muted: #7a6a5a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: Georgia, 'Times New Roman', serif;
+    margin: 0;
+    padding: 0 16px 60px;
+    line-height: 1.5;
+  }
+  header {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 40px 0 20px;
+    text-align: center;
+    border-bottom: 3px double var(--accent);
+  }
+  header h1 {
+    font-size: 2.4em;
+    margin: 0 0 6px;
+    color: var(--accent);
+    letter-spacing: 0.5px;
+  }
+  header p {
+    margin: 0;
+    color: var(--muted);
+    font-style: italic;
+  }
+  .wrap {
+    max-width: 820px;
+    margin: 0 auto;
+  }
+  .favorites {
+    background: #fbeee3;
+    border: 1px solid var(--accent-light);
+    border-radius: 8px;
+    padding: 18px 24px;
+    margin: 28px 0;
+  }
+  .favorites h2 {
+    margin-top: 0;
+    color: var(--accent);
+  }
+  .favorites ul {
+    columns: 2;
+    -webkit-columns: 2;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .favorites li {
+    break-inside: avoid;
+    margin-bottom: 8px;
+  }
+  .favorites a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .favorites a:hover { text-decoration: underline; }
+  nav.toc {
+    margin: 28px 0;
+    padding: 16px 24px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+  }
+  nav.toc h2 { margin-top: 0; font-size: 1.1em; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+  nav.toc ul { columns: 2; -webkit-columns: 2; list-style: none; padding: 0; margin: 0; }
+  nav.toc li { break-inside: avoid; margin-bottom: 6px; }
+  nav.toc a { color: var(--accent); text-decoration: none; }
+  nav.toc a:hover { text-decoration: underline; }
+  .count { color: var(--muted); font-size: 0.85em; font-weight: normal; }
+  section {
+    margin: 40px 0;
+  }
+  section h2 {
+    color: var(--accent);
+    border-bottom: 2px solid var(--line);
+    padding-bottom: 6px;
+  }
+  .blurb { color: var(--muted); font-style: italic; margin-top: -4px; }
+  ul.recipe-list { list-style: none; padding: 0; margin: 0; }
+  li.recipe {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  li.recipe:last-child { border-bottom: none; }
+  .recipe-title { font-size: 1.08em; font-weight: bold; }
+  .recipe-title a.titlelink { color: inherit; text-decoration: none; border-bottom: 1px dotted var(--accent-light); }
+  .recipe-title a.titlelink:hover { color: var(--accent); border-bottom-style: solid; }
+  .recipe-links { margin-top: 3px; font-size: 0.92em; }
+  .recipe-links a.filelink {
+    color: var(--accent-light);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--accent-light);
+  }
+  .recipe-links a.filelink:hover { color: var(--accent); border-bottom-style: solid; }
+  .note { margin-top: 3px; font-size: 0.85em; color: var(--muted); font-style: italic; }
+  .star { color: #c9962c; }
+  footer {
+    max-width: 820px;
+    margin: 40px auto 0;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.85em;
+  }
+#to-top{position:fixed;right:18px;bottom:18px;width:44px;height:44px;border:0;border-radius:50%;background:#7a3b1e;color:#fff;font-size:22px;line-height:1;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.35);opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s;z-index:999}
+#to-top.show{opacity:.9;visibility:visible}
+#to-top:hover{opacity:1}
+@media print{#to-top{display:none!important}}
+#search{max-width:820px;margin:18px auto 0;}
+#q{width:100%;font:1.05em Georgia,'Times New Roman',serif;padding:10px 14px;border:2px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);}
+#q:focus{outline:none;border-color:var(--accent-light);}
+#results{margin-top:10px;}
+#results .count{color:var(--muted);font-size:.9em;margin:6px 2px;}
+#results .hit{background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:0 0 8px;}
+#results .hit a.t{font-weight:bold;color:var(--accent);text-decoration:none;font-size:1.05em;}
+#results .hit a.t:hover{text-decoration:underline;}
+#results .sec{color:var(--muted);font-size:.8em;margin-left:6px;}
+#results .snip{color:var(--ink);font-size:.9em;margin-top:3px;}
+#results .more{font-size:.85em;margin-top:3px;}
+#results .more a{color:var(--accent-light);}
+#results mark{background:#f6e3a1;padding:0 1px;}
+@media print{#search{display:none;}}
+</style>
+</head>
+<body>
+<header>
+  <p style="margin:0 0 10px;font-size:.9em;"><a href="/" style="color:var(--accent);text-decoration:none;">&larr; All Cookbooks</a></p>
+  <img src="files/grey-fox-color.png" alt="The Grey Fox" width="150" height="169" style="display:block;margin:0 auto;max-width:150px;">
+  <p style="margin:2px 0 14px;font-size:.85em;letter-spacing:.2em;color:#3a2e26;font-style:normal;">WELCOME</p>
+  <h1>Papa Lanc's Recipe Cookbook</h1>
+  <p>124 recipes, gathered from every corner of the recipe box &mdash; 20 marked &#9733; have more than one copy on file, a good sign they're a favorite.</p>
+</header>
+<div id="search">
+  <input id="q" type="search" placeholder="Search recipes, ingredients, directions&hellip;" autocomplete="off" aria-label="Search recipes">
+  <div id="results" aria-live="polite"></div>
+</div>
+<div class="wrap">
+
+  <div class="favorites">
+    <h2>&#9733; Thanksgiving Favorites</h2>
+    <p class="blurb">Pulled from the 2021 and undated Thanksgiving menus &mdash; the dishes that show up every year.</p>
+    <ul>
+<li><a href="#brown-rice"><span class="star">★</span> Brown Rice</a></li>
+<li><a href="#green-bean-casserole"><span class="star">★</span> Green Bean Casserole</a></li>
+<li><a href="#mac-and-cheese"><span class="star">★</span> Mac and Cheese</a></li>
+<li><a href="#pineapple-casserole"><span class="star">★</span> Nannie&#x27;s Pineapple Casserole</a></li>
+<li><a href="#sweet-potato-casserole"><span class="star">★</span> Sweet Potato Casserole</a></li>
+<li><a href="#oyster-dressing"><span class="star">★</span> Oyster Casserole / Dressing</a></li>
+<li><a href="#dressing"><span class="star">★</span> Cornbread Dressing / Stuffing</a></li>
+<li><a href="#yeast-rolls"><span class="star">★</span> Yeast Rolls</a></li>
+<li><a href="#pumpkin-bars"><span class="star">★</span> Pumpkin Bars</a></li>
+<li><a href="#lemonade-pie"><span class="star">★</span> Lemonade Pie</a></li>
+    </ul>
+  </div>
+
+  <nav class="toc">
+    <h2>Contents</h2>
+    <ul>
+<li><a href="#appetizers">Appetizers &amp; Snacks</a> <span class="count">11</span></li>
+<li><a href="#bread">Breads &amp; Rolls</a> <span class="count">15</span></li>
+<li><a href="#breakfast">Breakfast</a> <span class="count">8</span></li>
+<li><a href="#soups">Soups &amp; Stews</a> <span class="count">4</span></li>
+<li><a href="#mains">Main Dishes &amp; Meats</a> <span class="count">36</span></li>
+<li><a href="#sides">Sides &amp; Vegetables</a> <span class="count">18</span></li>
+<li><a href="#sauces">Sauces &amp; Condiments</a> <span class="count">9</span></li>
+<li><a href="#canning">Canning &amp; Preserves</a> <span class="count">4</span></li>
+<li><a href="#desserts">Desserts</a> <span class="count">14</span></li>
+<li><a href="#beverages">Beverages</a> <span class="count">5</span></li>
+<li><a href="#reference">Reference &amp; Extras</a> <span class="count">6</span></li>
+    </ul>
+  </nav>
+
+
+    <section id="appetizers">
+      <h2>Appetizers &amp; Snacks <span class="count">(11)</span></h2>
+      
+      <ul class="recipe-list">
+      <li class="recipe" id="beanless-bean-dip">
+        <div class="recipe-title"><a class="titlelink" href="files/greys-cookbook-appetizers-beanless-bean-dip.html">Beanless Bean Dip</a></div>
+        
+      </li>
+
+      <li class="recipe" id="cheese-straws">
+        <div class="recipe-title"><a class="titlelink" href="files/greys-cookbook-appetizers-cheese-straws.html">Cheese Straws</a></div>
+        
+      </li>
+
+      <li class="recipe" id="fried-cheese-sticks">
+        <div class="recipe-title"><span class="star" title="Multiple copies on file — a family favorite">★</span> Fried Cheese Sticks</div>
+        <div class="recipe-links"><a class="filelink" href="Recipies/2019%20thanksgiving/Fried%20Cheese%20Sticks.pdf">recipe PDF</a> &nbsp;·&nbsp; <a class="filelink" href="Recipies/2019%20thanksgiving/cheese%20sticks.JPG">photo/scan</a></div>
+        
+      </li>
+
+      <li class="recipe" id="chex-party-mix">
+        <div class="recipe-title"><span class="star" title="Multiple copies on file — a family favorite">★</span> Chex Party Mix</div>
+        <div class="recipe-links"><a class="filelink" href="Recipies/chex%20party%20mix.pdf">copy 1</a> &nbsp;·&nbsp; <a class="filelink" href="Recipies/ThanksGiving/chex%20party%20mix.pdf">copy 2</a></div>
+        
+      </li>
+
+      <li class="recipe" id="baked-ham-cheese-party-sandwiches">
+        <div class="recipe-title"><a class="titlelink" href="Recipies/ThanksGiving/baked-ham-and-cheese-party-.pdf">Baked Ham &amp; Cheese Party Sandwiches</a></div>
+        
+      </li>
+
+      <li class="recipe" id="southern-pimento-cheese">
+        <div class="recipe-title"><a class="titlelink" href="Recipies/ThanksGiving/Southern%20Pimento%20Cheese%20-%20Printer%20Friendly%20-%20Allrecipes.com.pdf">Southern Pimento Cheese</a></div>
+        
+      </li>
+
+      <li class="recipe" id="shrimp-dip">
+        <div class="recipe-title"><a class="titlelink" href="files/shrimp-dip.html">Shrimp Dip</a></div>
+        
+      </li>
+
+      <li class="recipe" id="smoked-trout-dip">
+        <div class="recipe-title"><span class="star" title="Multiple copies on file — a family favorite">★</span> Smoked Trout Dip</div>
+        <div class="recipe-links"><a class="filelink" href="Recipies/Smoked%20Trout%20Dip%20-%20Printer%20Friendly%20-%20Allrecipes.com.pdf">copy 1</a> &nbsp;·&nbsp; <a class="filelink" href="Recipies/Mountain%20Brook/Ashlei%27s%20Smoked%20Trout%20Dip%20-%20Printer%20Friendly%20-%20Allrecipes.com.pdf">copy 2 (Ashlei&#x27;s)</a></div>
+        
+      </li>
+
+      <li class="recipe" id="chicken-salad">
+        <div class="recipe-title"><a class="titlelink" href="Recipies/Mountain%20Brook/chicken%20sald.pdf">Chicken Salad</a></div>
+        
+      </li>
+
+      <li class="recipe" id="chicken-spread">
+        <div class="recipe-title"><a class="titlelink" href="Recipies/Mountain%20Brook/chicken%20spread.pdf">Chicken Spread</a></div>
+        
+      </li>
+
+      <li class="recipe" id="papa-lancs-praline-crunch">
+        <div class="recipe-title"><a class="titlelink" href="files/papa-lancs-praline-crunch.html">Papa Lanc&#x27;s Praline Crunch</a></div>
+        
+      </li>
+      </ul>
+    </section>
+
+    <section id="bread">
+      <h2>Breads &amp; Rolls <span class="count">(15)</span></h2>
+      
+      <ul class="recipe-list">
+      <li class="recipe" id="sour-cream-biscuits">
+        <div class="recipe-title"><a class="titlelink" href="files/greys-cookbook-bread-sour-cream-biscuits.html">Sour Cream Biscuits</a></div>
+        
+      </li>
+
+      <li class="recipe" id="potato-biscuits">
+        <div class="recipe-title"><a class="titlelink" href="files/potato-bisquits.html">Potato Biscuits</a></div>
+        
+      </li>
+
+      <li class="recipe" id="cheddar-garlic-drop-biscuits-dukes-mayonnaise">
+        <div class="recipe-title"><a class="titlelink" href="Recipies/Cheddar%20Garlic%20Drop%20Biscuits%20_%20Duke%27s%20Mayonnaise.pdf">Cheddar Garlic Drop Biscuits (Duke&#x27;s Mayonnaise)</a></div>
+        
+      </li>
+
+      <li class="recipe" id="easy-3-ingredient-mayonnaise-drop-biscuits-dukes-mayo">
+        <div class="recipe-title"><a class="titlelink" href="Recipies/Easy%203%20Ingredient%20Mayonnaise%20Drop%20Biscuits%20_%20Duke%E2%80%99s%20Mayo.pdf">Easy 3-Ingredient Mayonnaise Drop Biscuits (Duke&#x27;s Mayo)</a></div>
+        
+      </li>
+
+      <li class="recipe" id="bojangles-biscuit-copycat">
+        <div class="recipe-title"><a class="titlelink" href="Recipies/Bojangles%20Biscuit%20Copycat%20Recipe%20-%20Insanely%20Good.pdf">Bojangles Biscuit Copycat</a></div>
+        
+      </li>
+
+      <li class="recipe" id="cornbread">
+        <div class="recipe-title"><span class="star" title="Multiple copies on file — a family favorite">★</span> Cornbread</div>
+        <div class="recipe-links"><a class="filelink" href="files/cornbread-best.html">“best!!” version</a> &nbsp;·&nbsp; <a class="filelink" href="files/golden-yellow-cornbread.html">Golden Yellow Cornbread</a> &nbsp;·&nbsp; <a class="filelink" href="Recipies/Cornbread%20Recipe%20_%20Moist%2C%20Fluffy%20Homemade%20Cornbread.pdf">Moist &amp; Fluffy (web)</a> &nbsp;·&nbsp; <a class="filelink" href="Recipies/corn%20bread.pdf">corn bread.pdf</a></div>
+        
+      </li>
+
+      <li class="recipe" id="cinnamon-rolls">
+        <div class="recipe-title"><a class="titlelink" href="files/cinamon-rolls.html">Cinnamon Rolls</a></div>
+        
+      </li>
+
+      <li class="recipe" id="cinnamon-raisin-bread-papa-lancs-bread-machine">
+        <div class="recipe-title"><a class="titlelink" href="files/cinamon-rasin-bread.html">Cinnamon Raisin Bread (Papa Lanc&#x27;s, bread machine)</a></div>
+        
+      </li>
+
+      <li class="recipe" id="stupid-easy-homemade-caramel-rolls">
+        <div class="recipe-title"><a class="titlelink" href="Recipies/Stupid%20Easy%20Homemade%20Caramel%20Rolls%20-%20Julie%27s%20Eats%20%26%20Treats.pdf">Stupid Easy Homemade Caramel Rolls</a></div>
+        
+      </li>
+
+      <li class="recipe" id="sour-cream-yeast-rolls">
+        <div class="recipe-title"><a class="titlelink" href="files/sour-cream-yeast-rolls.html">Sour Cream Yeast Rolls</a></div>
+        
+      </li>
+
+      <li class="recipe" id="yeast-rolls">
+        <div class="recipe-title"><span class="star" title="Multiple copies on file — a family favorite">★</span> Yeast Rolls</div>
+        <div class="recipe-links"><a class="filelink" href="files/yeast-rolls.html">copy 1 (.docx)</a> &nbsp;·&nbsp; <a class="filelink" href="files/yeast-rolls.html">copy 2 (.odt)</a> &nbsp;·&nbsp; <a class="filelink" href="files/2020-thanksgiving-new-yeast-rolls.html">“new” version</a></div>
+        
+      </li>
+
+      <li class="recipe" id="pumpernickel-rye-bread">
+        <div class="recipe-title"><span class="star" title="Multiple copies on file — a family favorite">★</span> Pumpernickel Rye Bread</div>
+        <div class="recipe-links"><a class="filelink" href="files/pumpernicle-rye-bread.html">main version</a> &nbsp;·&nbsp; <a class="filelink" href="files/pumpernicle-rye-bread-deli.html">deli version</a> &nbsp;·&nbsp; <a class="filelink" href="files/pumpernicle-rye-bread-tallodt.html">“tall” version</a> &nbsp;·&nbsp; <a class="filelink" href="Recipies/Pumpernicle%20Rye%20Bread.pdf">printable PDF</a></div>
+        
+      </li>
+
+      <li class="recipe" id="pumpernickel-coffee-pairing-notes">
+        <div class="recipe-title"><a class="titlelink" href="Recipies/Pumpenicle_coffee.pdf">Pumpernickel &amp; Coffee (pairing notes)</a></div>
+        
+      </li>
+
+      <li class="recipe" id="sourdough-starter">
+        <div class="recipe-title"><a class="titlelink" href="files/sourdough-starter.html">Sourdough Starter</a></div>
+        
+      </li>
+
+      <li class="recipe" id="sourdough-3-day-plan">
+        <div class="recipe-title"><a class="titlelink" href="files/sourdough-3-day-plan.html">Sourdough 3-Day Plan</a></div>
+        
+      </li>
+      </ul>
+    </section>
+
+    <section id="breakfast">
+      <h2>Breakfast <span class="count">(8)</span></h2>
+      
+      <ul class="recipe-list">
+      <li class="recipe" id="grits">
+        <div class="recipe-title"><a class="titlelink" href="files/greys-cookbook-breakfast-grits.html">Grits</a></div>
+        
+      </li>
+
+      <li class="recipe" id="omelets">
+        <div class="recipe-title"><a class="titlelink" href="files/greys-cookbook-breakfast-omelets.html">Omelets</a></div>
+        
+      </li>
+
+      <li class="recipe" id="hashbrown-casserole">
+        <div class="recipe-title"><span class="star" title="Multiple copies on file — a family favorite">★</span> Hashbrown Casserole</div>
+        <div class="recipe-links"><a class="filelink" href="files/greys-cookbook-breakfast-hashbrown-casserole.html">Grey&#x27;s Cookbook version</a> &nbsp;·&nbsp; <a class="filelink" href="files/hash-brown-casserole.html">other copy</a></div>
+        
+      </li>
+
+      <li class="recipe" id="breakfast-tater-tot-casserole">
+        <div class="recipe-title"><a class="titlelink" href="files/breakfast-tatertot-casserole.html">Breakfast Tater Tot Casserole</a></div>
+        
+      </li>
+
+      <li class="recipe" id="breakfast-casserole-meat-eggs-cheese">
+        <div class="recipe-title"><a class="titlelink" href="Recipies/Breakfast/breakfastcaserole%20meat%20eggs%20cheese.pdf">Breakfast Casserole (meat, eggs &amp; cheese)</a></div>
+        
+      </li>
+
+      <li class="recipe" id="scrambled-eggs-and-beef-epicurious">
+        <div class="recipe-title"><a class="titlelink" href="Recipies/Breakfast/Scrambled%20Eggs%20and%20Beef%20recipe%20_%20Epicurious.com.pdf">Scrambled Eggs and Beef (Epicurious)</a></div>
+        
+      </li>
+
+      <li class="recipe" id="slow-cooker-breakfast-casserole-spend-with-pennies">
+        <div class="recipe-title"><a class="titlelink" href="Recipies/2020%20Thanksgiving/Slow%20Cooker%20Breakfast%20Casserole%20-%20Spend%20With%20Pennies.pdf">Slow Cooker Breakfast Casserole (Spend With Pennies)</a></div>
+        
+      </li>
+
+      <li class="recipe" id="quiche">
+        <div class="recipe-title"><a class="titlelink" href="files/quiche.html">Quiche</a></div>
+        
+      </li>
+      </ul>
+    </section>
+
+    <section id="soups">
+      <h2>Soups &amp; Stews <span class="count">(4)</span></h2>
+      
+      <ul class="recipe-list">
+      <li class="recipe" id="baked-potato-soup">
+        <div class="recipe-title"><a class="titlelink" href="files/greys-cookbook-appetizers-baked-potato-soup.html">Baked Potato Soup</a></div>
+        
+      </li>
+
+      <li class="recipe" id="brunswick-stew">
+        <div class="recipe-title"><a class="titlelink" href="files/brunswick-stew.html">Brunswick Stew</a></div>
+        
+      </li>
+
+      <li class="recipe" id="turkey-gumbo-foodcom">
+        <div class="recipe-title"><a class="titlelink" href="Recipies/Turkey%20Gumbo%20Recipe%20-%20Food.com.pdf">Turkey Gumbo (Food.com)</a></div>
+        
+      </li>
+
+      <li class="recipe" id="potato-soup">
+        <div class="recipe-title"><a class="titlelink" href="files/potato-soup-1.html">Potato Soup</a></div>
+        
+      </li>
+      </ul>
+    </section>
+
+    <section id="mains">
+      <h2>Main Dishes &amp; Meats <span class="count">(36)</span></h2>
+      
+      <ul class="recipe-list">
+      <li class="recipe" id="3-course-meal-bruschetta-grilled-lamb-dessert">
+        <div class="recipe-title"><a class="titlelink" href="files/3-course-meal.html">3-Course Meal: Bruschetta, Grilled Lamb &amp; Dessert</a></div>
+        
+      </li>
+
+      <li class="recipe" id="baked-chicken-pesto-alfredo-freezer-meal">
+        <div class="recipe-title"><a class="titlelink" href="files/baked-chicken-pesto-alfredo-freezer-meal.html">Baked Chicken Pesto Alfredo (Freezer Meal)</a></div>
+        
+      </li>
+
+      <li class="recipe" id="chicken-casserole">
+        <div class="recipe-title"><a class="titlelink" href="files/greys-cookbook-meats-chicken-casserole.html">Chicken Casserole</a></div>
+        
+      </li>
+
+      <li class="recipe" id="chicken-casserole-alt-notes">
+        <div class="recipe-title"><a class="titlelink" href="Recipies/chicken%20caserole.txt">Chicken Casserole (alt notes)</a></div>
+        
+      </li>
+
+      <li class="recipe" id="country-style-steak">
+        <div class="recipe-title"><a class="titlelink" href="files/greys-cookbook-meats-country-style-steak.html">Country Style Steak</a></div>
+        
+      </li>
+
+      <li class="recipe" id="dads-country-style-steak">
+        <div class="recipe-title"><a class="titlelink" href="files/greys-cookbook-meats-dads-country-style-steak.html">Dad&#x27;s Country Style Steak</a></div>
+        
+      </li>
+
+      <li class="recipe" id="deer-tenderloin">
+        <div class="recipe-title"><a class="titlelink" href="files/greys-cookbook-meats-deer-tenderloin.html">Deer Tenderloin</a></div>
+        
+      </li>
+
+      <li class="recipe" id="tenderloin">
+        <div class="recipe-title"><a class="titlelink" href="files/greys-cookbook-meats-tenderloin.html">Tenderloin</a></div>
+        
+      </li>
+
+      <li class="recipe" id="dove-birds">
+        <div class="recipe-title"><a class="titlelink" href="files/greys-cookbook-meats-dove-birds.html">Dove Birds</a></div>
+        
+      </li>
+
+      <li class="recipe" id="grilled-chicken">
+        <div class="recipe-title"><a class="titlelink" href="files/greys-cookbook-meats-grilled-chicken.html">Grilled Chicken</a></div>
+        
+      </li>
+
+      <li class="recipe" id="hash">
+        <div class="recipe-title"><a class="titlelink" href="files/greys-cookbook-meats-hash.html">Hash</a></div>
+        
+      </li>
+
+      <li class="recipe" id="steak">
+        <div class="recipe-title"><a class="titlelink" href="files/greys-cookbook-meats-steak.html">Steak</a></div>
+        
+      </li>
+
+      <li class="recipe" id="steak-and-taters">
+        <div class="recipe-title"><a class="titlelink" href="Recipies/STEAK%20AND%20TATERS.pdf">Steak and Taters</a></div>
+        
+      </li>
+
+      <li class="recipe" id="parmesan-honey-pork-roast">
+        <div class="recipe-title"><a class="titlelink" href="files/greys-cookbook-meats-parmesan-honey-pork-roast.html">Parmesan Honey Pork Roast</a></div>
+        
+      </li>
+
+      <li class="recipe" id="pork-loin">
+        <div class="recipe-title"><a class="titlelink" href="files/pork-loin.html">Pork Loin</a></div>
+        
+      </li>
+
+      <li class="recipe" id="pork-and-apple">
+        <div class="recipe-title"><a class="titlelink" href="files/pork-and-apple.html">Pork and Apple</a></div>
+        
+      </li>
+
+      <li class="recipe" id="swiss-chicken-casserole">
+        <div class="recipe-title"><span class="star" title="Multiple copies on file — a family favorite">★</span> Swiss Chicken Casserole</div>
+        <div class="recipe-links"><a class="filelink" href="files/greys-cookbook-meats-swiss-chicken-casserole.html">Grey&#x27;s Cookbook version</a> &nbsp;·&nbsp; <a class="filelink" href="files/swiss-chicken-casserole.html">other copy</a></div>
+        
+      </li>
+
+      <li class="recipe" id="lasagna">
+        <div class="recipe-title"><span class="star" title="Multiple copies on file — a family favorite">★</span> Lasagna</div>
+        <div class="recipe-links"><a class="filelink" href="files/greys-cookbook-meats-lasagna.html">Grey&#x27;s Cookbook version</a> &nbsp;·&nbsp; <a class="filelink" href="files/easy-homemade-lasagna-recipe.html">“Easy Homemade” version</a></div>
+        
+      </li>
+
+      <li class="recipe" id="easy-bachelor-casserole">
+        <div class="recipe-title"><span class="star" title="Multiple copies on file — a family favorite">★</span> Easy Bachelor Casserole</div>
+        <div class="recipe-links"><a class="filelink" href="files/easy-bachelor-casserole.html">recipe</a> &nbsp;·&nbsp; <a class="filelink" href="Recipies/Easy%20Bachelor%20Caserole.txt">notes (.txt)</a></div>
+        
+      </li>
+
+      <li class="recipe" id="shrimp-and-grits">
+        <div class="recipe-title"><span class="star" title="Multiple copies on file — a family favorite">★</span> Shrimp and Grits</div>
+        <div class="recipe-links"><a class="filelink" href="files/greys-cookbook-meats-shrimp-and-grits.html">Grey&#x27;s Cookbook version</a> &nbsp;·&nbsp; <a class="filelink" href="Recipies/shrimp.JPG">Cathleen&#x27;s Kitchen (photo)</a> &nbsp;·&nbsp; <a class="filelink" href="files/shrimp-and-grits.png">scanned card</a></div>
+        
+      </li>
+
+      <li class="recipe" id="skillet-tilapia-with-cherry-tomatoes">
+        <div class="recipe-title"><a class="titlelink" href="files/skillet-tilapia-with-cherry-tomatoes.html">Papa Lanc&#x27;s Skillet Tilapia with Cherry Tomatoes</a></div>
+
+      </li>
+
+      <li class="recipe" id="salmon-patties">
+        <div class="recipe-title"><a class="titlelink" href="Recipies/salmon%20paties.jpg">Salmon Patties</a></div>
+        
+      </li>
+
+      <li class="recipe" id="chili-greys">
+        <div class="recipe-title"><a class="titlelink" href="files/chili-grey.html">Chili (Grey&#x27;s)</a></div>
+        
+      </li>
+
+      <li class="recipe" id="perfect-chili">
+        <div class="recipe-title"><a class="titlelink" href="files/perfect-chili.html">Perfect Chili</a></div>
+        
+      </li>
+
+      <li class="recipe" id="hot-dog-chili">
+        <div class="recipe-title"><span class="star" title="Multiple copies on file — a family favorite">★</span> Hot Dog Chili</div>
+        <div class="recipe-links"><a class="filelink" href="files/greys-cookbook-meats-hot-dog-chili.html">Grey&#x27;s Cookbook version</a> &nbsp;·&nbsp; <a class="filelink" href="files/hot-dog-chili.html">other copy</a> &nbsp;·&nbsp; <a class="filelink" href="Recipies/smoky_meat_forward_hot_dog_chili.pdf">“smoky, meat-forward” version</a></div>
+        
+      </li>
+
+      <li class="recipe" id="papa-lanc-party-pasta">
+        <div class="recipe-title"><a class="titlelink" href="files/papa-lanc-party-pasta.html">Papa Lanc Party Pasta</a></div>
+        
+      </li>
+
+      <li class="recipe" id="creamy-seafood-white-sauce-pasta">
+        <div class="recipe-title"><a class="titlelink" href="files/creamy-seafood-white-sauce-pasta.html">Creamy Seafood White Sauce Pasta</a></div>
+        
+      </li>
+
+      <li class="recipe" id="make-ahead-seafood-pasta-jar">
+        <div class="recipe-title"><a class="titlelink" href="files/make-ahead-seafood-pasta-jar.html">Make-Ahead Seafood Pasta Jar</a></div>
+        
+      </li>
+
+      <li class="recipe" id="cowboy-spaghetti">
+        <div class="recipe-title"><a class="titlelink" href="Recipies/cowboy%20spaghetti.pdf">Cowboy Spaghetti</a></div>
+        
+      </li>
+
+      <li class="recipe" id="chef-johns-italian-meatballs">
+        <div class="recipe-title"><a class="titlelink" href="Recipies/chef-johns-italian-meatball.pdf">Chef John&#x27;s Italian Meatballs</a></div>
+        
+      </li>
+
+      <li class="recipe" id="taco-skillet">
+        <div class="recipe-title"><a class="titlelink" href="Recipies/Taco%20Skillet.pdf">Taco Skillet</a></div>
+        
+      </li>
+
+      <li class="recipe" id="instant-pot-chicken">
+        <div class="recipe-title"><a class="titlelink" href="files/instantpot-chicken.html">Instant Pot Chicken</a></div>
+        
+      </li>
+
+      <li class="recipe" id="korean-ground-beef-and-rice-bowls">
+        <div class="recipe-title"><a class="titlelink" href="Recipies/ground%20beef/Korean%20Ground%20Beef%20and%20Rice%20Bowls.pdf">Korean Ground Beef and Rice Bowls</a></div>
+        
+      </li>
+
+      <li class="recipe" id="meatloaf">
+        <div class="recipe-title"><a class="titlelink" href="files/meatloaf.html">Meatloaf</a></div>
+        
+      </li>
+
+      <li class="recipe" id="kfc-fried-chicken-copycat-web-link">
+        <div class="recipe-title"><a class="titlelink" href="http://www.recipe30.com/kfc-secret-recipe.html/" target="_blank" rel="noopener">KFC Fried Chicken (copycat, web link)</a></div>
+        
+      </li>
+
+      <li class="recipe" id="slow-cooker-turkey-breast-with-gravy-taste-of-home">
+        <div class="recipe-title"><a class="titlelink" href="Recipies/ThanksGiving/Slow%20Cooker%20Turkey%20Breast%20with%20Gravy%20Recipe%20_%20Taste%20of%20Home.pdf">Slow Cooker Turkey Breast with Gravy (Taste of Home)</a></div>
+        
+      </li>
+      </ul>
+    </section>
+
+    <section id="sides">
+      <h2>Sides &amp; Vegetables <span class="count">(18)</span></h2>
+      
+      <ul class="recipe-list">
+      <li class="recipe" id="baked-beans">
+        <div class="recipe-title"><a class="titlelink" href="files/greys-cookbook-sides-baked-beans.html">Baked Beans</a></div>
+        
+      </li>
+
+      <li class="recipe" id="green-beans">
+        <div class="recipe-title"><a class="titlelink" href="files/greys-cookbook-sides-vegetables-green-beans.html">Green Beans</a></div>
+        
+      </li>
+
+      <li class="recipe" id="green-bean-casserole">
+        <div class="recipe-title"><span class="star" title="Multiple copies on file — a family favorite">★</span> Green Bean Casserole</div>
+        <div class="recipe-links"><a class="filelink" href="files/greys-cookbook-sides-green-bean-casserole.html">Grey&#x27;s Cookbook version</a> &nbsp;·&nbsp; <a class="filelink" href="Recipies/2019%20thanksgiving/green%20bean%20casserole.txt">notes (.txt)</a> &nbsp;·&nbsp; <a class="filelink" href="Recipies/ThanksGiving/holiday-green-bean-casserol.pdf">holiday version (web)</a></div>
+        
+      </li>
+
+      <li class="recipe" id="mac-and-cheese">
+        <div class="recipe-title"><span class="star" title="Multiple copies on file — a family favorite">★</span> Mac and Cheese</div>
+        <div class="recipe-links"><a class="filelink" href="files/greys-cookbook-sides-mac-and-cheese-crock-pot.html">Grey&#x27;s Cookbook, Crock Pot version</a> &nbsp;·&nbsp; <a class="filelink" href="files/baked-mac-and-cheese.html">Baked version</a> &nbsp;·&nbsp; <a class="filelink" href="files/thanksgiving-mac-and-cheese.html">Thanksgiving folder copy</a> &nbsp;·&nbsp; <a class="filelink" href="Recipies/2019%20thanksgiving/Southern%20Macaroni%20and%20Cheese%20Casserole%20_%20Recipe%20-%20The%20Anthony%20Kitchen.pdf">Southern Mac &amp; Cheese (2019)</a> &nbsp;·&nbsp; <a class="filelink" href="Recipies/ThanksGiving/Southern%20Macaroni%20and%20Cheese%20Casserole%20_%20Recipe%20-%20The%20Anthony%20Kitchen.pdf">Southern Mac &amp; Cheese (ThanksGiving)</a></div>
+        
+      </li>
+
+      <li class="recipe" id="brown-rice">
+        <div class="recipe-title"><span class="star" title="Multiple copies on file — a family favorite">★</span> Brown Rice</div>
+        <div class="recipe-links"><a class="filelink" href="files/greys-cookbook-sides-vegetables-brown-rice.html">Grey&#x27;s Cookbook version</a> &nbsp;·&nbsp; <a class="filelink" href="Recipies/Brown%20Rice.pdf">copy 1</a> &nbsp;·&nbsp; <a class="filelink" href="Recipies/2019%20thanksgiving/Brown%20Rice.pdf">copy 2</a> &nbsp;·&nbsp; <a class="filelink" href="files/brown-rice-final-nannies-original-recipe-scanned.html">Nannie&#x27;s original (scanned, .docx)</a> &nbsp;·&nbsp; <a class="filelink" href="Recipies/Brown%20Rice%20final%20Nannies%20original%20recipe%20scanned.pdf">Nannie&#x27;s original (scanned, .pdf)</a></div>
+        
+      </li>
+
+      <li class="recipe" id="fried-cabbage">
+        <div class="recipe-title"><a class="titlelink" href="files/greys-cookbook-sides-vegetables-fried-cabbage.html">Fried Cabbage</a></div>
+        
+      </li>
+
+      <li class="recipe" id="home-fries">
+        <div class="recipe-title"><a class="titlelink" href="files/greys-cookbook-sides-vegetables-home-fries.html">Home Fries</a></div>
+        
+      </li>
+
+      <li class="recipe" id="lima-beans">
+        <div class="recipe-title"><a class="titlelink" href="files/greys-cookbook-sides-vegetables-lima-beans.html">Lima Beans</a></div>
+        
+      </li>
+
+      <li class="recipe" id="mashed-potatoes">
+        <div class="recipe-title"><a class="titlelink" href="files/greys-cookbook-sides-vegetables-mashed-potatoes.html">Mashed Potatoes</a></div>
+        
+      </li>
+
+      <li class="recipe" id="scalloped-potatoes">
+        <div class="recipe-title"><a class="titlelink" href="files/scalloped-potatoes.html">Scalloped Potatoes (Cheesy Mushroom Soup Casserole)</a></div>
+        
+      </li>
+
+      <li class="recipe" id="succotash">
+        <div class="recipe-title"><a class="titlelink" href="files/greys-cookbook-sides-vegetables-succotash-1.html">Succotash</a></div>
+        
+      </li>
+
+      <li class="recipe" id="slaw">
+        <div class="recipe-title"><a class="titlelink" href="files/slaw.html">Slaw</a></div>
+        
+      </li>
+
+      <li class="recipe" id="tomato-pie">
+        <div class="recipe-title"><a class="titlelink" href="Recipies/Tomato%20Pie.pdf">Tomato Pie</a></div>
+        
+      </li>
+
+      <li class="recipe" id="pineapple-casserole">
+        <div class="recipe-title"><span class="star" title="Multiple copies on file — a family favorite">★</span> Nannie&#x27;s Pineapple Casserole</div>
+        <div class="recipe-links"><a class="filelink" href="files/2019-thanksgiving-nannies-pineapple-casserole.html">copy 1</a> &nbsp;·&nbsp; <a class="filelink" href="files/thanksgiving-nannies-pineapple-casserole.html">copy 2</a> &nbsp;·&nbsp; <a class="filelink" href="Recipies/ThanksGiving/pineapple-cassero.pdf">web version</a></div>
+        
+      </li>
+
+      <li class="recipe" id="sausage-and-rice-casserole-taste-of-home">
+        <div class="recipe-title"><a class="titlelink" href="Recipies/ThanksGiving/Sausage%20and%20Rice%20Casserole%20Side%20Dish%20Recipe%20_%20Taste%20of%20Home.pdf">Sausage and Rice Casserole (Taste of Home)</a></div>
+        
+      </li>
+
+      <li class="recipe" id="sweet-potato-casserole">
+        <div class="recipe-title"><span class="star" title="Multiple copies on file — a family favorite">★</span> The Best Sweet Potato Casserole with Marshmallows and Pecans</div>
+        <div class="recipe-links"><a class="filelink" href="Recipies/ThanksGiving/The%20Best%20Sweet%20Potato%20Casserole%20with%20Marshmallows%20and%20Pecans.pdf">main recipe</a> &nbsp;·&nbsp; <a class="filelink" href="Recipies/2019%20thanksgiving/yummy-sweet-potato-casserole.pdf">copy (2019)</a> &nbsp;·&nbsp; <a class="filelink" href="Recipies/2021%20thanksgiving/yummy-sweet-potato-casserole.pdf">copy (2021)</a> &nbsp;·&nbsp; <a class="filelink" href="Recipies/ThanksGiving/yummy-sweet-potato-casserole.pdf">copy (ThanksGiving)</a></div>
+        
+      </li>
+
+      <li class="recipe" id="oyster-dressing">
+        <div class="recipe-title">Oyster Casserole / Dressing</div>
+        <div class="recipe-links"><a class="filelink" href="files/2020-thanksgiving-oyster-caserole.html">Oyster Casserole</a> &nbsp;·&nbsp; <a class="filelink" href="Recipies/ThanksGiving/New%20Orleans%20Oyster%20Dressing.pdf">New Orleans Oyster Dressing</a> &nbsp;·&nbsp; <a class="filelink" href="Recipies/ThanksGiving/Oyster%20Dressing%20_%20The%20Pioneer%20Woman.pdf">Pioneer Woman&#x27;s Oyster Dressing</a></div>
+        <div class="note">Three takes on the same holiday dish — pick a favorite.</div>
+      </li>
+
+      <li class="recipe" id="dressing">
+        <div class="recipe-title">Cornbread Dressing / Stuffing</div>
+        <div class="recipe-links"><a class="filelink" href="Recipies/2019%20thanksgiving/stuffing.txt">quick notes</a> &nbsp;·&nbsp; <a class="filelink" href="Recipies/ThanksGiving/corn-bread-dressing-with-oy.pdf">with oysters</a> &nbsp;·&nbsp; <a class="filelink" href="Recipies/ThanksGiving/Southern%20Old-Fashioned%20Cornbread%20Dressing%20-%20The%20Anthony%20Kitchen.pdf">Southern Old-Fashioned</a> &nbsp;·&nbsp; <a class="filelink" href="Recipies/ThanksGiving/Granny%E2%80%99s%20Old-Fashioned%20Bread%20and%20Sage%20Dressing%20-%20Kraft%20Recipes.pdf">Granny&#x27;s Bread &amp; Sage</a> &nbsp;·&nbsp; <a class="filelink" href="Recipies/ThanksGiving/Make_%20Vickie%27s%20Old-Fashioned%20Sage%20Dressing%20-%20Gooseberry%20Patch.pdf">Vickie&#x27;s Sage Dressing</a></div>
+        <div class="note">Five versions on file — pick a favorite.</div>
+      </li>
+      </ul>
+    </section>
+
+    <section id="sauces">
+      <h2>Sauces &amp; Condiments <span class="count">(9)</span></h2>
+      
+      <ul class="recipe-list">
+      <li class="recipe" id="red-bbq-sauce">
+        <div class="recipe-title"><span class="star" title="Multiple copies on file — a family favorite">★</span> Red BBQ Sauce</div>
+        <div class="recipe-links"><a class="filelink" href="files/red-bbq-sauce.html">copy 1 (.docx)</a> &nbsp;·&nbsp; <a class="filelink" href="Recipies/red%20BBQ%20Sauce.pdf">copy 2 (.pdf)</a></div>
+        
+      </li>
+
+      <li class="recipe" id="vinegar-bbq-sauce">
+        <div class="recipe-title"><span class="star" title="Multiple copies on file — a family favorite">★</span> Vinegar BBQ Sauce</div>
+        <div class="recipe-links"><a class="filelink" href="files/vinegar-bbq-sauce.html">copy 1 (.docx)</a> &nbsp;·&nbsp; <a class="filelink" href="Recipies/vinegar%20bbq%20sauce.pdf">copy 2 (.pdf)</a></div>
+        
+      </li>
+
+      <li class="recipe" id="mustard-bbq-sauce">
+        <div class="recipe-title"><a class="titlelink" href="files/mustard-bbq-sauce.html">Mustard BBQ Sauce</a></div>
+        
+      </li>
+
+      <li class="recipe" id="pantry-bbq-sauce">
+        <div class="recipe-title"><a class="titlelink" href="files/pantry-bbq-sauce.html">Pantry BBQ Sauce</a></div>
+        
+      </li>
+
+      <li class="recipe" id="beefy-onion-gravy-lipton-kitchens">
+        <div class="recipe-title"><a class="titlelink" href="Recipies/Beefy%20Onion%20Gravy%20_%20Lipton%20Kitchens.pdf">Beefy Onion Gravy (Lipton Kitchens)</a></div>
+        
+      </li>
+
+      <li class="recipe" id="original-greek-coney-sauce">
+        <div class="recipe-title"><a class="titlelink" href="files/original-greek-coney-sauce.html">Original Greek Coney Sauce</a></div>
+        
+      </li>
+
+      <li class="recipe" id="white-sauce-from-budro">
+        <div class="recipe-title"><a class="titlelink" href="files/white-sauce-from-budro.html">White Sauce (from Budro)</a></div>
+        
+      </li>
+
+      <li class="recipe" id="cream-of-anything-soup-mix">
+        <div class="recipe-title"><a class="titlelink" href="files/cream-of-anything-soup-mix.html">Cream of Anything Soup Mix</a></div>
+        
+      </li>
+
+      <li class="recipe" id="cajun-cream-of-shrimp-soup-mix">
+        <div class="recipe-title"><a class="titlelink" href="files/cajun-cream-of-shrimp-soup-mix.html">Cajun Cream of Shrimp Soup Mix</a></div>
+        
+      </li>
+      </ul>
+    </section>
+
+    <section id="canning">
+      <h2>Canning &amp; Preserves <span class="count">(4)</span></h2>
+      
+      <ul class="recipe-list">
+      <li class="recipe" id="canning-basics">
+        <div class="recipe-title"><a class="titlelink" href="files/canning.html">Canning Basics</a></div>
+        
+      </li>
+
+      <li class="recipe" id="blueberry-jam">
+        <div class="recipe-title"><a class="titlelink" href="Recipies/blueberry%20jam.jpg">Blueberry Jam</a></div>
+        
+      </li>
+
+      <li class="recipe" id="fig-jam">
+        <div class="recipe-title"><a class="titlelink" href="Recipies/fig%20jam.png">Fig Jam</a></div>
+        
+      </li>
+
+      <li class="recipe" id="zucchini-squash-pickles">
+        <div class="recipe-title"><a class="titlelink" href="Recipies/zucchini-squash-pickles.pdf">Zucchini &amp; Squash Pickles</a></div>
+        
+      </li>
+      </ul>
+    </section>
+
+    <section id="desserts">
+      <h2>Desserts <span class="count">(14)</span></h2>
+      
+      <ul class="recipe-list">
+      <li class="recipe" id="cream-cheese-blueberry-crescent-cobbler">
+        <div class="recipe-title"><a class="titlelink" href="files/cream-cheese-blueberry-crescent-cobbler.html">Cream Cheese Blueberry Crescent Cobbler</a></div>
+        
+      </li>
+
+      <li class="recipe" id="blackberry-cobbler">
+        <div class="recipe-title"><a class="titlelink" href="files/greys-cookbook-dessert-blackberry-cobbler.html">Blackberry Cobbler</a></div>
+        
+      </li>
+
+      <li class="recipe" id="red-velvet-cake">
+        <div class="recipe-title"><a class="titlelink" href="files/greys-cookbook-dessert-red-velvet-cake.html">Red Velvet Cake</a></div>
+        
+      </li>
+
+      <li class="recipe" id="best-chocolate-cake">
+        <div class="recipe-title"><a class="titlelink" href="files/best-chocolate-cake.html">Best Chocolate Cake</a></div>
+        
+      </li>
+
+      <li class="recipe" id="orange-cake">
+        <div class="recipe-title"><a class="titlelink" href="Recipies/Christmas/Orange%20Cake.pdf">Orange Cake</a></div>
+        
+      </li>
+
+      <li class="recipe" id="lemonade-pie">
+        <div class="recipe-title"><span class="star" title="Multiple copies on file — a family favorite">★</span> Lemonade Pie</div>
+        <div class="recipe-links"><a class="filelink" href="files/greys-cookbook-dessert-lemonade-pie.html">Grey&#x27;s Cookbook version</a> &nbsp;·&nbsp; <a class="filelink" href="files/lemonade-pie.html">copy (.docx)</a> &nbsp;·&nbsp; <a class="filelink" href="files/lemonade-pie.html">copy (.odt)</a> &nbsp;·&nbsp; <a class="filelink" href="files/you-can-be-a-hero-cook-lemonade-pie.html">“You can be a Hero” version</a></div>
+        
+      </li>
+
+      <li class="recipe" id="blueberries-and-cream-ice-cream">
+        <div class="recipe-title"><a class="titlelink" href="Recipies/Blueberries%20and%20Cream%20Ice%20Cream%20-%20Print.pdf">Blueberries and Cream Ice Cream</a></div>
+        
+      </li>
+
+      <li class="recipe" id="blueberry-ice-cream">
+        <div class="recipe-title"><a class="titlelink" href="files/blueberry-ice-cream.html">Blueberry Ice Cream</a></div>
+        
+      </li>
+
+      <li class="recipe" id="butter-pecan-ice-cream">
+        <div class="recipe-title"><a class="titlelink" href="files/butter-pecan-ice-cream.html">Butter Pecan Ice Cream</a></div>
+        
+      </li>
+
+      <li class="recipe" id="fluffiest-homemade-donuts">
+        <div class="recipe-title"><a class="titlelink" href="files/fluffiest-homemade-donuts-recipe.html">Fluffiest Homemade Donuts</a></div>
+        
+      </li>
+
+      <li class="recipe" id="pumpkin-bars">
+        <div class="recipe-title"><a class="titlelink" href="Recipies/ThanksGiving/pumpkin%20bars.pdf">Pumpkin Bars</a></div>
+        
+      </li>
+
+      <li class="recipe" id="gingerbread-house-holiday-craft">
+        <div class="recipe-title"><a class="titlelink" href="Recipies/ThanksGiving/Ginger%20Bread%20House.pdf">Gingerbread House (holiday craft)</a></div>
+        
+      </li>
+
+      <li class="recipe" id="quick-easy-treats-mug-cake-coconut-chocolates-more">
+        <div class="recipe-title"><a class="titlelink" href="files/quick-recipies.html">Quick &amp; Easy Treats (mug cake, coconut chocolates &amp; more)</a></div>
+        
+      </li>
+
+      <li class="recipe" id="dessert-recipe-collection-multiple-recipes-incl-tahini-cookies">
+        <div class="recipe-title"><a class="titlelink" href="Recipies/_Dessert.pdf">Dessert Recipe Collection (multiple recipes, incl. Tahini Cookies)</a></div>
+        
+      </li>
+      </ul>
+    </section>
+
+    <section id="beverages">
+      <h2>Beverages <span class="count">(5)</span></h2>
+      
+      <ul class="recipe-list">
+      <li class="recipe" id="homemade-muscadine-wine">
+        <div class="recipe-title"><a class="titlelink" href="Recipies/Homemade%20Muscadine%20Wine.pdf">Homemade Muscadine Wine</a></div>
+        
+      </li>
+
+      <li class="recipe" id="chocolate-wine">
+        <div class="recipe-title"><a class="titlelink" href="files/chocolate-wine.html">Chocolate Wine</a></div>
+        
+      </li>
+
+      <li class="recipe" id="home-made-corn-mash-moonshine">
+        <div class="recipe-title"><a class="titlelink" href="Recipies/moonshine/Home%20Made%20Corn%20Mash%20Moonshine%20Recipe.pdf">Home Made Corn Mash Moonshine</a></div>
+        
+      </li>
+
+      <li class="recipe" id="moonshine-cuts-pot-distilling-guide">
+        <div class="recipe-title"><a class="titlelink" href="Recipies/moonshine/make-moonshine-cuts-pot-distilling.pdf">Moonshine: Cuts &amp; Pot Distilling Guide</a></div>
+        
+      </li>
+
+      <li class="recipe" id="cocktail-recipe-collection-multiple-recipes-incl-rhubarb-fennel-gin">
+        <div class="recipe-title"><a class="titlelink" href="Recipies/_Cocktails_Final.pdf">Cocktail Recipe Collection (multiple recipes, incl. Rhubarb-Fennel Gin)</a></div>
+        
+      </li>
+      </ul>
+    </section>
+
+    <section id="reference">
+      <h2>Reference &amp; Extras <span class="count">(6)</span></h2>
+      <p class="blurb">Not recipes themselves, but useful background kept with the collection.</p>
+      <ul class="recipe-list">
+      <li class="recipe" id="foreword-from-greys-cookbook">
+        <div class="recipe-title"><a class="titlelink" href="files/greys-cookbook-forward.html">Foreword (from Grey&#x27;s Cookbook)</a></div>
+        
+      </li>
+
+      <li class="recipe" id="2021-thanksgiving-menu">
+        <div class="recipe-title"><a class="titlelink" href="files/2021-thanksgiving-menu.html">2021 Thanksgiving Menu</a></div>
+        
+      </li>
+
+      <li class="recipe" id="thanksgiving-menu-undated">
+        <div class="recipe-title"><a class="titlelink" href="files/thanksgiving-thanksgiving-menu.html">Thanksgiving Menu (undated)</a></div>
+        
+      </li>
+
+      <li class="recipe" id="kitchenaid-stand-mixer-manual-recipes">
+        <div class="recipe-title"><a class="titlelink" href="Recipies/kitchen%20aid%20cookbook.pdf">KitchenAid Stand Mixer Manual &amp; Recipes</a></div>
+        
+      </li>
+
+      <li class="recipe" id="the-mac-king-thanksgiving-show-cookbook-full-booklet">
+        <div class="recipe-title"><a class="titlelink" href="Recipies/MacKingShowThanksgivingCookbook2012email1-1.pdf">The Mac King Thanksgiving Show Cookbook (full booklet)</a></div>
+        
+      </li>
+
+      <li class="recipe" id="planning-a-bbq">
+        <div class="recipe-title"><a class="titlelink" href="files/planning-a-bbq.html">Planning a BBQ</a></div>
+        <div class="note">Saved web article with tips for planning a cookout.</div>
+      </li>
+      </ul>
+    </section>
+
+</div>
+<div style="text-align:center;margin:28px auto 8px;"><img src="files/grey-fox-color.png" alt="The Grey Fox" width="100" height="113" style="display:block;margin:0 auto;max-width:100px;"><p style="margin:2px 0 0;font-size:.75em;letter-spacing:.2em;color:#3a2e26;">WELCOME</p></div>
+<footer>
+  <p>Links point back to the original files in <code>H:\Grey\Recipies</code> &mdash; nothing was moved or converted.</p>
+</footer>
+<button id="to-top" type="button" aria-label="Back to top" title="Back to top">&#8593;</button>
+<script>(function(){var b=document.getElementById("to-top");function t(){b.classList.toggle("show",window.scrollY>400)}window.addEventListener("scroll",t,{passive:true});t();b.onclick=function(){window.scrollTo({top:0,behavior:"smooth"})}})();</script>
+<script>
+(function(){
+  var q=document.getElementById("q"),out=document.getElementById("results"),data=null,loading=false;
+  function esc(t){return t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+  function rx(w){return w.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");}
+  function load(cb){
+    if(data){cb();return;}
+    if(loading)return;loading=true;
+    fetch("search.json").then(function(r){return r.json();}).then(function(d){data=d;cb();})
+      .catch(function(){out.innerHTML='<div class="count">Search could not load. Try refreshing the page.</div>';loading=false;});
+  }
+  function run(){
+    var raw=q.value.trim().toLowerCase();
+    if(raw.length<2){out.innerHTML="";return;}
+    var words=raw.split(/\s+/).filter(Boolean),hits=[];
+    data.forEach(function(r){
+      var title=r.t.toLowerCase(),body=r.x.toLowerCase(),all=title+" "+body,ok=true,score=0;
+      words.forEach(function(w){
+        if(all.indexOf(w)<0)ok=false;
+        if(title.indexOf(w)>=0)score+=10;
+      });
+      if(ok)hits.push({r:r,score:score});
+    });
+    hits.sort(function(a,b){return b.score-a.score;});
+    if(!hits.length){out.innerHTML='<div class="count">No recipes found for &ldquo;'+esc(q.value.trim())+'&rdquo;.</div>';return;}
+    var hl=new RegExp("("+words.map(rx).join("|")+")","gi");
+    var html='<div class="count">'+hits.length+(hits.length==1?" recipe":" recipes")+' found</div>';
+    hits.slice(0,50).forEach(function(h){
+      var r=h.r,href=r.l.length?r.l[0][1]:"#"+r.id,snip="";
+      var low=r.x.toLowerCase(),pos=-1;
+      words.forEach(function(w){var p=low.indexOf(w);if(p>=0&&(pos<0||p<pos))pos=p;});
+      if(pos>=0&&r.t.toLowerCase().indexOf(words[0])<0||pos>0){
+        var a=Math.max(0,pos-50),b=Math.min(r.x.length,pos+110);
+        snip=(a>0?"&hellip;":"")+esc(r.x.slice(a,b)).replace(hl,"<mark>$1</mark>")+(b<r.x.length?"&hellip;":"");
+      }
+      html+='<div class="hit"><a class="t" href="'+esc(encodeURI(href))+'">'+esc(r.t).replace(hl,"<mark>$1</mark>")+'</a><span class="sec">'+esc(r.s)+'</span>';
+      if(snip)html+='<div class="snip">'+snip+'</div>';
+      if(r.l.length>1){html+='<div class="more">Other copies: ';
+        html+=r.l.slice(1).map(function(l){return '<a href="'+esc(encodeURI(l[1]))+'">'+esc(l[0])+'</a>';}).join(" &middot; ");
+        html+='</div>';}
+      html+='</div>';
+    });
+    if(hits.length>50)html+='<div class="count">Showing the first 50. Add a word to narrow it down.</div>';
+    out.innerHTML=html;
+  }
+  q.addEventListener("focus",function(){load(function(){});});
+  q.addEventListener("input",function(){load(run);});
+})();
+</script>
+</body>
+</html>
