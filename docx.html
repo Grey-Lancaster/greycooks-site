@@ -436,7 +436,11 @@
             }));
           });
 
-          children.push(twoColumnTable(leftCol, rightCol));
+          if (recipe.ingredients.length) {
+            children.push(twoColumnTable(leftCol, rightCol));
+          } else {
+            children.push(...rightCol);
+          }
 
           if (recipe.notes.length) {
             children.push(new Paragraph({

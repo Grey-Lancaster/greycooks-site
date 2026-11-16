@@ -796,7 +796,8 @@
       const longRecipe =
         recipe.ingredients.length > 12 ||
         recipe.directions.length > 7 ||
-        recipe.notes.join(" ").length > 550;
+        recipe.notes.join(" ").length > 550 ||
+        !recipe.ingredients.length;
 
       return `
         <section class="page">
@@ -809,12 +810,14 @@
             <div class="divider"></div>
 
             <div class="recipe-content" style="${longRecipe ? "grid-template-columns: 1fr;" : ""}">
-              <div class="recipe-block">
-                <h3>Ingredients</h3>
-                <ul>
-                  ${recipe.ingredients.map(i => `<li>${escapeHtml(i)}</li>`).join("")}
-                </ul>
-              </div>
+              ${recipe.ingredients.length ? `
+                <div class="recipe-block">
+                  <h3>Ingredients</h3>
+                  <ul>
+                    ${recipe.ingredients.map(i => `<li>${escapeHtml(i)}</li>`).join("")}
+                  </ul>
+                </div>
+              ` : ""}
 
               <div class="recipe-block">
                 <h3>Directions</h3>
