@@ -392,10 +392,64 @@
 
     .back-cover-image {
       display: block;
-      width: 3.8in;
-      height: 3.8in;
+      width: 2.7in;
+      height: 2.7in;
       object-fit: cover;
       object-position: center;
+    }
+
+    .back-cover-heading {
+      margin: 18px 0 0;
+      font-size: 0.8rem;
+      color: var(--accent);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .back-cover-text {
+      margin: 6px auto 0;
+      max-width: 3.9in;
+      font-size: 0.8rem;
+      line-height: 1.5;
+      color: var(--ink);
+      text-align: left;
+      position: relative;
+      z-index: 1;
+    }
+
+    .back-cover-publisher {
+      margin-top: 18px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .back-cover-logo {
+      display: block;
+      height: 0.55in;
+      width: auto;
+      margin: 0 auto 8px;
+    }
+
+    .back-cover-publisher-name {
+      margin: 0;
+      font-size: 0.82rem;
+      color: var(--accent);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .back-cover-printing {
+      margin: 4px 0 0;
+      font-size: 0.68rem;
+      font-style: italic;
+      color: var(--muted, #666);
+    }
+
+    body.print-grayscale .back-cover-logo {
+      filter: grayscale(100%);
     }
 
     body.print-grayscale .back-cover-image {
@@ -602,6 +656,29 @@
         box-shadow: none;
       }
     }
+    .foreword-page .about-title,
+    .foreword-page .small-divider {
+      text-align: center;
+      align-self: center;
+    }
+
+    .foreword-page p {
+      margin: 0 0 9px;
+      font-size: 0.84rem;
+      line-height: 1.5;
+      text-align: left;
+    }
+
+    .foreword-quote {
+      margin: 4px 14px 9px;
+      font-style: italic;
+      font-size: 0.92rem;
+      text-align: center;
+      color: var(--accent);
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
   </style>
 </head>
 <body class="print-grayscale">
@@ -649,6 +726,9 @@
 
     const PRINT_COVER_IMAGE = "/images/cover.jpg";
     const PRINT_BACK_COVER_IMAGE = "/images/back-cover.jpg";
+    // Back cover blurb. Edit this text; it is drafted, not final.
+    const BACK_COVER_TEXT = "Grey Lancaster was born and raised in Spartanburg, SC but spent extensive time at “The Farm” in Green Creek, N.C. He first learned to cook because his mom loved to sleep in and he wanted a hot breakfast. Mom’s weekly menu rotation, camping trips with the Scouts, and hunting trips at the Mary Lou were key components of his culinary education. Often told his ability to cook would make his wife happy, he married Becky, who was and is a much better cook by far. Every now and then she lets him help in the kitchen. Usually at the sink washing dishes.";
+    const PRINT_PUBLISHER_LOGO = "/images/grey-fox-color-transparent.png";
 
     function escapeHtml(str) {
       return String(str).replace(/[&<>"']/g, function (ch) {
@@ -849,7 +929,66 @@
                 alt="Fishing off the dock with Budro"
               >
             </div>
+            <p class="back-cover-heading">About the Author</p>
+            <p class="back-cover-text">${escapeHtml(BACK_COVER_TEXT)}</p>
             <p class="back-cover-note">greycooks.com</p>
+            <div class="back-cover-publisher">
+              <img
+                class="back-cover-logo"
+                src="${escapeHtml(PRINT_PUBLISHER_LOGO)}"
+                alt="The Grey Fox logo"
+              >
+              <p class="back-cover-publisher-name">The Grey Fox Publishing Co.</p>
+              <p class="back-cover-printing">First Edition &middot; November 2026</p>
+            </div>
+          </div>
+        </section>
+      `;
+    }
+
+    // The Foreword lives on the Grey's Cook Book home page; pull it from there
+    // so the book and the site never disagree.
+    const FOREWORD_URL = "/grey/";
+    const FOREWORD_FIXES = [["the actually eating", "the actual eating"]];
+
+    async function loadForeword() {
+      try {
+        const res = await fetch(FOREWORD_URL);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const doc = new DOMParser().parseFromString(await res.text(), "text/html");
+        const sec = doc.querySelector("#foreword");
+        if (!sec) return null;
+        const fix = (t) => FOREWORD_FIXES.reduce((s, [a, b]) => s.replace(a, b), t.replace(/\s+/g, " ").trim());
+        const parts = [];
+        for (const el of sec.children) {
+          el.querySelectorAll("br").forEach((br) => br.replaceWith(" "));
+          if (el.tagName === "P") {
+            parts.push({ type: "p", text: fix(el.textContent) });
+          } else if (el.classList.contains("pull-quote")) {
+            parts.push({ type: "quote", text: fix(el.textContent) });
+          }
+        }
+        return parts.length ? parts : null;
+      } catch (e) {
+        console.warn("Foreword not loaded:", e);
+        return null;
+      }
+    }
+
+    function renderForewordPage(parts) {
+      const body = parts.map((p) => p.type === "quote"
+        ? `<blockquote class="foreword-quote">${escapeHtml(p.text)}</blockquote>`
+        : `<p>${escapeHtml(p.text)}</p>`).join("");
+      return `
+        <section class="page">
+          <div class="page-inner foreword-page">
+            <h2 class="about-title">Foreword</h2>
+            <div class="small-divider"></div>
+            ${body}
+            <footer class="recipe-footer">
+              <span>greycooks.com</span>
+              <span>0</span>
+            </footer>
           </div>
         </section>
       `;
@@ -905,7 +1044,7 @@
         const height = section.getBoundingClientRect().height;
         const pages = Math.max(1, Math.ceil((height - 2) / pageHeight));
 
-        if (section.querySelector(".section-page")) {
+        if (section.querySelector(".section-page, .foreword-page")) {
           chapterPages.push(physical);
         }
 
@@ -980,8 +1119,13 @@
         }
       }
 
+      const foreword = await loadForeword();
       const tocItems = [];
       let pageNumber = 3;
+      if (foreword) {
+        tocItems.push({ title: "Foreword", page: pageNumber });
+        pageNumber += 1;
+      }
 
       for (const section of builtSections) {
         tocItems.push({
@@ -992,13 +1136,15 @@
         pageNumber += section.recipes.length;
       }
 
-      const aboutPageNumber = pageNumber;
 
       let html = "";
       html += renderTitlePage();
       html += renderToc(tocItems);
+      if (foreword) {
+        html += renderForewordPage(foreword);
+      }
 
-      pageNumber = 3;
+      pageNumber = foreword ? 4 : 3;
 
       for (const section of builtSections) {
         html += renderSectionPage(section.title, section.imageSrc, section.imageAlt);
@@ -1010,7 +1156,6 @@
         }
       }
 
-      html += renderAboutPage(aboutPageNumber);
       html += renderBackCover();
 
       book.innerHTML = html;

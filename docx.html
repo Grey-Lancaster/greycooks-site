@@ -205,6 +205,36 @@
 
     let builtSections = [];
     let coverImage = null;
+    let foreword = null;
+
+    // The Foreword lives on the Grey's Cook Book home page; pull it from there
+    // (same as print.html / print2.html) so the book and the site never disagree.
+    const FOREWORD_URL = "/grey/";
+    const FOREWORD_FIXES = [["the actually eating", "the actual eating"]];
+
+    async function loadForeword() {
+      try {
+        const res = await fetch(FOREWORD_URL);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const doc = new DOMParser().parseFromString(await res.text(), "text/html");
+        const sec = doc.querySelector("#foreword");
+        if (!sec) return null;
+        const fix = (t) => FOREWORD_FIXES.reduce((s, [a, b]) => s.replace(a, b), t.replace(/\s+/g, " ").trim());
+        const parts = [];
+        for (const el of sec.children) {
+          el.querySelectorAll("br").forEach((br) => br.replaceWith(" "));
+          if (el.tagName === "P") {
+            parts.push({ type: "p", text: fix(el.textContent) });
+          } else if (el.classList.contains("pull-quote")) {
+            parts.push({ type: "quote", text: fix(el.textContent) });
+          }
+        }
+        return parts.length ? parts : null;
+      } catch (e) {
+        console.warn("Foreword not loaded:", e);
+        return null;
+      }
+    }
 
     async function loadRecipes() {
       const loading = document.getElementById("loading");
@@ -213,6 +243,7 @@
       const errors = [];
 
       coverImage = await loadImageForDocx(PRINT_COVER_IMAGE);
+      foreword = await loadForeword();
 
       for (const cat of CATEGORY_PAGES) {
         try {
@@ -359,15 +390,44 @@
         })
       );
 
-      builtSections.forEach(section => {
+      const tocTitles = (foreword ? ["Foreword"] : []).concat(builtSections.map(s => s.title));
+      tocTitles.forEach(title => {
         children.push(new Paragraph({
           spacing: { after: 140 },
           border: { bottom: { style: BorderStyle.SINGLE, size: 2, color: LINE } },
-          children: [new TextRun({ text: section.title, bold: true, color: INK, font: HEADING_FONT, size: 22 })]
+          children: [new TextRun({ text: title, bold: true, color: INK, font: HEADING_FONT, size: 22 })]
         }));
       });
 
       children.push(new Paragraph({ children: [new PageBreak()] }));
+
+      // ---- Foreword ----
+      if (foreword) {
+        children.push(
+          new Paragraph({
+            alignment: AlignmentType.CENTER,
+            spacing: { after: 100 },
+            children: [new TextRun({ text: "Foreword", bold: true, allCaps: true, color: ACCENT, size: 36, characterSpacing: 30, font: HEADING_FONT })]
+          }),
+          divider()
+        );
+        foreword.forEach(part => {
+          if (part.type === "quote") {
+            children.push(new Paragraph({
+              alignment: AlignmentType.CENTER,
+              spacing: { before: 80, after: 200 },
+              indent: { left: 500, right: 500 },
+              children: [new TextRun({ text: part.text, italics: true, color: ACCENT, size: 22, font: FONT })]
+            }));
+          } else {
+            children.push(new Paragraph({
+              spacing: { after: 160, line: 300 },
+              children: [new TextRun({ text: part.text, color: INK, font: FONT })]
+            }));
+          }
+        });
+        children.push(new Paragraph({ children: [new PageBreak()] }));
+      }
 
       // ---- Chapters & recipes ----
       builtSections.forEach((section, sIdx) => {
@@ -458,25 +518,6 @@
           }
         });
       });
-
-      // ---- About page ----
-      children.push(
-        new Paragraph({ children: [new PageBreak()] }),
-        new Paragraph({
-          alignment: AlignmentType.CENTER,
-          spacing: { after: 200 },
-          children: [new TextRun({ text: "About the Author", bold: true, allCaps: true, color: ACCENT, size: 36, characterSpacing: 30, font: HEADING_FONT })]
-        }),
-        new Paragraph({
-          alignment: AlignmentType.CENTER,
-          spacing: { after: 140 },
-          children: [new TextRun({ text: "Grey Lancaster shares approachable home cooking rooted in family meals, practical kitchen know-how, and recipes worth making again.", color: INK, font: FONT })]
-        }),
-        new Paragraph({
-          alignment: AlignmentType.CENTER,
-          children: [new TextRun({ text: "This collection brings together favorites from greycooks.com in a format meant for real kitchens, real tables, and real use.", color: INK, font: FONT })]
-        })
-      );
 
       const footer = new Footer({
         children: [
